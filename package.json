@@ -11,14 +11,14 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.gitMerge"
+        "onCommand:extension.gitMergeFrom"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.gitMerge",
-                "title": "Git Merge"
+                "command": "extension.gitMergeFrom",
+                "title": "Git: Merge From"
             }
         ]
     },
