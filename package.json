@@ -1,9 +1,9 @@
 {
     "name": "git-merger",
     "displayName": "Git Merger",
-    "icon": "./merger-icon.png",
+    "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
-    "version": "0.1",
+    "version": "0.1.0",
     "publisher": "ShaharKazaz",
     "repository": {
         "type" : "git",
