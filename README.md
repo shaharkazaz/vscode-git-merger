@@ -1,4 +1,4 @@
-# ![alt text](https://github.com/shaharkazaz/vscode-git-merger/blob/master/merger-icon.png "Git Merger") vscode-git-merger 
+# ![alt text](https://github.com/shaharkazaz/vscode-git-merger/blob/master/merger-icon.png "Git Merger") Git Merger
 
 No more terminal! Merging branches now in vscode.  
 An easy merge flow using the vscode conflict handler.
