@@ -8,6 +8,13 @@ An easy merge flow using the vscode conflict handler.
 * Easy and intuative merging.  
 * Integrated conflict handling.
 
-# Relase Notes
+# Relased Features
 
-v0.0.1 - A very limited and simple implimation of the extention.
+* Merge branch into working branch. ("Git: Merge From")
+* Abort merge ("Git: Abort Merge")
+* Get notified on any conflicts or errors
+
+# Help this extention be great
+
+If you want to contribute or have any feedback positive or nagitive, let me know!  
+Contact via email: shahar.kazaz@gmail.com
