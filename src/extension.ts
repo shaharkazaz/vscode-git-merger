@@ -11,7 +11,9 @@ export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitMergeFrom', () => {
         exec('git branch -a',{cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
             if(error){
-                vscode.window.showErrorMessage(error.toString());
+                console.log("Error while fetching branches");
+                console.log(error);
+                vscode.window.showErrorMessage("Oops! something didn't work check the log for more inforamtion");
                 return;
             }
             let currentBranch,
@@ -39,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 return;
                             }
                             else if(stdout.indexOf("up-to-date") != -1){
-                                vscode.window.setStatusBarMessage("Already up-to-date", 3000);
+                                vscode.window.showInformationMessage("Already up-to-date");
                                 return;
                             }
                         }
@@ -49,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
                             vscode.window.showErrorMessage("Oops! something didn't work check the log for more inforamtion");
                             return;
                         }
-                        vscode.window.setStatusBarMessage(chosenitem + " was merged into " + currentBranch, 3000);
+                        vscode.window.showInformationMessage(chosenitem + " was merged into " + currentBranch);
                     });
                 }
             });
@@ -64,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.window.showErrorMessage("Oops! something didn't work check the log for more inforamtion");
                 return;
             }
-            vscode.window.setStatusBarMessage("Merge was successfully aborted", 3000);
+            vscode.window.showInformationMessage("Merge was successfully aborted");
         });
     });
 
