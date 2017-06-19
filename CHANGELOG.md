@@ -1,8 +1,11 @@
 # Change Log
-### v0.1.3
-#### Changed
-* Updated package.json file
-* Updated README.file
+### v0.2.0
 #### Fixed
 * Conflicts were showing as errors.
 * Logger didn't work properly.
+#### Changed
+* package.json file
+* README.file
+### v0.1.2
+#### Added
+* Logger

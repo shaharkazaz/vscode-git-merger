@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 return (branch.trim().length > 0 && branch.indexOf("*") == -1 && branch.indexOf("HEAD") == -1)
             });
-            vscode.window.showQuickPick(branchesNames, "Chose destination branch").then(chosenitem => {
+            vscode.window.showQuickPick(branchesNames, "Choose destination branch").then(chosenitem => {
                 if(chosenitem){
                     exec("git merge " + chosenitem + " --no-commit --no-ff", {cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
                         if(stdout){
@@ -41,6 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
                                 return;
                             }
                             else if(stdout.indexOf("up-to-date") != -1){
+                                logger.logInfo("Already up-to-date");
                                 vscode.window.showInformationMessage("Already up-to-date");
                                 return;
                             }
@@ -51,6 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
                             vscode.window.showErrorMessage("Oops! something didn't work check the \'Git Merger Log\' for more inforamtion");
                             return;
                         }
+                        logger.logInfo(chosenitem + " was merged into " + currentBranch);
                         vscode.window.showInformationMessage(chosenitem + " was merged into " + currentBranch);
                     });
                 }
@@ -66,6 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.window.showErrorMessage("Oops! something didn't work check the \'Git Merger Log\' for more inforamtion");
                 return;
             }
+            logger.logError("Merge was successfully aborted");
             vscode.window.showInformationMessage("Merge was successfully aborted");
         });
     });
