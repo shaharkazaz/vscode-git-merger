@@ -3,17 +3,17 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { exec, execSync } from 'child_process';
+import * as logger from "../logger";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
     let disposable = vscode.commands.registerCommand('extension.gitMergeFrom', () => {
         exec('git branch -a',{cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
             if(error){
-                console.log("Error while fetching branches");
-                console.log(error);
-                vscode.window.showErrorMessage("Oops! something didn't work check the log for more inforamtion");
+                logger.logError("Error while fetching branches");
+                logger.logError(stderr || error);
+                vscode.window.showErrorMessage("Oops! something didn't work check the \'Git Merger Log\' for more inforamtion");
                 return;
             }
             let currentBranch,
@@ -30,14 +30,14 @@ export function activate(context: vscode.ExtensionContext) {
                         if(stdout){
                             if(stdout.toLowerCase().indexOf("conflict") != -1){
                                 let conflictedFiles = stdout.split("\n"),conflictedFilesLength = conflictedFiles.length -1;
-                                console.log("Conflicts while mergning in the following files:");
+                                logger.logInfo("Conflicts while mergning in the following files:");
                                 for(let i = 0; i < conflictedFilesLength; i++){
                                     let conflictIndex = conflictedFiles[i].indexOf("CONFLICT (content): Merge conflict in");
                                     if(conflictIndex != -1){
-                                        console.log(conflictedFiles[i].substr(38, conflictedFiles[i].length));
+                                        logger.logInfo(conflictedFiles[i].substr(38, conflictedFiles[i].length));
                                     }
                                 }
-                                vscode.window.showWarningMessage("Seems like there are some conflicts to handle (Conflicted files list in log)");
+                                vscode.window.showWarningMessage("Seems like there are some conflicts to handle (Conflicted files list in \'Git Merger Log\')");
                                 return;
                             }
                             else if(stdout.indexOf("up-to-date") != -1){
@@ -46,9 +46,9 @@ export function activate(context: vscode.ExtensionContext) {
                             }
                         }
                         else if(error){
-                            console.log("Error while mergning");
-                            console.log(error);
-                            vscode.window.showErrorMessage("Oops! something didn't work check the log for more inforamtion");
+                            logger.logError("Error while mergning");
+                            logger.logError(stderr || error);
+                            vscode.window.showErrorMessage("Oops! something didn't work check the \'Git Merger Log\' for more inforamtion");
                             return;
                         }
                         vscode.window.showInformationMessage(chosenitem + " was merged into " + currentBranch);
@@ -61,9 +61,9 @@ export function activate(context: vscode.ExtensionContext) {
         // The code you place here will be executed every time your command is executed
         exec('git merge --abort',{cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
             if(error){
-                console.log("Error while mergning");
-                console.log(stderr.replace("fatal:", ""));
-                vscode.window.showErrorMessage("Oops! something didn't work check the log for more inforamtion");
+                logger.logError("Error while aborting mergning");
+                logger.logError(stderr || error);
+                vscode.window.showErrorMessage("Oops! something didn't work check the \'Git Merger Log\' for more inforamtion");
                 return;
             }
             vscode.window.showInformationMessage("Merge was successfully aborted");

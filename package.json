@@ -3,7 +3,7 @@
     "displayName": "Git Merger",
     "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "publisher": "ShaharKazaz",
     "repository": {
         "type" : "git",
@@ -20,7 +20,7 @@
         "onCommand:extension.gitMergeFrom",
         "onCommand:extension.gitAbortMerge"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/src/commands/extension",
     "contributes": {
         "commands": [
             {

@@ -1,7 +1,8 @@
 # Change Log
-All notable changes to the "git-merger" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-- Initial release
+### v0.1.3
+#### Changed
+* Updated package.json file
+* Updated README.file
+#### Fixed
+* Conflicts were showing as errors.
+* Logger didn't work properly.
