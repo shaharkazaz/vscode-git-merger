@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
                     currentBranch = branch.replace('*','').trim();
                     return false;
                 }
-                return (branch.trim().length > 0 && branch.indexOf("*") == -1)
+                return (branch.trim().length > 0 && branch.indexOf("*") == -1 && branch.indexOf("HEAD") == -1)
             });
             vscode.window.showQuickPick(branchesNames, "Chose destination branch").then(chosenitem => {
                 if(chosenitem){
