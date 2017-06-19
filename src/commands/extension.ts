@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.window.showErrorMessage("Oops! something didn't work check the \'Git Merger Log\' for more inforamtion");
                 return;
             }
-            logger.logError("Merge was successfully aborted");
+            logger.logInfo("Merge was successfully aborted");
             vscode.window.showInformationMessage("Merge was successfully aborted");
         });
     });
