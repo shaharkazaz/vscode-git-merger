@@ -1,4 +1,7 @@
 # Change Log
+### v0.2.1
+#### Fixed
+* minor bug fix
 ### v0.2.0
 #### Fixed
 * Conflicts were showing as errors.
