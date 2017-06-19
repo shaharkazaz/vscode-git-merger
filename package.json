@@ -19,8 +19,7 @@
         "merging"
     ],
     "categories": [
-        "Git",
-        "tools"
+        "Other"
     ],
     "activationEvents": [
         "onCommand:extension.gitMergeFrom",
