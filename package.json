@@ -6,15 +6,21 @@
     "version": "0.2.0",
     "publisher": "ShaharKazaz",
     "repository": {
-        "type" : "git",
-        "url" : "https://github.com/shaharkazaz/vscode-git-merger"
+        "type": "git",
+        "url": "https://github.com/shaharkazaz/vscode-git-merger"
     },
     "license": "MIT",
     "engines": {
         "vscode": "^1.13.0"
     },
+    "keywords":[
+        "git",
+        "merge",
+        "merging"
+    ],
     "categories": [
-        "Other"
+        "Git",
+        "tools"
     ],
     "activationEvents": [
         "onCommand:extension.gitMergeFrom",
