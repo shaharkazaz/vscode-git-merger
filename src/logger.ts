@@ -4,14 +4,13 @@ let outLogChannel: vscode.OutputChannel;
 
 function getLogChannel() {
     if (outLogChannel === undefined) {
-         outLogChannel = vscode.window.createOutputChannel('Git Merger Log');
+         outLogChannel = vscode.window.createOutputChannel('Git Merger');
     }
     return outLogChannel;
 }
 
 export function logError(error: any) {
     getLogChannel().appendLine(`[Error-${getTimeAndms()}] ${error.toString()}`.replace(/(\r\n|\n|\r)/gm, ''));
-    getLogChannel().show();
 }
 
 export function logInfo(message: string) {
@@ -20,6 +19,10 @@ export function logInfo(message: string) {
 
 export function logDebug(message: string) {
     getLogChannel().appendLine(`[Debug-${getTimeAndms()}] ${message}`);
+}
+
+export function openLog():void{
+    getLogChannel().show();
 }
 
 function getTimeAndms(): string {

@@ -3,7 +3,7 @@
     "displayName": "Git Merger",
     "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "publisher": "ShaharKazaz",
     "repository": {
         "type": "git",
@@ -13,7 +13,10 @@
     "engines": {
         "vscode": "^1.13.0"
     },
-    "keywords":[
+    "galleryBanner": {
+        "color": "BDE4A7"
+    },
+    "keywords": [
         "git",
         "merge",
         "merging"
@@ -25,7 +28,7 @@
         "onCommand:extension.gitMergeFrom",
         "onCommand:extension.gitAbortMerge"
     ],
-    "main": "./out/src/commands/extension",
+    "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {

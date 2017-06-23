@@ -1,4 +1,4 @@
-# ![alt text](./merger-icon.png "Git Merger") Git Merger
+# ![alt text](./merger-icon.png "Git Merger") Git Merger v0.2.2
 
 No more terminal! Merging branches now in vscode.  
 An easy merge flow using the vscode conflict handler.
@@ -8,6 +8,13 @@ An easy merge flow using the vscode conflict handler.
 * Easy and intuitive merging.  
 * Integrated conflict handling.
 
+# Upcoming features
+
+* Adding stash commands (very soon)
+* Auto merge commit message (soon)
+* A rich settings file for a dynamic experiance (soon)
+* 3 screens conflict resolver (soon+)
+
 # Installation
 
 First, you will need to [install Visual Studio Code](https://code.visualstudio.com/download).  
@@ -16,8 +23,8 @@ Once you have vscode installed access the marketplace and install "Git Merger" e
 # Commands
 The extension commands that can be accessed from the command pallet (Cmd+Shift+P or Ctrl+Shift+P):
 
-* ```Git: Merge From``` - Merge branch into working branch.
-* ```Git: Abort Merge``` - Abort merge.
+* ```Git: Merge From``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
+* ```Git: Abort Merge``` - Abort merge. 
 
 # Help this extension be great
 
