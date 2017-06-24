@@ -1,4 +1,5 @@
-export interface IBranchObject {
+import {QuickPickItem} from "vscode"
+export interface IBranchsObject {
     currentBranch:string,
-    branchList: Array<string>
+    branchList: Array<QuickPickItem>
 }

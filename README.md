@@ -3,11 +3,6 @@
 No more terminal! Merging branches now in vscode.  
 An easy merge flow using the vscode conflict handler.
 
-# Road Map
-
-* Easy and intuitive merging.  
-* Integrated conflict handling.
-
 # Upcoming features
 
 * Adding stash commands (very soon)

@@ -9,7 +9,7 @@ import * as logger from "../logger";
 import strings from '../constants/string-constnats';
 // import {getBranches} from "../services/branch-manager";
 import {
-    IBranchObject
+    IBranchsObject
 } from "../constants/interfaces";
 
 // this method is called when your extension is activated
@@ -22,25 +22,33 @@ export function activate(context: vscode.ExtensionContext) {
             if (error) {
                 logger.logError(strings.messages.log.error.getBranches);
                 logger.logError(stderr || error);
-                vscode.window.showErrorMessage(strings.messages.windowMessages.error, "open log").then(() => {
-                    logger.openLog();
+                vscode.window.showErrorMessage(strings.messages.windowMessages.error, strings.messages.actionButtons.openLog).then((action) => {
+                    if(action == strings.messages.actionButtons.openLog){logger.openLog();}
                 });
                 return;
             }
-            let branchObject: IBranchObject = {
+            let branchObject: IBranchsObject = {
                 currentBranch: "",
                 branchList: []
             };
-            branchObject.branchList = stdout.split("\n").filter((branch) => {
+            let tempArray = stdout.split("\n"), tempArrayLength = tempArray.length -1;
+            for (let i = 0; i < tempArrayLength; i++) {
+                let branch = tempArray[i], columnIndex = branch.indexOf(":");
                 if (branch.indexOf("*") != -1) {
-                    branchObject.currentBranch = branch.replace('*', '').trim();
-                    return false;
+                    branchObject.currentBranch = branch.replace('*', '').trim().substring(0, columnIndex);
+                } else if(branch.indexOf("HEAD") == -1) {
+                    let branchName =  branch.substring(0, columnIndex),
+                        branchHash = branch.substring(columnIndex + 1, branch.length);
+                    if(branchName.indexOf("origin") != -1){
+                        branchHash = "Remote branch at " + branchHash;
+                    }
+                    branchObject.branchList.push({label: branchName, description: branchHash})
                 }
-                return (branch.trim().length > 0 && branch.indexOf("*") == -1 && branch.indexOf("HEAD") == -1)
-            });
+            }
+
             vscode.window.showQuickPick(branchObject.branchList, strings.messages.quickPick.chooseBranch).then(chosenitem => {
                 if (chosenitem) {
-                    exec(strings.commands.git.merge(["no-commit", "no-ff"], chosenitem), {
+                    exec(strings.commands.git.merge(["no-commit", "no-ff"], chosenitem.label), {
                         cwd: vscode.workspace.rootPath
                     }, (error, stdout, stderr) => {
                         if (stdout) {
@@ -54,8 +62,8 @@ export function activate(context: vscode.ExtensionContext) {
                                         logger.logInfo(conflictedFiles[i].substr(38, conflictedFiles[i].length));
                                     }
                                 }
-                                vscode.window.showWarningMessage(strings.messages.windowMessages.warnings.conflicts, "open log").then(() => {
-                                    logger.openLog();
+                                vscode.window.showWarningMessage(strings.messages.windowMessages.warnings.conflicts, strings.messages.actionButtons.openLog).then((action) => {
+                                    if(action == strings.messages.actionButtons.openLog){logger.openLog();}
                                 });
                                 return;
                             } else if (stdout.indexOf(strings.git.upToDate) != -1) {
@@ -66,8 +74,8 @@ export function activate(context: vscode.ExtensionContext) {
                         } else if (error) {
                             logger.logError(strings.messages.log.error.merging);
                             logger.logError(stderr || error);
-                            vscode.window.showErrorMessage(strings.messages.windowMessages.error, "open log").then(() => {
-                                logger.openLog();
+                            vscode.window.showErrorMessage(strings.messages.windowMessages.error, strings.messages.actionButtons.openLog).then((action) => {
+                                if(action == strings.messages.actionButtons.openLog){logger.openLog();}
                             });
                             return;
                         }

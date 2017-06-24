@@ -1,7 +1,7 @@
 export default {
     commands: {
         git: {
-            getBranches: "git branch -a",
+            getBranches: "git for-each-ref --format='%(HEAD)%(refname:short):%(objectname:short)'",
             merge: (flags: Array < string > , branchName ? : string) => {
                 let command = "git merge " + branchName || "";
                 if (flags) {
@@ -14,6 +14,9 @@ export default {
         }
     },
     messages: {
+        actionButtons: {
+            openLog: "open log"
+        },
         log: {
             error: {
                 abortMerge: "Error while aborting merge",
