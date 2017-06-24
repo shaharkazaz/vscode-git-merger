@@ -17,11 +17,15 @@ export function activate(context: vscode.ExtensionContext) {
             if (error) {
                 logger.logError(strings.messages.log.error.abortMerge);
                 logger.logError(stderr || error);
-                vscode.window.showErrorMessage(strings.messages.windowMessages.error);
+                vscode.window.showErrorMessage(strings.messages.windowMessages.error, "open log").then(() => {
+                    logger.openLog();
+                });
                 return;
             }
             logger.logInfo(strings.messages.common.success.abortMerge);
-            vscode.window.showInformationMessage(strings.messages.common.success.abortMerge);
+            vscode.window.showInformationMessage(strings.messages.common.success.abortMerge, "open log").then(() => {
+                logger.openLog();
+            });
         });
     });
 
