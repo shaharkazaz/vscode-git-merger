@@ -1,4 +1,4 @@
-# ![alt text](./merger-icon.png "Git Merger") Git Merger v0.2.4
+# ![alt text](./merger-icon.png "Git Merger") Git Merger v0.2.5
 
 **NOTICE** - If you have installed v0.2.2 or lower you need to manually update the extension due to a bug in the extension auto-update
 
