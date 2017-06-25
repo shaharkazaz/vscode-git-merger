@@ -1,4 +1,6 @@
-# ![alt text](./merger-icon.png "Git Merger") Git Merger v0.2.2
+# ![alt text](./merger-icon.png "Git Merger") Git Merger v0.2.4
+
+**NOTICE** - If you have installed v0.2.2 or lower you need to manually update the extension due to a bug in the extension auto-update
 
 No more terminal! Merging branches now in vscode.  
 An easy merge flow using the vscode conflict handler.

@@ -3,7 +3,7 @@
     "displayName": "Git Merger",
     "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "publisher": "shaharkazaz",
     "repository": {
         "type": "git",

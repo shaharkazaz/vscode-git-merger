@@ -1,9 +1,13 @@
 # Change Log
+### v0.2.4  
+**Fixed**
+
+* Bug fix 
 
 ### v0.2.3  
 **Fixed**  
 
-* minor bug fix 
+* Fix extension auto update
 
 ### v0.2.2  
 **Added**  
