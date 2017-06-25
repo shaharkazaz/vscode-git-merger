@@ -4,7 +4,7 @@
     "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
     "version": "0.2.2",
-    "publisher": "ShaharKazaz",
+    "publisher": "shaharkazaz",
     "repository": {
         "type": "git",
         "url": "https://github.com/shaharkazaz/vscode-git-merger"
