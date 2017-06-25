@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
             for (let i = 0; i < tempArrayLength; i++) {
                 let branch = tempArray[i].replace(/'/g, '').trim(), columnIndex = branch.indexOf(":");
                 if (branch.indexOf("*") != -1) {
-                    branchObject.currentBranch = branch.replace('*', '').trim().substring(0, columnIndex);
+                    branchObject.currentBranch = branch.replace('*', '').trim().substring(0, columnIndex-1);
                 } else if(branch.indexOf("HEAD") == -1) {
                     let branchName =  branch.substring(0, columnIndex),
                         branchHash = branch.substring(columnIndex + 1, branch.length);
@@ -79,8 +79,8 @@ export function activate(context: vscode.ExtensionContext) {
                             });
                             return;
                         }
-                        logger.logInfo(strings.messages.common.success.merge(chosenitem, branchObject.currentBranch));
-                        vscode.window.showInformationMessage(strings.messages.common.success.merge(chosenitem, branchObject.currentBranch));
+                        logger.logInfo(strings.messages.common.success.merge(chosenitem.label, branchObject.currentBranch));
+                        vscode.window.showInformationMessage(strings.messages.common.success.merge(chosenitem.label, branchObject.currentBranch));
                     });
                 }
             });
