@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
             };
             let tempArray = stdout.split("\n"), tempArrayLength = tempArray.length -1;
             for (let i = 0; i < tempArrayLength; i++) {
-                let branch = tempArray[i], columnIndex = branch.indexOf(":");
+                let branch = tempArray[i].replace("'", '').trim(), columnIndex = branch.indexOf(":");
                 if (branch.indexOf("*") != -1) {
                     branchObject.currentBranch = branch.replace('*', '').trim().substring(0, columnIndex);
                 } else if(branch.indexOf("HEAD") == -1) {
