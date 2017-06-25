@@ -1,4 +1,10 @@
 # Change Log
+
+### v0.2.3  
+**Fixed**  
+
+* minor bug fix 
+
 ### v0.2.2  
 **Added**  
 
