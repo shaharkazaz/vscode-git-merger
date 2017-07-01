@@ -11,19 +11,18 @@ import * as logger from "../logger";
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitAbortMerge', () => {
         // The code you place here will be executed every time your command is executed
-        exec(strings.commands.git.merge(["abort"]), {
+        exec(strings.git.merge(["abort"]), {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
-                logger.logError(strings.messages.log.error.abortMerge);
-                logger.logError(stderr || error);
-                vscode.window.showErrorMessage(strings.messages.windowMessages.error, strings.messages.actionButtons.openLog).then((action) => {
-                    if(action == strings.messages.actionButtons.openLog){logger.openLog();}
-                });
+                if(stderr.indexOf(strings.git.noMerge)){
+                    logger.logInfo(strings.git.noMerge);
+                    return;
+                }
+                logger.logError(strings.error("aborting merge"), stderr || error);
                 return;
             }
-            logger.logInfo(strings.messages.common.success.abortMerge);
-            vscode.window.showInformationMessage(strings.messages.common.success.abortMerge);
+            logger.logInfo(strings.success.general("Merge", "aborted"));
         });
     });
 

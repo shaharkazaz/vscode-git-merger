@@ -3,10 +3,12 @@
 import * as vscode from 'vscode';
 import * as gitMerge from './commands/gitMerge';
 import * as gitAbort from './commands/gitAbort';
+import * as gitStash from './commands/gitStash';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext): Promise<any> {
     gitMerge.activate(context);
     gitAbort.activate(context);
+    gitStash.activate(context);
 }

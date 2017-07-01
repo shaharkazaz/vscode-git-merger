@@ -1,4 +1,4 @@
-# ![alt text](./merger-icon.png "Git Merger") Git Merger v0.2.5
+# ![alt text](./merger-icon.png "Git Merger") Git Merger [![](http://vsmarketplacebadge.apphb.com/version-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](http://vsmarketplacebadge.apphb.com/installs/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](http://vsmarketplacebadge.apphb.com/rating-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger)
 
 **NOTICE** - If you have installed v0.2.2 or lower you need to manually update the extension due to a bug in the extension auto-update
 
@@ -25,7 +25,8 @@ The extension commands that can be accessed from the command pallet (Cmd+Shift+P
 
 # Help this extension be great
 
-If you want to contribute or have any feedback positive or negative, let me know!  Contact via [Email](shahar.kazaz@gmail.com) or open an issue at this project's [Git Repo](https://github.com/shaharkazaz/vscode-git-merger).
+If you want to contribute or have any feedback positive or negative, let me know!  
+Contact via [Email](shahar.kazaz@gmail.com) or open an issue at this project's [Git Repo](https://github.com/shaharkazaz/vscode-git-merger).
 
 # License
 

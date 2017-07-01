@@ -16,15 +16,11 @@ import {
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitMergeFrom', () => {
-        exec(strings.commands.git.getBranches, {
+        exec(strings.git.getBranches, {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
-                logger.logError(strings.messages.log.error.getBranches);
-                logger.logError(stderr || error);
-                vscode.window.showErrorMessage(strings.messages.windowMessages.error, strings.messages.actionButtons.openLog).then((action) => {
-                    if(action == strings.messages.actionButtons.openLog){logger.openLog();}
-                });
+                logger.logError(strings.error("fetching branches"), stderr || error);
                 return;
             }
             let branchObject: IBranchsObject = {
@@ -46,41 +42,35 @@ export function activate(context: vscode.ExtensionContext) {
                 }
             }
 
-            vscode.window.showQuickPick(branchObject.branchList, strings.messages.quickPick.chooseBranch).then(chosenitem => {
+            vscode.window.showQuickPick(branchObject.branchList, strings.quickPick.chooseBranch).then(chosenitem => {
                 if (chosenitem) {
-                    exec(strings.commands.git.merge(["no-commit", "no-ff"], chosenitem.label), {
+                    exec(strings.git.merge(["no-commit", "no-ff"], chosenitem.label), {
                         cwd: vscode.workspace.rootPath
                     }, (error, stdout, stderr) => {
                         if (stdout) {
                             if (stdout.toLowerCase().indexOf("conflict") != -1) {
                                 let conflictedFiles = stdout.split("\n"),
                                     conflictedFilesLength = conflictedFiles.length - 1;
-                                logger.logInfo(strings.messages.log.warnings.conflicts);
+                                logger.logWarning(strings.warnings.conflicts);
                                 for (let i = 0; i < conflictedFilesLength; i++) {
                                     let conflictIndex = conflictedFiles[i].indexOf(strings.git.conflicts);
                                     if (conflictIndex != -1) {
-                                        logger.logInfo(conflictedFiles[i].substr(38, conflictedFiles[i].length));
+                                        logger.logWarning(conflictedFiles[i].substr(38, conflictedFiles[i].length));
                                     }
                                 }
-                                vscode.window.showWarningMessage(strings.messages.windowMessages.warnings.conflicts, strings.messages.actionButtons.openLog).then((action) => {
-                                    if(action == strings.messages.actionButtons.openLog){logger.openLog();}
+                                vscode.window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
+                                    if(action == strings.actionButtons.openLog){logger.openLog();}
                                 });
                                 return;
                             } else if (stdout.indexOf(strings.git.upToDate) != -1) {
                                 logger.logInfo(strings.git.upToDate);
-                                vscode.window.showInformationMessage(strings.git.upToDate);
                                 return;
                             }
                         } else if (error) {
-                            logger.logError(strings.messages.log.error.merging);
-                            logger.logError(stderr || error);
-                            vscode.window.showErrorMessage(strings.messages.windowMessages.error, strings.messages.actionButtons.openLog).then((action) => {
-                                if(action == strings.messages.actionButtons.openLog){logger.openLog();}
-                            });
+                            logger.logError(strings.error("merging"), stderr || error);
                             return;
                         }
-                        logger.logInfo(strings.messages.common.success.merge(chosenitem.label, branchObject.currentBranch));
-                        vscode.window.showInformationMessage(strings.messages.common.success.merge(chosenitem.label, branchObject.currentBranch));
+                        logger.logInfo(strings.success.merge(chosenitem.label, branchObject.currentBranch));
                     });
                 }
             });

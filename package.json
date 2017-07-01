@@ -19,14 +19,19 @@
     "keywords": [
         "git",
         "merge",
-        "merging"
+        "merging",
+        "stash",
+        "unstash",
+        "shelf",
+        "util"
     ],
     "categories": [
         "Other"
     ],
     "activationEvents": [
         "onCommand:extension.gitMergeFrom",
-        "onCommand:extension.gitAbortMerge"
+        "onCommand:extension.gitAbortMerge",
+        "onCommand:extension.gitStash"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -38,6 +43,10 @@
             {
                 "command": "extension.gitAbortMerge",
                 "title": "Git: Abort Merge"
+            },
+            {
+                "command": "extension.gitStash",
+                "title": "Git: Stash"
             }
         ]
     },
@@ -53,5 +62,8 @@
         "mocha": "^2.3.3",
         "@types/node": "^6.0.40",
         "@types/mocha": "^2.2.32"
+    },
+    "dependencies": {
+        "moment": "^2.18.1"
     }
 }
