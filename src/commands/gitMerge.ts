@@ -1,26 +1,22 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+
 import * as vscode from 'vscode';
 import {
     exec
 } from 'child_process';
 import * as logger from "../logger";
 import strings from '../constants/string-constnats';
-// import {getBranches} from "../services/branch-manager";
 import {
     IBranchsObject
 } from "../constants/interfaces";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitMergeFrom', () => {
         exec(strings.git.getBranches, {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
-                logger.logError(strings.error("fetching branches"), stderr || error);
+                logger.logError(strings.error("fetching branch list"), stderr || error);
                 return;
             }
             let branchObject: IBranchsObject = {

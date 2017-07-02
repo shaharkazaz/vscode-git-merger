@@ -23,8 +23,8 @@ export default {
             return "Error while " + errorWhile;
         },
     timeForamt: {
-        names: "MM.DD.YYYY HH:mm:ss",
-        log: "HH:mm:ss"
+        fullDate: "MM.DD.YYYY HH:mm:ss",
+        hours: "HH:mm:ss"
     },
     windowConflictsMessage: "Seems like there are some conflicts to handle check the \'Git Merger Log\' for more inforamtion",
     actionButtons: {

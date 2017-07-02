@@ -29,7 +29,7 @@ function getLogChannel() {
 
 export function logError(errorTitle: string, error: any) {
     getLogChannel().appendLine(errorTitle);
-    getLogChannel().appendLine(`[Error-${moment().format(strings.timeForamt.log)}] ${error.toString()}`.replace(/(\r\n|\n|\r)/gm, ''));
+    getLogChannel().appendLine(`[Error-${moment().format(strings.timeForamt.hours)}] ${error.toString()}`.replace(/(\r\n|\n|\r)/gm, ''));
     vscode.window.showErrorMessage(strings.windowErrorMessage, strings.actionButtons.openLog).then((action) => {
         if (action == strings.actionButtons.openLog) {
             this.openLog();
@@ -38,16 +38,16 @@ export function logError(errorTitle: string, error: any) {
 }
 
 export function logInfo(message: string) {
-    getLogChannel().appendLine(`[Info-${moment().format(strings.timeForamt.log)}] ${message}`);
+    getLogChannel().appendLine(`[Info-${moment().format(strings.timeForamt.hours)}] ${message}`);
     vscode.window.showInformationMessage(message);
 }
 
 export function logWarning(message: string) {
-    getLogChannel().appendLine(`[Warning-${moment().format(strings.timeForamt.log)}] ${message}`);
+    getLogChannel().appendLine(`[Warning-${moment().format(strings.timeForamt.hours)}] ${message}`);
 }
 
 export function logDebug(message: string) {
-    getLogChannel().appendLine(`[Debug-${moment().format(strings.timeForamt.log)}] ${message}`);
+    getLogChannel().appendLine(`[Debug-${moment().format(strings.timeForamt.hours)}] ${message}`);
 }
 
 export function openLog(): void {

@@ -31,7 +31,8 @@
     "activationEvents": [
         "onCommand:extension.gitMergeFrom",
         "onCommand:extension.gitAbortMerge",
-        "onCommand:extension.gitStash"
+        "onCommand:extension.gitStash",
+        "onCommand:extension.gitUnstash"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -47,6 +48,10 @@
             {
                 "command": "extension.gitStash",
                 "title": "Git: Stash"
+            },
+            {
+                "command": "extension.gitUnstash",
+                "title": "Git: Unstash"
             }
         ]
     },
