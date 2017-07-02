@@ -1,9 +1,9 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import strings from '../constants/string-constnats';
+import strings from '../../constants/string-constnats';
 import { exec } from 'child_process';
-import * as logger from "../logger";
+import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitAbortMerge', () => {

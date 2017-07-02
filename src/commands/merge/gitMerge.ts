@@ -4,11 +4,11 @@ import * as vscode from 'vscode';
 import {
     exec
 } from 'child_process';
-import * as logger from "../logger";
-import strings from '../constants/string-constnats';
+import * as logger from "../../logger";
+import strings from '../../constants/string-constnats';
 import {
     IBranchsObject
-} from "../constants/interfaces";
+} from "../../constants/interfaces";
 
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitMergeFrom', () => {

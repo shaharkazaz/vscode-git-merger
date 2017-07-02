@@ -2,13 +2,13 @@
 
 import * as vscode from 'vscode';
 import * as moment from 'moment';
-import strings from '../constants/string-constnats';
+import strings from '../../constants/string-constnats';
 import { exec } from 'child_process';
-import * as logger from "../logger";
+import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitStash', () => {
-        vscode.window.showInputBox({placeHolder: "Enter stash name (the default name is the current branch)", validateInput: (input) => {
+        vscode.window.showInputBox({placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
             if(input[0] == "-"){
                 return "The name can't start with '-'";
             } else if(new RegExp("[()&`|]", 'g').test(input)){
@@ -17,13 +17,11 @@ export function activate(context: vscode.ExtensionContext) {
         }}).then((userInput) => {
             if(userInput === undefined){return;}
             //prevent duplicate names? 
-            let stashName = userInput && userInput.trim() != "" ? userInput : "";
-            stashName += " " + moment().format("x");
-            exec(strings.git.stash("save ", stashName), {
+            exec(strings.git.stash("save ", userInput.trim() + " " + moment().format("x")), {
                 cwd: vscode.workspace.rootPath
             }, (error, stdout, stderr) => {
                 if (error) {
-                    logger.logError(strings.error("creating stash"), stderr || error);
+                    logger.logError(strings.error("creating stash:"), stderr || error);
                     return;
                 } 
                 if(stdout.indexOf("No local changes to save") != -1){
@@ -32,8 +30,11 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 logger.logInfo(strings.success.general("Stash", "created"));
             });
+
         });
     });
 
     context.subscriptions.push(disposable);
 }
+
+

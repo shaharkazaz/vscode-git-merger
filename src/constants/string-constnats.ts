@@ -4,6 +4,7 @@ export default {
         upToDate: "Already up-to-date",
         noMerge: "There is no merge to abort",
         getBranches: "git for-each-ref --format='%(HEAD)%(refname:short):%(objectname:short)'",
+        getCurrentBranch: "git rev-parse --abbrev-ref HEAD",
         merge: (flags: Array < string > , branchName ? : string) => {
             let command = "git merge " + (branchName || "");
             if (flags) {

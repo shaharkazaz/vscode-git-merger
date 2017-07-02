@@ -28,8 +28,7 @@ function getLogChannel() {
 }
 
 export function logError(errorTitle: string, error: any) {
-    getLogChannel().appendLine(errorTitle);
-    getLogChannel().appendLine(`[Error-${moment().format(strings.timeForamt.hours)}] ${error.toString()}`.replace(/(\r\n|\n|\r)/gm, ''));
+    getLogChannel().appendLine(`[Error-${moment().format(strings.timeForamt.hours)}] ${errorTitle}\n${error.toString()}`);
     vscode.window.showErrorMessage(strings.windowErrorMessage, strings.actionButtons.openLog).then((action) => {
         if (action == strings.actionButtons.openLog) {
             this.openLog();

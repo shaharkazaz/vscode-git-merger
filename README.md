@@ -7,10 +7,9 @@ An easy merge flow using the vscode conflict handler.
 
 # Upcoming features
 
-* Adding stash commands (very soon)
 * Auto merge commit message (soon)
 * A rich settings file for a dynamic experiance (soon)
-* 3 screens conflict resolver (soon+)
+* 3 screens conflict resolver.
 
 # Installation
 
@@ -22,6 +21,9 @@ The extension commands that can be accessed from the command pallet (Cmd+Shift+P
 
 * ```Git: Merge From``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
 * ```Git: Abort Merge``` - Abort merge. 
+* ```Git: Stash``` - Stash your WIP for later usage.
+* ```Git: Unstash``` - Apply stashed changes on working branch.
+* ```Git: Clear stash``` - Remove any saved stashes.
 
 # Help this extension be great
 

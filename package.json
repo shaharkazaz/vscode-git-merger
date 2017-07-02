@@ -3,7 +3,7 @@
     "displayName": "Git Merger",
     "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
-    "version": "0.2.5",
+    "version": "0.3.0",
     "publisher": "shaharkazaz",
     "repository": {
         "type": "git",
@@ -32,18 +32,19 @@
         "onCommand:extension.gitMergeFrom",
         "onCommand:extension.gitAbortMerge",
         "onCommand:extension.gitStash",
-        "onCommand:extension.gitUnstash"
+        "onCommand:extension.gitUnstash",
+        "onCommand:extension.gitClearStash"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {
                 "command": "extension.gitMergeFrom",
-                "title": "Git: Merge From"
+                "title": "Git: Merge from"
             },
             {
                 "command": "extension.gitAbortMerge",
-                "title": "Git: Abort Merge"
+                "title": "Git: Abort merge"
             },
             {
                 "command": "extension.gitStash",
@@ -52,6 +53,10 @@
             {
                 "command": "extension.gitUnstash",
                 "title": "Git: Unstash"
+            },
+            {
+                "command": "extension.gitClearStash",
+                "title": "Git: Clear stash"
             }
         ]
     },

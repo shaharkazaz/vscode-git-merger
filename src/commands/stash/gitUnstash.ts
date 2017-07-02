@@ -2,11 +2,11 @@
 
 import * as vscode from 'vscode';
 import * as moment from 'moment';
-import strings from '../constants/string-constnats';
+import strings from '../../constants/string-constnats';
 import {
     exec
 } from 'child_process';
-import * as logger from "../logger";
+import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('extension.gitUnstash', () => {
@@ -24,30 +24,41 @@ export function activate(context: vscode.ExtensionContext) {
             //handle stashes not from this extension
             let stashList: Array<any> = stdout.split("\n");
             stashList.pop();
-            stashList = stashList.map((stashItem) => {
+            stashList = stashList.map((stashItem:string) => {
+                stashItem = stashItem.toLowerCase();
                 let stashString = stashItem.split(" "),
                 stashIndex = stashString[0].substring(7, stashString[0].indexOf("}")),
                 timestamp = stashString.pop(),
-                stashObject = {
-                    label: stashString[2].substring(0, stashString[2].indexOf(":")),
+                defaultMsg = stashString[2] == "on",
+                stashObject:vscode.QuickPickItem = {
+                    label: defaultMsg ? stashString[3].substring(0, stashString[3].indexOf(":")) : stashString[2].substring(0, stashString[2].indexOf(":")),
                     description: "("+stashIndex+") "
                 };
                 if(stashString.length >= 4){
-                    let tempArray = stashString.slice(3, stashString.length),
+                    let tempArray = stashString.slice(defaultMsg ? 4 : 3, stashString.length),
                     tempArrayLength = tempArray.length;
-                    stashObject.label = "";
+                    stashObject.detail= "";
                     for (let i = 0; i < tempArrayLength; i++) {
-                        stashObject.label += i+1 < tempArrayLength ? tempArray[i] + " " : tempArray[i];
+                        stashObject.detail += i+1 < tempArrayLength ? tempArray[i] + " " : tempArray[i];
                     }
                 }
                 if(parseInt(timestamp)){
                     stashObject.description += "Created " + moment(timestamp, "x").fromNow();
                 } else {
-                    stashObject.label += timestamp;
+                    stashObject.detail += timestamp;
                 }
                 return stashObject;
             });
-            vscode.window.showQuickPick(stashList, {matchOnDescription: true, placeHolder: "Choose what to unstash"}).then(chosenitem => {});
+            vscode.window.showQuickPick(stashList, {matchOnDescription: true, placeHolder: "Choose what to unstash"}).then(chosenitem => {
+                if(chosenitem === undefined){return}
+                let stashIndex = chosenitem.description.substring(chosenitem.description.indexOf("(")+1, chosenitem.description.indexOf(")"));
+                exec(strings.git.stash("apply " + stashIndex), { cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
+                    if(error) {
+                        logger.logError(strings.error("unstashing:"), stderr || error);
+                        return;
+                    }
+                });
+            });
         });
     });
 

@@ -1,4 +1,9 @@
 # Change Log
+### v0.3.0
+**Added**  
+
+* "Git: Stash", "Git: Unstash" & "Git: Clear stash" commands.
+
 ### v0.2.5  
 **Fixed**
 
