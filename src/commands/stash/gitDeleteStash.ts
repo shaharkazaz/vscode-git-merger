@@ -9,7 +9,7 @@ import {
 import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.gitPop', () => {
+    let disposable = vscode.commands.registerCommand('gitMerger.deleteStash', () => {
         exec(strings.git.stash("list "), {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {
@@ -49,16 +49,16 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 return stashObject;
             });
-            vscode.window.showQuickPick(stashList, {matchOnDescription: true, placeHolder: "Choose the stash you wish to apply and drop"}).then(chosenitem => {
+            vscode.window.showQuickPick(stashList, {matchOnDescription: true, placeHolder: "Choose the stash you wish to drop"}).then(chosenitem => {
                 if(chosenitem === undefined){return}
                 let stashIndex = chosenitem.description.substring(chosenitem.description.indexOf("(")+1, chosenitem.description.indexOf(")"));
-                exec(strings.git.stash("pop " + stashIndex), { cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
+                exec(strings.git.stash("drop " + stashIndex), { cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
                     if(error) {
                         logger.logError(strings.error("droping stash:"), stderr || error);
                         return;
                     }
                     if(stdout.indexOf("Dropped") != -1){
-                        logger.logInfo(strings.success.general("Stash", "applied and removed"));
+                        logger.logInfo(strings.success.general("Stash", "removed"));
                     }
                 });
             });

@@ -7,7 +7,7 @@ import { exec } from 'child_process';
 import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.gitStash', () => {
+    let disposable = vscode.commands.registerCommand('gitMerger.stash', () => {
         vscode.window.showInputBox({placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
             if(input[0] == "-"){
                 return "The name can't start with '-'";

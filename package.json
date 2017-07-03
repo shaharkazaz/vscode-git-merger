@@ -3,7 +3,7 @@
     "displayName": "Git Merger",
     "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "publisher": "shaharkazaz",
     "repository": {
         "type": "git",
@@ -25,44 +25,39 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.gitMergeFrom",
-        "onCommand:extension.gitAbortMerge",
-        "onCommand:extension.gitStash",
-        "onCommand:extension.gitUnstash",
-        "onCommand:extension.gitClearStash",
-        "onCommand:extension.gitDropStash",
-        "onCommand:extension.gitPop"
+        "onCommand:gitMerger.mergeFrom",
+        "onCommand:gitMerger.abortMerge",
+        "onCommand:gitMerger.stash",
+        "onCommand:gitMerger.unstash",
+        "onCommand:gitMerger.clearStash",
+        "onCommand:gitMerger.deleteStash"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.gitMergeFrom",
+                "command": "gitMerger.mergeFrom",
                 "title": "GitMerger: Merge from"
             },
             {
-                "command": "extension.gitAbortMerge",
+                "command": "gitMerger.abortMerge",
                 "title": "GitMerger: Abort merge"
             },
             {
-                "command": "extension.gitStash",
+                "command": "gitMerger.stash",
                 "title": "GitMerger: Stash"
             },
             {
-                "command": "extension.gitUnstash",
+                "command": "gitMerger.unstash",
                 "title": "GitMerger: Unstash"
             },
             {
-                "command": "extension.gitClearStash",
+                "command": "gitMerger.clearStash",
                 "title": "GitMerger: Clear stash"
             },
             {
-                "command": "extension.gitDropStash",
-                "title": "GitMerger: Drop stash"
-            },
-            {
-                "command": "extension.gitPop",
-                "title": "GitMerger: Pop"
+                "command": "gitMerger.deleteStash",
+                "title": "GitMerger: Delete stash"
             }
         ]
     },

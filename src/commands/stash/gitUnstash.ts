@@ -9,7 +9,7 @@ import {
 import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.gitUnstash', () => {
+    let disposable = vscode.commands.registerCommand('gitMerger.unstash', () => {
         exec(strings.git.stash("list "), {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {

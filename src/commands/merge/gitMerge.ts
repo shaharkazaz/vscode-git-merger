@@ -11,7 +11,7 @@ import {
 } from "../../constants/interfaces";
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.gitMergeFrom', () => {
+    let disposable = vscode.commands.registerCommand('gitMerger.mergeFrom', () => {
         exec(strings.git.getBranches, {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {

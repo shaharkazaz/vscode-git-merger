@@ -6,7 +6,7 @@ import { exec } from 'child_process';
 import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.gitAbortMerge', () => {
+    let disposable = vscode.commands.registerCommand('gitMerger.abortMerge', () => {
         exec(strings.git.merge(["abort"]), {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {

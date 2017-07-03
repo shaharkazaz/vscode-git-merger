@@ -6,7 +6,7 @@ import * as gitAbort from './commands/merge/gitAbort';
 import * as gitStash from './commands/stash/gitStash';
 import * as gitUnstash from './commands/stash/gitUnstash';
 import * as gitClearStash from './commands/stash/gitClearStash';
-import * as gitDropStash from './commands/stash/gitDropStash';
+import * as gitDeleteStash from './commands/stash/gitDeleteStash';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -16,5 +16,5 @@ export async function activate(context: vscode.ExtensionContext): Promise<any> {
     gitStash.activate(context);
     gitUnstash.activate(context);
     gitClearStash.activate(context);
-    gitDropStash.activate(context);
+    gitDeleteStash.activate(context);
 }
