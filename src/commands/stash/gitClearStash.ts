@@ -8,7 +8,7 @@ import {
 import * as logger from "../../logger";
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.gitClearStash', () => {
+    let disposable = vscode.commands.registerCommand('gitMerger.clearStash', () => {
         exec(strings.git.stash("clear"), {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {

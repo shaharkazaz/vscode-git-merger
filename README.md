@@ -24,7 +24,7 @@ The extension commands that can be accessed from the command pallet (Cmd+Shift+P
 * ```GitMerger: Stash``` - Stash your WIP for later usage.
 * ```GitMerger: Unstash``` - Apply stashed changes on working branch.
 * ```GitMerger: Clear stash``` - Remove any saved stashes.
-* ```GitMerger: Pop``` - Apply stash and remove it from stash list.
+* ```GitMerger: Delete stash``` - Delete a specific stash.
 
 # Help this extension be great
 

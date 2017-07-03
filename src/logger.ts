@@ -31,7 +31,7 @@ export function logError(errorTitle: string, error: any) {
     getLogChannel("errors").appendLine(`[Error-${moment().format(strings.timeForamt.hours)}] ${errorTitle}\n${error.toString()}`);
     vscode.window.showErrorMessage(strings.windowErrorMessage, strings.actionButtons.openLog).then((action) => {
         if (action == strings.actionButtons.openLog) {
-            this.openLog();
+            this.openLog("errors");
         }
     });
 }
