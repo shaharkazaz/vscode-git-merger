@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
                                     }
                                 }
                                 vscode.window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
-                                    if(action == strings.actionButtons.openLog){logger.openLog();}
+                                    if(action == strings.actionButtons.openLog){logger.openLog("errors");}
                                 });
                                 return;
                             } else if (stdout.indexOf(strings.git.upToDate) != -1) {

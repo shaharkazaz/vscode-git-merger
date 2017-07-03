@@ -19,11 +19,12 @@ Once you have vscode installed access the marketplace and install "Git Merger" e
 # Commands
 The extension commands that can be accessed from the command pallet (Cmd+Shift+P or Ctrl+Shift+P):
 
-* ```Git: Merge From``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
-* ```Git: Abort Merge``` - Abort merge. 
-* ```Git: Stash``` - Stash your WIP for later usage.
-* ```Git: Unstash``` - Apply stashed changes on working branch.
-* ```Git: Clear stash``` - Remove any saved stashes.
+* ```GitMerger: Merge From``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
+* ```GitMerger: Abort Merge``` - Abort merge. 
+* ```GitMerger: Stash``` - Stash your WIP for later usage.
+* ```GitMerger: Unstash``` - Apply stashed changes on working branch.
+* ```GitMerger: Clear stash``` - Remove any saved stashes.
+* ```GitMerger: Pop``` - Apply stash and remove it from stash list.
 
 # Help this extension be great
 

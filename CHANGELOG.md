@@ -2,8 +2,8 @@
 ### v0.3.0
 **Added**  
 
-* "Git: Stash", "Git: Unstash" & "Git: Clear stash" commands.
-
+* "GitMerger: Stash", "GitMerger: Unstash", "GitMerger: Drop stash", "GitMerger: Pop"  & "GitMerger: Clear stash" commands.
+* Information Log 'Git merger info'(sperated for the error log)
 ### v0.2.5  
 **Fixed**
 
