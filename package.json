@@ -19,11 +19,7 @@
     "keywords": [
         "git",
         "merge",
-        "merging",
-        "stash",
-        "unstash",
-        "shelf",
-        "util"
+        "stash"
     ],
     "categories": [
         "Other"
