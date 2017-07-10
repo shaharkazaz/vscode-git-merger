@@ -11,13 +11,13 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInputBox({placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
             if(input[0] == "-"){
                 return "The name can't start with '-'";
-            } else if(new RegExp("[()&`|]", 'g').test(input)){
-                return "The name can't contain the following characters: '|', '&', '(', ')' or '`'";
+            } else if(new RegExp("[()&`|!]", 'g').test(input)){
+                return "The name can't contain the following characters: '|', '&', '!', '(', ')' or '`'";
             } return "";
         }}).then((userInput) => {
             if(userInput === undefined){return;}
             //prevent duplicate names? 
-            exec(strings.git.stash("save ", userInput.trim() + " " + moment().format("x")), {
+            exec(strings.git.stash("save ", false, userInput.trim() + " " + moment().format("x")), {
                 cwd: vscode.workspace.rootPath
             }, (error, stdout, stderr) => {
                 if (error) {
