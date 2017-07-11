@@ -1,4 +1,9 @@
 # Change Log
+### v0.3.2  
+**Updated** 
+
+* New design for stash quick pick item
+
 ### v0.3.1  
 **Fixed** 
 
