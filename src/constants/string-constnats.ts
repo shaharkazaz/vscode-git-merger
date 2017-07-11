@@ -14,8 +14,9 @@ export default {
             }
             return command;
         },
-        stash: (stashCommand: string, stashName ? : string) => {
-            let command = "git stash " + stashCommand + (stashName || "");
+        stash: (stashCommand: string, includeFlag:boolean = false, stashName ? : string) => {
+            let flag = includeFlag ? '--pretty=format:"{\'detail\':\'%gd \u2022 %h \u2022 %cr\',\'label\':\'%s\',\'index\':\'%gd\'}"' : "",
+                command = "git stash " + stashCommand + flag + (stashName || "");
             return command;
         }
     },
