@@ -1,8 +1,17 @@
 # Change Log
 ### v0.3.2  
+**Added** 
+
+* Delete stash after unstash option ([issue #11](https://github.com/shaharkazaz/vscode-git-merger/issues/11))
+
 **Updated** 
 
-* New design for stash quick pick item
+* Code improvements in git merge function
+
+### v0.3.2  
+**Updated** 
+
+* New design for stash quick pick item ([issue #12](https://github.com/shaharkazaz/vscode-git-merger/issues/12))
 
 ### v0.3.1  
 **Fixed** 

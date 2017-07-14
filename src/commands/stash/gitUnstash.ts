@@ -1,7 +1,6 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as moment from 'moment';
 import strings from '../../constants/string-constnats';
 import {
     exec
@@ -13,30 +12,52 @@ export function activate(context: vscode.ExtensionContext) {
         exec(strings.git.stash("list ", true), {
             cwd: vscode.workspace.rootPath
         }, (error, stdout, stderr) => {
-            if(error) {
+            if (error) {
                 logger.logError(strings.error("fetching stash list"), stderr || error);
                 return;
             }
-            if(stdout.length == 0){
+            if (stdout.length == 0) {
                 logger.logInfo("No stash exists");
                 return;
             }
-            let stashList: Array<any> = stdout.split("\n").map((stashItem):vscode.QuickPickItem => {
+            let stashList: Array < any > = stdout.split("\n").map((stashItem): vscode.QuickPickItem => {
                 let tempStashItem = JSON.parse(stashItem
-                .replace(/([:{,]')/g, (matcher):string => matcher.replace("'", '"'))
-                .replace(/'[,}:]/g, (matcher):string => matcher.replace("'", '"')));
+                    .replace(/([:{,]')/g, (matcher): string => matcher.replace("'", '"'))
+                    .replace(/'[,}:]/g, (matcher): string => matcher.replace("'", '"')));
                 tempStashItem.label = tempStashItem.label.replace("WIP ", "");
                 tempStashItem.label = tempStashItem.label.charAt(0).toUpperCase() + tempStashItem.label.slice(1);
                 return tempStashItem;
             });
-            vscode.window.showQuickPick(stashList, {matchOnDescription: true, placeHolder: "Choose what to unstash"}).then(chosenitem => {
-                if(chosenitem === undefined){return}
-                exec(strings.git.stash("apply " + chosenitem.index), { cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
-                    if(error) {
+            vscode.window.showQuickPick(stashList, {
+                matchOnDescription: true,
+                placeHolder: "Choose stash to apply"
+            }).then(chosenitem => {
+                if (chosenitem === undefined) {
+                    return
+                }
+                exec(strings.git.stash("apply " + chosenitem.index), {
+                    cwd: vscode.workspace.rootPath
+                }, (error, stdout, stderr) => {
+                    if (error) {
                         logger.logError(strings.error("unstashing:"), stderr || error);
                         return;
                     }
-                    logger.logInfo("Stash was applied on current branch");
+                    logger.logInfo(strings.success.general("Stash", "applied on current branch"), {
+                        name: "delete stash",
+                        callback: () => {
+                            exec(strings.git.stash("drop " + chosenitem.index), {
+                                cwd: vscode.workspace.rootPath
+                            }, (error, stdout, stderr) => {
+                                if (error) {
+                                    logger.logError(strings.error("droping stash:"), stderr || error);
+                                    return;
+                                }
+                                if (stdout.indexOf("Dropped") != -1) {
+                                    logger.logInfo(strings.success.general("Stash", "removed"));
+                                }
+                            });
+                        }
+                    });
                 });
             });
         });
