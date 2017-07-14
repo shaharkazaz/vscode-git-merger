@@ -1,7 +1,6 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as moment from 'moment';
 import strings from '../../constants/string-constnats';
 import { exec } from 'child_process';
 import * as logger from "../../logger";
@@ -17,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
         }}).then((userInput) => {
             if(userInput === undefined){return;}
             //prevent duplicate names? 
-            exec(strings.git.stash("save ", false, userInput.trim() + " " + moment().format("x")), {
+            exec(strings.git.stash("save ", false, userInput.trim()), {
                 cwd: vscode.workspace.rootPath
             }, (error, stdout, stderr) => {
                 if (error) {
