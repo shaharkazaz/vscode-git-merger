@@ -1,7 +1,6 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as moment from 'moment';
 import strings from '../../constants/string-constnats';
 import {
     exec
