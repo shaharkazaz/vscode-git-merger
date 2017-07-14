@@ -19,26 +19,27 @@ export function activate(context: vscode.ExtensionContext) {
                 logger.logError(strings.error("fetching branch list"), stderr || error);
                 return;
             }
-            let branchObject: IBranchsObject = {
-                currentBranch: "",
-                branchList: []
-            };
-            let tempArray = stdout.split("\n"), tempArrayLength = tempArray.length -1;
-            for (let i = 0; i < tempArrayLength; i++) {
-                let branch = tempArray[i].replace(/'/g, '').trim(), columnIndex = branch.indexOf(":");
-                if (branch.indexOf("*") != -1) {
-                    branchObject.currentBranch = branch.replace('*', '').trim().substring(0, columnIndex-1);
-                } else if(branch.indexOf("HEAD") == -1) {
-                    let branchName =  branch.substring(0, columnIndex),
-                        branchHash = branch.substring(columnIndex + 1, branch.length);
-                    if(branchName.indexOf("origin") != -1){
-                        branchHash = "Remote branch at " + branchHash;
+            let currentBranch;
+            let branchList: Array < any > = stdout.split("\n").map((branch) => {
+                if(branch){
+                    let tempBranchItem = JSON.parse(branch
+                        .replace(/([:{,\s]')/g, (matcher): string => matcher.replace("'", '"'))
+                        .replace(/'[,}:\s]/g, (matcher): string => matcher.replace("'", '"')));
+                    if(tempBranchItem.label.indexOf("origin") != -1){
+                        tempBranchItem.description = "Remote branch at " + tempBranchItem.description;
                     }
-                    branchObject.branchList.push({label: branchName, description: branchHash})
+                    return tempBranchItem;
                 }
-            }
-
-            vscode.window.showQuickPick(branchObject.branchList, strings.quickPick.chooseBranch).then(chosenitem => {
+            }).filter((branch) => {
+                if(branch) {
+                    if(branch.current == "*"){
+                        currentBranch = branch.label; 
+                    } else {
+                        return true;
+                    }
+                }
+            });
+            vscode.window.showQuickPick(branchList , {placeHolder: strings.quickPick.chooseBranch}).then(chosenitem => {
                 if (chosenitem) {
                     exec(strings.git.merge(["no-commit", "no-ff"], chosenitem.label), {
                         cwd: vscode.workspace.rootPath
@@ -66,7 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
                             logger.logError(strings.error("merging"), stderr || error);
                             return;
                         }
-                        logger.logInfo(strings.success.merge(chosenitem.label, branchObject.currentBranch));
+                        logger.logInfo(strings.success.merge(chosenitem.label, currentBranch));
                     });
                 }
             });

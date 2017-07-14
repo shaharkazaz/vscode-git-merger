@@ -30,15 +30,19 @@ function getLogChannel(type) {
 export function logError(errorTitle: string, error: any) {
     getLogChannel("errors").appendLine(`[Error-${moment().format(strings.timeForamt.hours)}] ${errorTitle}\n${error.toString()}`);
     vscode.window.showErrorMessage(strings.windowErrorMessage, strings.actionButtons.openLog).then((action) => {
-        if (action == strings.actionButtons.openLog) {
+        if (action) {
             this.openLog("errors");
         }
     });
 }
 
-export function logInfo(message: string) {
+export function logInfo(message: string, actionButton?) {
     getLogChannel("info").appendLine(`[Info-${moment().format(strings.timeForamt.hours)}] ${message}`);
-    vscode.window.showInformationMessage(message);
+    vscode.window.showInformationMessage(message, actionButton ? actionButton.name : []).then((action) => {
+        if(action){
+            actionButton.callback();
+        }
+    });
 }
 
 export function logWarning(message: string) {

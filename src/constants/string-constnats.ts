@@ -3,7 +3,7 @@ export default {
         conflicts: "CONFLICT (content): Merge conflict in",
         upToDate: "Already up-to-date",
         noMerge: "There is no merge to abort",
-        getBranches: "git for-each-ref --format='%(HEAD)%(refname:short):%(objectname:short)'",
+        getBranches: 'git for-each-ref --format="{\'description\':\'%(objectname:short)\',\'label\':\'%(refname:short)\',\'current\':\'%(HEAD)\'}" refs/heads refs/remotes',
         getCurrentBranch: "git rev-parse --abbrev-ref HEAD",
         merge: (flags: Array < string > , branchName ? : string) => {
             let command = "git merge " + (branchName || "");
@@ -44,7 +44,7 @@ export default {
             return operation + " was successfully " + functionality;
         },
         merge: (choosenBranch, currentBranch) => {
-            return "Branch " + choosenBranch + " was merged into the current branch " + currentBranch;
+            return "Branch " + choosenBranch + " was successfully merged into branch " + currentBranch;
         }
     }
 }
