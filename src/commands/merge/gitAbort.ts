@@ -1,14 +1,21 @@
 'use strict';
-
-import * as vscode from 'vscode';
+/** 
+ *  @fileOverview The git abort merge command executer file
+ *  @author       Shahar Kazaz
+ *  @requires     vscode
+ *  @requires     strings: The extension string constants
+ *  @requires     exec
+ *  @requires     logger
+ */
+import {commands, workspace, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
 import { exec } from 'child_process';
 import * as logger from "../../logger";
 
-export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('gitMerger.abortMerge', () => {
+export function activate(context: ExtensionContext) {
+    let disposable = commands.registerCommand('gitMerger.abortMerge', () => {
         exec(strings.git.merge(["abort"]), {
-            cwd: vscode.workspace.rootPath
+            cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
                 if(stderr.indexOf(strings.git.noMerge)){

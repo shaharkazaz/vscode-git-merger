@@ -1,6 +1,14 @@
-import * as vscode from 'vscode';
+/** 
+ *  @fileOverview This file contains all the string constants
+ *  @author       Shahar Kazaz
+ *  @requires     workspace from vscode
+ *  @requires     allowedMergeFlags 
+ */
+import {workspace} from 'vscode';
+import {allowedMergeFlags} from "./allowedMergeFlags"
+
 export default {
-    userSettings: vscode.workspace.getConfiguration('gitMerger'),
+    userSettings: workspace.getConfiguration('gitMerger'),
     git: {
         conflicts: "CONFLICT (content): Merge conflict in",
         upToDate: "Already up-to-date",
@@ -11,7 +19,7 @@ export default {
             let command = "git merge " + (branchName || "");
             if (flags) {
                 flags.forEach(flag => {
-                    command += " --" + flag;
+                    command += " " + allowedMergeFlags[flag] + flag;
                 });
             }
             return command;

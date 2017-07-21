@@ -1,13 +1,21 @@
 'use strict';
+/** 
+ *  @fileOverview The git stash command executer file
+ *  @author       Shahar Kazaz
+ *  @requires     vscode
+ *  @requires     strings: The extension string constants
+ *  @requires     exec
+ *  @requires     logger
+ */
 
-import * as vscode from 'vscode';
+import {commands, workspace, window, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
 import { exec } from 'child_process';
 import * as logger from "../../logger";
 
-export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('gitMerger.stash', () => {
-        vscode.window.showInputBox({placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
+export function activate(context: ExtensionContext) {
+    let disposable = commands.registerCommand('gitMerger.stash', () => {
+        window.showInputBox({placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
             if(input[0] == "-"){
                 return "The name can't start with '-'";
             } else if(new RegExp("[()&`|!]", 'g').test(input)){
@@ -17,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
             if(userInput === undefined){return;}
             //prevent duplicate names? 
             exec(strings.git.stash("save ", false, userInput.trim()), {
-                cwd: vscode.workspace.rootPath
+                cwd: workspace.rootPath
             }, (error, stdout, stderr) => {
                 if (error) {
                     logger.logError(strings.error("creating stash:"), stderr || error);

@@ -1,19 +1,22 @@
 'use strict';
-
-import * as vscode from 'vscode';
-import {
-    exec
-} from 'child_process';
-import * as logger from "../../logger";
+/** 
+ *  @fileOverview The git merge command executer file
+ *  @author       Shahar Kazaz
+ *  @requires     vscode
+ *  @requires     strings: The extension string constants
+ *  @requires     exec
+ *  @requires     logger
+ */
+import {commands, workspace, window, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
-import {
-    IBranchsObject
-} from "../../constants/interfaces";
+import {exec} from 'child_process';
+import * as logger from "../../logger";
+import {allowedMergeFlags} from "../../constants/allowedMergeFlags"
 
-export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('gitMerger.mergeFrom', () => {
+export function activate(context: ExtensionContext) {
+    let disposable = commands.registerCommand('gitMerger.mergeFrom', () => {
         exec(strings.git.getBranches, {
-            cwd: vscode.workspace.rootPath
+            cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
                 logger.logError(strings.error("fetching branch list"), stderr || error);
@@ -31,12 +34,28 @@ export function activate(context: vscode.ExtensionContext) {
                     return true;
                 }
             });
-            vscode.window.showQuickPick(branchList, {
+            window.showQuickPick(branchList, {
                 placeHolder: strings.quickPick.chooseBranch
             }).then(chosenitem => {
                 if (chosenitem) {
-                    exec(strings.git.merge(strings.userSettings.get("mergeCommandFlags"), chosenitem.label), {
-                        cwd: vscode.workspace.rootPath
+                    let mergeFlags: Array < string > = strings.userSettings.get("mergeCommandFlags"),
+                    invalidFlag = [];
+                    mergeFlags.forEach((flag, index) => {
+                        if (!allowedMergeFlags[flag]) {
+                            invalidFlag.push(flag);
+                            mergeFlags.splice(index, 1);
+                        }
+                    });
+                    if(invalidFlag.length > 0){
+                        logger.logWarning("The following commands are not valid merge commands: " + invalidFlag.toString());
+                        window.showWarningMessage("Some of your flags were invalid and were exluded, check the log for more info", strings.actionButtons.openLog).then((chosenitem)=>{
+                               if(chosenitem){
+                                   logger.openLog();
+                               } 
+                            });
+                    }
+                    exec(strings.git.merge(mergeFlags, (chosenitem as any).label), {
+                        cwd: workspace.rootPath
                     }, (error, stdout, stderr) => {
                         if (stdout) {
                             if (stdout.toLowerCase().indexOf("conflict") != -1) {
@@ -49,9 +68,9 @@ export function activate(context: vscode.ExtensionContext) {
                                         logger.logWarning(conflictedFiles[i].substr(38, conflictedFiles[i].length));
                                     }
                                 }
-                                vscode.window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
+                                window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
                                     if (action == strings.actionButtons.openLog) {
-                                        logger.openLog("errors");
+                                        logger.openLog();
                                     }
                                 });
                                 return;
@@ -63,7 +82,7 @@ export function activate(context: vscode.ExtensionContext) {
                             logger.logError(strings.error("merging"), stderr || error);
                             return;
                         }
-                        logger.logInfo(strings.success.merge(chosenitem.label, currentBranch));
+                        logger.logInfo(strings.success.merge((chosenitem as any).label, currentBranch));
                     });
                 }
             });
