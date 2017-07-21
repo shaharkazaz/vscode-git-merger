@@ -1,6 +1,11 @@
-import * as vscode from 'vscode';
+/** 
+ *  @fileOverview This file contains all the string constants
+ *  @author       Shahar Kazaz
+ *  @requires     workspace from vscode
+ */
+import {workspace} from 'vscode';
 export default {
-    userSettings: vscode.workspace.getConfiguration('gitMerger'),
+    userSettings: workspace.getConfiguration('gitMerger'),
     git: {
         conflicts: "CONFLICT (content): Merge conflict in",
         upToDate: "Already up-to-date",

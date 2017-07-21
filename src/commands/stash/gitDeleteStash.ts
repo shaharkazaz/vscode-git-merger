@@ -1,16 +1,21 @@
 'use strict';
-
-import * as vscode from 'vscode';
+/** 
+ *  @fileOverview The git delete stash command executer file
+ *  @author       Shahar Kazaz
+ *  @requires     vscode
+ *  @requires     strings: The extension string constants
+ *  @requires     exec
+ *  @requires     logger
+ */
+import {commands, workspace, window, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
-import {
-    exec
-} from 'child_process';
+import { exec } from 'child_process';
 import * as logger from "../../logger";
 
-export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('gitMerger.deleteStash', () => {
+export function activate(context: ExtensionContext) {
+    let disposable = commands.registerCommand('gitMerger.deleteStash', () => {
         exec(strings.git.stash("list ", true), {
-            cwd: vscode.workspace.rootPath
+            cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if(error) {
                 logger.logError(strings.error("fetching stash list"), stderr || error);
@@ -25,9 +30,9 @@ export function activate(context: vscode.ExtensionContext) {
                 stashItem.label = stashItem.label.replace("WIP ", "");
                 stashItem.label = stashItem.label.charAt(0).toUpperCase() + stashItem.label.slice(1);
             });
-            vscode.window.showQuickPick(stashList, {matchOnDescription: true, placeHolder: "Choose the stash you wish to drop"}).then(chosenitem => {
+            window.showQuickPick(stashList, {matchOnDescription: true, placeHolder: "Choose the stash you wish to drop"}).then(chosenitem => {
                 if(chosenitem){
-                    exec(strings.git.stash("drop " + chosenitem.index), { cwd: vscode.workspace.rootPath}, (error, stdout, stderr) => {
+                    exec(strings.git.stash("drop " + chosenitem.index), { cwd: workspace.rootPath}, (error, stdout, stderr) => {
                         if(error) {
                             logger.logError(strings.error("droping stash:"), stderr || error);
                             return;

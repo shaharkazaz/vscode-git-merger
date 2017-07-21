@@ -1,19 +1,21 @@
 'use strict';
-
-import * as vscode from 'vscode';
-import {
-    exec
-} from 'child_process';
-import * as logger from "../../logger";
+/** 
+ *  @fileOverview The git merge command executer file
+ *  @author       Shahar Kazaz
+ *  @requires     vscode
+ *  @requires     strings: The extension string constants
+ *  @requires     exec
+ *  @requires     logger
+ */
+import {commands, workspace, window, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
-import {
-    IBranchsObject
-} from "../../constants/interfaces";
+import {exec} from 'child_process';
+import * as logger from "../../logger";
 
-export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('gitMerger.mergeFrom', () => {
+export function activate(context: ExtensionContext) {
+    let disposable = commands.registerCommand('gitMerger.mergeFrom', () => {
         exec(strings.git.getBranches, {
-            cwd: vscode.workspace.rootPath
+            cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
                 logger.logError(strings.error("fetching branch list"), stderr || error);
@@ -31,12 +33,12 @@ export function activate(context: vscode.ExtensionContext) {
                     return true;
                 }
             });
-            vscode.window.showQuickPick(branchList, {
+            window.showQuickPick(branchList, {
                 placeHolder: strings.quickPick.chooseBranch
             }).then(chosenitem => {
                 if (chosenitem) {
-                    exec(strings.git.merge(strings.userSettings.get("mergeCommandFlags"), chosenitem.label), {
-                        cwd: vscode.workspace.rootPath
+                    exec(strings.git.merge(strings.userSettings.get("mergeCommandFlags"), (chosenitem as any).label), {
+                        cwd: workspace.rootPath
                     }, (error, stdout, stderr) => {
                         if (stdout) {
                             if (stdout.toLowerCase().indexOf("conflict") != -1) {
@@ -49,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
                                         logger.logWarning(conflictedFiles[i].substr(38, conflictedFiles[i].length));
                                     }
                                 }
-                                vscode.window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
+                                window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
                                     if (action == strings.actionButtons.openLog) {
                                         logger.openLog("errors");
                                     }
@@ -63,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
                             logger.logError(strings.error("merging"), stderr || error);
                             return;
                         }
-                        logger.logInfo(strings.success.merge(chosenitem.label, currentBranch));
+                        logger.logInfo(strings.success.merge((chosenitem as any).label, currentBranch));
                     });
                 }
             });

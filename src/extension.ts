@@ -1,20 +1,20 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import * as gitMerge from './commands/merge/gitMerge';
-import * as gitAbort from './commands/merge/gitAbort';
-import * as gitStash from './commands/stash/gitStash';
-import * as gitUnstash from './commands/stash/gitUnstash';
-import * as gitClearStash from './commands/stash/gitClearStash';
-import * as gitDeleteStash from './commands/stash/gitDeleteStash';
+/** 
+ *  @fileOverview This file the initilzor of the extension
+ *  @author       Shahar Kazaz
+ *  @requires     vscode
+ *  @requires     ./commands(/index.ts): All the extensions commands
+ */
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+import * as vscode from 'vscode';
+import {commands} from './commands';
+
+
+/**
+ * this method is called when your extension is activated
+ * your extension is activated the very first time the command is executed
+ */ 
 export async function activate(context: vscode.ExtensionContext): Promise<any> {
-    gitMerge.activate(context);
-    gitAbort.activate(context);
-    gitStash.activate(context);
-    gitUnstash.activate(context);
-    gitClearStash.activate(context);
-    gitDeleteStash.activate(context);
+    commands.forEach((command) => {
+        command.activate(context);
+    });
 }
