@@ -19,29 +19,23 @@ export function activate(context: vscode.ExtensionContext) {
                 logger.logError(strings.error("fetching branch list"), stderr || error);
                 return;
             }
-            let currentBranch;
-            let branchList: Array < any > = stdout.split("\n").map((branch) => {
-                if(branch){
-                    let tempBranchItem = JSON.parse(branch
-                        .replace(/([:{,\s]')/g, (matcher): string => matcher.replace("'", '"'))
-                        .replace(/'[,}:\s]/g, (matcher): string => matcher.replace("'", '"')));
-                    if(tempBranchItem.label.indexOf("origin") != -1){
-                        tempBranchItem.description = "Remote branch at " + tempBranchItem.description;
+            let branchList = JSON.parse("[" + stdout.slice(0, -2) + "]"),
+                currentBranch;
+            branchList = branchList.filter((branch) => {
+                if (branch.current === "*") {
+                    currentBranch = branch.label;
+                } else {
+                    if (branch.label.indexOf("origin") != -1) {
+                        branch.description = "Remote branch at " + branch.description;
                     }
-                    return tempBranchItem;
-                }
-            }).filter((branch) => {
-                if(branch) {
-                    if(branch.current == "*"){
-                        currentBranch = branch.label; 
-                    } else {
-                        return true;
-                    }
+                    return true;
                 }
             });
-            vscode.window.showQuickPick(branchList , {placeHolder: strings.quickPick.chooseBranch}).then(chosenitem => {
+            vscode.window.showQuickPick(branchList, {
+                placeHolder: strings.quickPick.chooseBranch
+            }).then(chosenitem => {
                 if (chosenitem) {
-                    exec(strings.git.merge(["no-commit", "no-ff"], chosenitem.label), {
+                    exec(strings.git.merge(strings.userSettings.get("mergeCommandFlags"), chosenitem.label), {
                         cwd: vscode.workspace.rootPath
                     }, (error, stdout, stderr) => {
                         if (stdout) {
@@ -56,7 +50,9 @@ export function activate(context: vscode.ExtensionContext) {
                                     }
                                 }
                                 vscode.window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
-                                    if(action == strings.actionButtons.openLog){logger.openLog("errors");}
+                                    if (action == strings.actionButtons.openLog) {
+                                        logger.openLog("errors");
+                                    }
                                 });
                                 return;
                             } else if (stdout.indexOf(strings.git.upToDate) != -1) {

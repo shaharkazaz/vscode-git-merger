@@ -14,7 +14,7 @@
         "vscode": "^1.13.0"
     },
     "galleryBanner": {
-        "color": "BDE4A7"
+        "color": "#BDE4A7"
     },
     "keywords": [
         "git",
@@ -34,8 +34,23 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "commands": [
-            {
+        "configuration": {
+            "type": "object",
+            "title": "GitMerger configuration",
+            "properties": {
+                "gitMerger.mergeCommandFlags": {
+                    "type": "Array<string>",
+                    "default": ["no-commit", "no-ff"],
+                    "description": "Add flags to the git merge command"
+                },
+                "gitMerger.includeCommitMessage": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Generate a commit message after merge and commit"
+                }
+            }
+        },
+        "commands": [{
                 "command": "gitMerger.mergeFrom",
                 "title": "GitMerger: Merge from"
             },

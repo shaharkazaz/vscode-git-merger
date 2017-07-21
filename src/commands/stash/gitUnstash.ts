@@ -20,45 +20,41 @@ export function activate(context: vscode.ExtensionContext) {
                 logger.logInfo("No stash exists");
                 return;
             }
-            let stashList: Array < any > = stdout.split("\n").map((stashItem): vscode.QuickPickItem => {
-                let tempStashItem = JSON.parse(stashItem
-                    .replace(/([:{,]')/g, (matcher): string => matcher.replace("'", '"'))
-                    .replace(/'[,}:]/g, (matcher): string => matcher.replace("'", '"')));
-                tempStashItem.label = tempStashItem.label.replace("WIP ", "");
-                tempStashItem.label = tempStashItem.label.charAt(0).toUpperCase() + tempStashItem.label.slice(1);
-                return tempStashItem;
+            let stashList: Array < any > = JSON.parse("[" + stdout.slice(0, -1) + "]");
+            stashList.forEach(stashItem => {
+                stashItem.label = stashItem.label.replace("WIP ", "");
+                stashItem.label = stashItem.label.charAt(0).toUpperCase() + stashItem.label.slice(1);
             });
             vscode.window.showQuickPick(stashList, {
                 matchOnDescription: true,
                 placeHolder: "Choose stash to apply"
             }).then(chosenitem => {
-                if (chosenitem === undefined) {
-                    return
-                }
-                exec(strings.git.stash("apply " + chosenitem.index), {
-                    cwd: vscode.workspace.rootPath
-                }, (error, stdout, stderr) => {
-                    if (error) {
-                        logger.logError(strings.error("unstashing:"), stderr || error);
-                        return;
-                    }
-                    logger.logInfo(strings.success.general("Stash", "applied on current branch"), {
-                        name: "delete stash",
-                        callback: () => {
-                            exec(strings.git.stash("drop " + chosenitem.index), {
-                                cwd: vscode.workspace.rootPath
-                            }, (error, stdout, stderr) => {
-                                if (error) {
-                                    logger.logError(strings.error("droping stash:"), stderr || error);
-                                    return;
-                                }
-                                if (stdout.indexOf("Dropped") != -1) {
-                                    logger.logInfo(strings.success.general("Stash", "removed"));
-                                }
-                            });
+                if (chosenitem) {
+                    exec(strings.git.stash("apply " + chosenitem.index), {
+                        cwd: vscode.workspace.rootPath
+                    }, (error, stdout, stderr) => {
+                        if (error) {
+                            logger.logError(strings.error("unstashing:"), stderr || error);
+                            return;
                         }
+                        logger.logInfo(strings.success.general("Stash", "applied on current branch"), {
+                            name: "delete stash",
+                            callback: () => {
+                                exec(strings.git.stash("drop " + chosenitem.index), {
+                                    cwd: vscode.workspace.rootPath
+                                }, (error, stdout, stderr) => {
+                                    if (error) {
+                                        logger.logError(strings.error("droping stash:"), stderr || error);
+                                        return;
+                                    }
+                                    if (stdout.indexOf("Dropped") != -1) {
+                                        logger.logInfo(strings.success.general("Stash", "removed"));
+                                    }
+                                });
+                            }
+                        });
                     });
-                });
+                }
             });
         });
     });
