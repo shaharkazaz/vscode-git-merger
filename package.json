@@ -43,10 +43,15 @@
                     "default": ["no-commit", "no-ff"],
                     "description": "Add flags to the git merge command"
                 },
-                "gitMerger.includeCommitMessage": {
+                "gitMerger.customCommitMessage": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Generate a commit message after merge and commit"
+                    "default": false,
+                    "description": "Add a custom commit message to the merge"
+                },
+                "gitMerger.extendAutoCommitMessage": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Add your custom message after the auto commit message"
                 }
             }
         },

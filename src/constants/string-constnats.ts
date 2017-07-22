@@ -5,7 +5,7 @@
  *  @requires     allowedMergeFlags 
  */
 import {workspace} from 'vscode';
-import {allowedMergeFlags} from "./allowedMergeFlags"
+import { allowedFlags } from "./allowedFlags";
 
 export default {
     userSettings: workspace.getConfiguration('gitMerger'),
@@ -15,12 +15,17 @@ export default {
         noMerge: "There is no merge to abort",
         getBranches: 'git for-each-ref --format=\'{"description":"%(objectname:short)","label":"%(refname:short)","current":"%(HEAD)"},\' refs/heads refs/remotes',
         getCurrentBranch: "git rev-parse --abbrev-ref HEAD",
-        merge: (flags: Array < string > , branchName ? : string) => {
+        merge: (flags: Array < string > , branchName ? : string, commitMessage?: string) => {
             let command = "git merge " + (branchName || "");
             if (flags) {
                 flags.forEach(flag => {
-                    command += " " + allowedMergeFlags[flag] + flag;
+                    if(flag !== "m"){
+                        command += ' ' + allowedFlags["merge"][flag] + flag;
+                    }
                 });
+            }
+            if(commitMessage){
+                command += ' -m "' + commitMessage + '"';
             }
             return command;
         },
@@ -54,7 +59,7 @@ export default {
             return operation + " was successfully " + functionality;
         },
         merge: (choosenBranch, currentBranch) => {
-            return "Branch " + choosenBranch + " was successfully merged into branch " + currentBranch;
+            return "Branch '" + choosenBranch + "' was successfully merged into branch '" + currentBranch + "'";
         }
     }
 }
