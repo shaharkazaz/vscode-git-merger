@@ -3,7 +3,7 @@
     "displayName": "Git Merger",
     "icon": "merger-icon.png",
     "description": "Simplifies the git merge process",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "publisher": "shaharkazaz",
     "repository": {
         "type": "git",
@@ -38,10 +38,10 @@
             "type": "object",
             "title": "GitMerger configuration",
             "properties": {
-                "gitMerger.mergeCommandFlags": {
+                "gitMerger.mergeCommandOptions": {
                     "type": "Array<string>",
                     "default": ["no-commit", "no-ff"],
-                    "description": "Add flags to the git merge command"
+                    "description": "Add options to the git merge command"
                 },
                 "gitMerger.customCommitMessage": {
                     "type": "boolean",
@@ -50,7 +50,7 @@
                 },
                 "gitMerger.extendAutoCommitMessage": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Add your custom message after the auto commit message"
                 }
             }

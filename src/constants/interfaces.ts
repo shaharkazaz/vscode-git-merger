@@ -16,8 +16,8 @@ export interface IGitStashResponse extends QuickPickItem {
     index: string;
 }
 
-export interface IFlagsObj {
-        validFlags: Array<string>;
+export interface IOptionsObj {
+        validOptions: Array<string>;
         requireCommitMessage: boolean;
-        invalidFlags: Array<string>;
+        invalidOptions: Array<string>;
 }

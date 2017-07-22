@@ -2,10 +2,10 @@
  *  @fileOverview This file contains all the string constants
  *  @author       Shahar Kazaz
  *  @requires     workspace from vscode
- *  @requires     allowedMergeFlags 
+ *  @requires     allowedOptions 
  */
 import {workspace} from 'vscode';
-import { allowedFlags } from "./allowedFlags";
+import { allowedOptions } from "./allowedOptions";
 
 export default {
     userSettings: workspace.getConfiguration('gitMerger'),
@@ -15,12 +15,12 @@ export default {
         noMerge: "There is no merge to abort",
         getBranches: 'git for-each-ref --format=\'{"description":"%(objectname:short)","label":"%(refname:short)","current":"%(HEAD)"},\' refs/heads refs/remotes',
         getCurrentBranch: "git rev-parse --abbrev-ref HEAD",
-        merge: (flags: Array < string > , branchName ? : string, commitMessage?: string) => {
+        merge: (options: Array < string > , branchName ? : string, commitMessage?: string) => {
             let command = "git merge " + (branchName || "");
-            if (flags) {
-                flags.forEach(flag => {
-                    if(flag !== "m"){
-                        command += ' ' + allowedFlags["merge"][flag] + flag;
+            if (options) {
+                options.forEach(option => {
+                    if(option !== "m"){
+                        command += ' ' + allowedOptions["merge"][option] + option;
                     }
                 });
             }
@@ -29,9 +29,9 @@ export default {
             }
             return command;
         },
-        stash: (stashCommand: string, includeFlag:boolean = false, stashName ? : string) => {
-            let flag = includeFlag ? '--pretty=format:\'{"detail":"%gd \u2022 %h \u2022 %cr","label":"%s","index":"%gd"},\'' : "",
-                command = "git stash " + stashCommand + flag + (stashName || "");
+        stash: (stashCommand: string, includeOption:boolean = false, stashName ? : string) => {
+            let option = includeOption ? '--pretty=format:\'{"detail":"%gd \u2022 %h \u2022 %cr","label":"%s","index":"%gd"},\'' : "",
+                command = "git stash " + stashCommand + option + (stashName || "");
             return command;
         }
     },

@@ -1,11 +1,11 @@
 import {
     IBranchObj,
-    IFlagsObj,
+    IOptionsObj,
     IGitStashResponse
 } from "../constants/interfaces";
 import {
-    allowedFlags
-} from "../constants/allowedFlags";
+    allowedOptions
+} from "../constants/allowedOptions";
 import strings from '../constants/string-constnats';
 
 export function getBranchList(output: string): IBranchObj {
@@ -38,23 +38,23 @@ export function getStashList(output: string): Array < IGitStashResponse > {
     return stashList;
 }
 
-export function processUserFlags(userSettings, flagsType): IFlagsObj {
-    let invalidFlags: Array < string > = [],
+export function processUserOptions(userSettings, optionsType): IOptionsObj {
+    let invalidOptions: Array < string > = [],
         requireCommitMessage = false;
     for (let index = 0; index < userSettings.length; index++) {
-        let flag = userSettings[index];
-        if (!allowedFlags[flagsType][flag]) {
-            invalidFlags.push(flag);
+        let option = userSettings[index];
+        if (!allowedOptions[optionsType][option]) {
+            invalidOptions.push(option);
             userSettings.splice(index, 1);
             index--;
-        } else if (flagsType === "merge" && (flag === "m" || strings.userSettings.get("customCommitMessage"))) {
+        } else if (optionsType === "merge" && (option === "m" || strings.userSettings.get("customCommitMessage"))) {
             requireCommitMessage = true;
         }
     }
     return {
-        validFlags: userSettings,
+        validOptions: userSettings,
         requireCommitMessage: requireCommitMessage,
-        invalidFlags: invalidFlags
+        invalidOptions: invalidOptions
     }
 }
 

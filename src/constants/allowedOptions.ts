@@ -1,4 +1,4 @@
-export const allowedFlags = {
+export const allowedOptions = {
     "merge": {
         "commit": "--",
         "no-commit": "--",

@@ -1,5 +1,16 @@
 # Change Log
-### v0.3.2  
+### v0.3.4  
+**Added** 
+
+* User can now add basic configuration to the merge command, for more info check out the repo [wiki](https://github.com/shaharkazaz/vscode-git-merger/wiki/User-config)  
+* Custom commit message to replace/extend the auto commit message.  
+* Documentation of the project.
+
+**Updated** 
+
+* Code improvements.
+
+### v0.3.3  
 **Added** 
 
 * Delete stash after unstash option ([issue #11](https://github.com/shaharkazaz/vscode-git-merger/issues/11))
@@ -52,7 +63,7 @@
 ### v0.2.1
 **Fixed**  
 
-* minor bug fix 
+* Minor bug fix 
  
 ### v0.2.0
 **Fixed** 

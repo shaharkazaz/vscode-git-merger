@@ -50,24 +50,6 @@ export function activate(context: ExtensionContext) {
     }
 
     /**
-     * Register the command into the extension
-     * @returns {void}
-     */
-    function registerCommand() {
-        let disposable = commands.registerCommand('gitMerger.deleteStash', () => {
-            window.showQuickPick(stashList, {
-                matchOnDescription: true,
-                placeHolder: "Choose the stash you wish to drop"
-            }).then(stashItem => {
-                if (stashItem) {
-                    deleteStash(stashItem);
-                }
-            });
-        });
-        context.subscriptions.push(disposable);
-    }
-
-    /**
      * Get the list of all the stashs
      * @returns {void}
      */
@@ -77,14 +59,23 @@ export function activate(context: ExtensionContext) {
         }).toString());
     }
 
-    try {
-        stashList = fetchStashList();
-        if (stashList.length > 0) {
-            registerCommand();
-        } else {
-            logger.logInfo("No stash exists");
+    let disposable = commands.registerCommand('gitMerger.deleteStash', () => {
+        try {
+            stashList = fetchStashList();
+            if (stashList.length === 0) {
+                logger.logInfo("No stash exists");
+            }
+        } catch (error) {
+            logger.logError(strings.error("fetching branch list"), error.message);
         }
-    } catch (error) {
-        logger.logError(strings.error("fetching branch list"), error.message);
-    }
+        window.showQuickPick(stashList, {
+            matchOnDescription: true,
+            placeHolder: "Choose the stash you wish to drop"
+        }).then(stashItem => {
+            if (stashItem) {
+                deleteStash(stashItem);
+            }
+        });
+    });
+    context.subscriptions.push(disposable);
 }

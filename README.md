@@ -1,15 +1,11 @@
 # ![alt text](./merger-icon.png "Git Merger") Git Merger [![](https://vsmarketplacebadge.apphb.com/version-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](https://vsmarketplacebadge.apphb.com/installs/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](https://vsmarketplacebadge.apphb.com/rating-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger)
 
-**NOTICE** - If you have installed v0.2.2 or older you need to manually update the extension due to a bug in the extension auto-update
-
 No more terminal! Merging branches now in vscode.  
-An easy merge flow using the vscode conflict handler.
 
-# Upcoming features
+# Road Map
 
-* Auto merge commit message (soon)
-* A rich settings file for a dynamic experiance (soon)
-* 3 screens conflict resolver.
+My vision is to create the merge resolver we all want, a 3 screen just click and fix merger.  
+Coming soon to your VScode.
 
 # Installation
 
