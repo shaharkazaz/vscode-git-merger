@@ -9,6 +9,7 @@ import {
 import strings from '../constants/string-constnats';
 
 export function getBranchList(output: string): IBranchObj {
+    output = output.replace("'", "").trim();
     let responseObj = {
         branchList: this.parseGitJson(output),
         currentBranch: ""
