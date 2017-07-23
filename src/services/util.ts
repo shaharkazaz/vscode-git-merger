@@ -9,7 +9,6 @@ import {
 import strings from '../constants/string-constnats';
 
 export function getBranchList(output: string): IBranchObj {
-    output = output.replace("'", "").trim();
     let responseObj = {
         branchList: this.parseGitJson(output),
         currentBranch: ""
@@ -60,6 +59,8 @@ export function processUserOptions(userSettings, optionsType): IOptionsObj {
 }
 
 export function parseGitJson(jsonString: string): any {
+    jsonString = jsonString.replace(/[:{,\s]'/g, (matcher): string => matcher.replace("'", '"'))
+        .replace(/'[,}:\s]/g, (matcher): string => matcher.replace("'", '"'));
     jsonString = "[" + jsonString.substring(0, jsonString.lastIndexOf("},")) + "}]";
     return JSON.parse(jsonString);
 }
