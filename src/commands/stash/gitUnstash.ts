@@ -91,19 +91,20 @@ export function activate(context: ExtensionContext) {
             stashList = fetchStashList();
             if (stashList.length === 0) {
                 logger.logInfo("No stash exists");
+                return
             }
+            window.showQuickPick(stashList, {
+                matchOnDescription: true,
+                placeHolder: "Choose stash to apply"
+            }).then(choosenStashItem => {
+                if (choosenStashItem) {
+                    stashItem = choosenStashItem;
+                    unstash();
+                }
+            });
         } catch (error) {
             logger.logError(strings.error("fetching branch list"), error.message);
         }
-        window.showQuickPick(stashList, {
-            matchOnDescription: true,
-            placeHolder: "Choose stash to apply"
-        }).then(choosenStashItem => {
-            if (choosenStashItem) {
-                stashItem = choosenStashItem;
-                unstash();
-            }
-        });
     });
     context.subscriptions.push(disposable);
 }

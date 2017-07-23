@@ -1,4 +1,9 @@
 # Change Log
+### v0.3.5
+**Fixed** 
+
+* Fixed bug ([issue #15](https://github.com/shaharkazaz/vscode-git-merger/issues/15))
+
 ### v0.3.4  
 **Added** 
 
@@ -43,7 +48,7 @@
 ### v0.2.5  
 **Fixed**
 
-* Bug fix 
+* Fixed bug ([issue #2](https://github.com/shaharkazaz/vscode-git-merger/issues/2))
 
 ### v0.2.3  
 **Fixed**  
