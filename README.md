@@ -1,6 +1,11 @@
 # ![alt text](./merger-icon.png "Git Merger") Git Merger [![](https://vsmarketplacebadge.apphb.com/version-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](https://vsmarketplacebadge.apphb.com/installs/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](https://vsmarketplacebadge.apphb.com/rating-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger)
 
-No more terminal! Merging branches now in vscode.  
+Merging branches has never been easier.
+
+# Key Features
+
+* Stash & Patch - Uncommited changes handler while merging.
+* Merge into / from - Merge your local branch into another and vice versa.
 
 # Road Map
 
@@ -10,10 +15,10 @@ Coming soon to your VScode.
 # Installation
 
 First, you will need to [install Visual Studio Code](https://code.visualstudio.com/download).  
-Once you have vscode installed access the marketplace and install "Git Merger" extension.
+Once you have vscode installed access the marketplace and install "Git Merger" or launch the VScode quick open (Cmd+p | Ctrl+p) and run `ext install git-merger` 
 
 # Commands
-The extension commands that can be accessed from the command pallet (Cmd+Shift+P or Ctrl+Shift+P):
+The extension commands that can be accessed from the command pallet (Cmd+Shift+P | Ctrl+Shift+P):
 
 * ```GitMerger: Merge From``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
 * ```GitMerger: Abort Merge``` - Abort merge. 

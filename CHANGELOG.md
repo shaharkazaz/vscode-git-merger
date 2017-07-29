@@ -1,4 +1,14 @@
 # Change Log
+### v0.3.6
+**Added** 
+
+* Stash & Patch - stash uncommitted changes and apply after a successful merge.
+* Git merge message will be added in the vcm commit message box after a successful merge.
+
+**Fixed** 
+
+* Fixed "abort merge" command.
+
 ### v0.3.5
 **Fixed** 
 
