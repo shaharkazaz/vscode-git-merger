@@ -40,9 +40,13 @@ export function getStashList(output: string): Array < IGitStashResponse > {
 
 export function processUserOptions(userSettings, optionsType): IOptionsObj {
     let invalidOptions: Array < string > = [],
-        requireCommitMessage = false;
+        requireCommitMessage = false,
+        addMessage = false;
     for (let index = 0; index < userSettings.length; index++) {
         let option = userSettings[index];
+        if(option == "no-commit"){
+            addMessage = true;
+        }
         if (!allowedOptions[optionsType][option]) {
             invalidOptions.push(option);
             userSettings.splice(index, 1);
@@ -54,7 +58,8 @@ export function processUserOptions(userSettings, optionsType): IOptionsObj {
     return {
         validOptions: userSettings,
         requireCommitMessage: requireCommitMessage,
-        invalidOptions: invalidOptions
+        invalidOptions: invalidOptions,
+        addMessage: addMessage
     }
 }
 

@@ -20,4 +20,5 @@ export interface IOptionsObj {
         validOptions: Array<string>;
         requireCommitMessage: boolean;
         invalidOptions: Array<string>;
+        addMessage: boolean;
 }

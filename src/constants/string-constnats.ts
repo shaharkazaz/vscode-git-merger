@@ -10,6 +10,7 @@ import { allowedOptions } from "./allowedOptions";
 export default {
     userSettings: workspace.getConfiguration('gitMerger'),
     git: {
+        status: "git status",
         conflicts: "CONFLICT (content): Merge conflict in",
         upToDate: "Already up-to-date",
         noMerge: "There is no merge to abort",
@@ -43,7 +44,7 @@ export default {
         fullDate: "MM.DD.YYYY HH:mm:ss",
         hours: "HH:mm:ss"
     },
-    windowConflictsMessage: "Seems like there are some conflicts to handle check the \'Git Merger Log\' for more inforamtion",
+    windowConflictsMessage: "Seems like there are some conflicts, resolve before commiting",
     actionButtons: {
         openLog: "open log"
     },

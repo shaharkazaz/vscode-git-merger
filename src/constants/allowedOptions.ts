@@ -1,5 +1,6 @@
 export const allowedOptions = {
     "merge": {
+        "abort": "--",
         "commit": "--",
         "no-commit": "--",
         "ff": "--",
