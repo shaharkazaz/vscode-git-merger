@@ -51,8 +51,8 @@ export function activate(context: ExtensionContext) {
          * @type {IgitBranchResponse}
          */
         targetBranch,
-        patchCreated;
-
+        patchCreated,
+        userCommitMessage;
 
     /**
      * Exexute the git merge command
@@ -60,10 +60,7 @@ export function activate(context: ExtensionContext) {
      * @returns {void}
      */
     function merge(customCommitMsg ? ) {
-        if (customCommitMsg && strings.userSettings.get("extendAutoCommitMessage")) {
-            customCommitMsg = "Merge branch '" + targetBranch.label + "' into '" + branchObj.currentBranch + "'\n" + customCommitMsg;
-        }
-        exec(strings.git.merge(optionsObj.validOptions, targetBranch.label, customCommitMsg), {
+        exec(strings.git.merge(optionsObj.validOptions, targetBranch.label, userCommitMessage), {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (optionsObj.invalidOptions.length > 0) {
@@ -85,22 +82,33 @@ export function activate(context: ExtensionContext) {
                         }
                     }
                     let message = strings.windowConflictsMessage;
-                    if(patchCreated) {
+
+                    if (patchCreated) {
                         message += ", stash was not applied";
                     }
                     window.showWarningMessage(message);
                     setGitMessage();
                     return;
                 } else if (stdout.indexOf(strings.git.upToDate) != -1) {
-                    if (patchCreated) {
-                        unstash();
-                    }
                     logger.logInfo(strings.git.upToDate);
                     return;
                 }
             } else if (error) {
-                logger.logError(strings.error("merging"), stderr || error);
-                return;
+                if (stderr.indexOf("Your local changes") != -1) {
+                    window.showWarningMessage("Merge will fail due to uncommited changes, either commit\
+                        the changes or use stash & patch option", "Stash & Patch").then((action) => {
+                        if (action) {
+                            stash("Temp stash - merge branch '" + targetBranch.label + "' into '" + branchObj.currentBranch + "'", true).then(() => {
+                                patchCreated = true;
+                                merge();
+                            });
+                        }
+                    });
+                    return;
+                } else {
+                    logger.logError(strings.error("merging"), stderr || error);
+                    return;
+                }
             }
             if (optionsObj.addMessage) {
                 setGitMessage();
@@ -113,7 +121,9 @@ export function activate(context: ExtensionContext) {
     }
 
     function setGitMessage() {
-        scm.inputBox.value = "Merge branch '" + targetBranch.label + "' into branch '" + branchObj.currentBranch + "'";
+        if(scm.inputBox.value.length == 0){
+            scm.inputBox.value = "Merge branch '" + targetBranch.label + "' into branch '" + branchObj.currentBranch + "'";
+        }
     }
 
     /**
@@ -130,37 +140,14 @@ export function activate(context: ExtensionContext) {
             window.showInputBox({
                 placeHolder: "Enter a custom commit message"
             }).then((customCommitMsg) => {
-                merge(customCommitMsg);
+                if (strings.userSettings.get("extendAutoCommitMessage")) {
+                    customCommitMsg = "Merge branch '" + targetBranch.label + "' into '" + branchObj.currentBranch + "'\n" + customCommitMsg;
+                }
+                userCommitMessage = customCommitMsg;
+                merge();
             });
         } else {
             merge();
-        }
-    }
-
-    function checkUncommitedFiles() {
-        let gitStatus = execSync(strings.git.status, {
-            cwd: workspace.rootPath
-        }).toString();
-        if (gitStatus.indexOf("nothing to commit") != -1) {
-            try {
-                branchObj = fetchBranchs();
-            } catch (error) {
-                logger.logError(strings.error("Fetching git branches"), error.message);
-            }
-            showBranchQuickPick()
-        } else {
-            window.showWarningMessage("Merge will fail due to uncommited changes, either commit\
-         the changes or use stash & patch option", "Stash & Patch").then((action) => {
-                if (action) {
-                    try {
-                        branchObj = fetchBranchs();
-                    } catch (error) {
-                        logger.logError(strings.error("Fetching git branches"), error.message);
-                    }
-                    patchCreated = true;
-                    showBranchQuickPick()
-                }
-            })
         }
     }
 
@@ -179,25 +166,18 @@ export function activate(context: ExtensionContext) {
             placeHolder: strings.quickPick.chooseBranch
         }).then(chosenitem => {
             if (chosenitem) {
-                if (patchCreated) {
-                    targetBranch = chosenitem;
-                    stash("Temp stash - merge branch '" + targetBranch.label + "' into '" + branchObj.currentBranch + "'", true).then(() => {
-                        processMergeOptions();
-                    });
-                } else {
-                    targetBranch = chosenitem;
-                    processMergeOptions();
-                }
-
+                targetBranch = chosenitem;
+                processMergeOptions();
             }
         });
     }
 
     let disposable = commands.registerCommand('gitMerger.mergeFrom', () => {
         try {
-            checkUncommitedFiles();
+            branchObj = fetchBranchs();
+            showBranchQuickPick();
         } catch (error) {
-            logger.logError(strings.error("Getting git status"), error.message);
+            logger.logError(strings.error("Fetching git branches"), error.message);
         }
     });
     context.subscriptions.push(disposable);

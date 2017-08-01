@@ -10,10 +10,10 @@ Coming soon to your VScode.
 # Installation
 
 First, you will need to [install Visual Studio Code](https://code.visualstudio.com/download).  
-Once you have vscode installed access the marketplace and install "Git Merger" extension.
+Once you have vscode installed access the marketplace and install "Git Merger" or launch the VScode quick open (<kbd>⌘</kbd>+<kbd>p</kbd>  | <kbd>Ctrl</kbd>+<kbd>p</kbd>) and run `ext install git-merger` 
 
 # Commands
-The extension commands that can be accessed from the command pallet (Cmd+Shift+P or Ctrl+Shift+P):
+The extension commands that can be accessed from the command pallet (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> ):
 
 * ```GitMerger: Merge From``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
 * ```GitMerger: Abort Merge``` - Abort merge. 
