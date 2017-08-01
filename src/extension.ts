@@ -5,16 +5,22 @@
  *  @requires     ./commands(/index.ts): All the extensions commands
  */
 
-import * as vscode from 'vscode';
-import {commands} from './commands';
+import {ExtensionContext, commands} from 'vscode';
+import {commands as localCommands} from './commands';
 
+export abstract class Command {
+    abstract getCommandName(): string;
+    abstract async execute(): Promise<any>;
+}
 
 /**
  * this method is called when your extension is activated
  * your extension is activated the very first time the command is executed
  */ 
-export async function activate(context: vscode.ExtensionContext): Promise<any> {
-    commands.forEach((command) => {
-        command.activate(context);
+export async function activate(context: ExtensionContext): Promise<any> {
+    localCommands.forEach((command: any) => {
+        const comm: Command = new command();
+        const disposable = commands.registerCommand('gitMerger.' + comm.getCommandName(), comm.execute);
+        context.subscriptions.push(disposable);  
     });
 }

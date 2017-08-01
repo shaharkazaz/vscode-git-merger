@@ -22,7 +22,7 @@ import {
     exec,
     execSync
 } from 'child_process';
-import * as logger from "../../logger";
+import {logger} from "../../logger";
 import {
     getBranchList,
     processUserOptions
@@ -34,25 +34,37 @@ import {
 import {
     unstash
 } from "../stash/gitUnstash";
+import { Command } from "../../extension";
 
-export function activate(context: ExtensionContext) {
-    /**
+
+export class GitMerge extends Command {
+        /**
      * Holds a list of all the branchs and the current branch
      * @type {IBranchObj}
      */
-    let branchObj: IBranchObj,
+     branchObj: IBranchObj;
         /**
          * Holds all the git commands options info
          * @type {IOptionsObj}
          */
-        optionsObj: IOptionsObj,
+        optionsObj: IOptionsObj;
         /**
          * Holds the targeted merge branch info
          * @type {IgitBranchResponse}
          */
-        targetBranch,
-        patchCreated,
+        targetBranch;
+        patchCreated;
         userCommitMessage;
+    getCommandName(): string {
+        return "mergeFrom";
+    }
+    async execute():Promise<any> {
+        this.branchObj = fetchBranchs();
+            showBranchQuickPick();
+    }
+}
+
+
 
     /**
      * Exexute the git merge command
@@ -171,14 +183,3 @@ export function activate(context: ExtensionContext) {
             }
         });
     }
-
-    let disposable = commands.registerCommand('gitMerger.mergeFrom', () => {
-        try {
-            branchObj = fetchBranchs();
-            showBranchQuickPick();
-        } catch (error) {
-            logger.logError(strings.error("Fetching git branches"), error.message);
-        }
-    });
-    context.subscriptions.push(disposable);
-}

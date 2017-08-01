@@ -36,6 +36,12 @@ export default {
             return command;
         }
     },
+    msgTypes: {
+        ERROR: "Error",
+        WARNING: "Warning",
+        INFO: "Info",
+        DEBUG: "Debug"
+    },
     error:
         (errorWhile: string) => {
             return "Error while " + errorWhile;

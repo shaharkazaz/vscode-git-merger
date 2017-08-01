@@ -10,24 +10,27 @@
 import {commands, workspace, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
 import { exec } from 'child_process';
-import * as logger from "../../logger";
+import {logError, logMessage} from "../../logger";
+import { Command } from "../../extension";
 
-export function activate(context: ExtensionContext) {
-    let disposable = commands.registerCommand('gitMerger.abortMerge', () => {
+export class GitAbort extends Command {
+    getCommandName(): string {
+        return "abortMerge";
+    }
+    async execute():Promise<any> {
         exec(strings.git.merge(["abort"]), {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
                 if(stderr.indexOf(strings.git.noMerge)){
-                    logger.logInfo(strings.git.noMerge);
+                    logError(strings.git.noMerge);
                     return;
                 }
-                logger.logError(strings.error("aborting merge"), stderr || error);
+                let message = stderr ? stderr.toString() : error.toString()
+                logError(message, strings.error("aborting merge"));
                 return;
             }
-            logger.logInfo(strings.success.general("Merge", "aborted"));
+            logMessage(strings.msgTypes.INFO, strings.success.general("Merge", "aborted"));
         });
-    });
-
-    context.subscriptions.push(disposable);
+    }
 }
