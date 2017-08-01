@@ -1,6 +1,12 @@
 # ![alt text](./merger-icon.png "Git Merger") Git Merger [![](https://vsmarketplacebadge.apphb.com/version-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](https://vsmarketplacebadge.apphb.com/installs/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger) [![](https://vsmarketplacebadge.apphb.com/rating-short/shaharkazaz.git-merger.svg)](https://marketplace.visualstudio.com/items?itemName=shaharkazaz.git-merger)
 
-No more terminal! Merging branches now in vscode.  
+Merging branches has never been easier.
+
+# Key Features
+
+* Stash & Patch - Uncommited changes handler while merging.
+* Merge from - Merge any branch into your local branch.
+* Configure options on the git merge command.
 
 # Road Map
 
