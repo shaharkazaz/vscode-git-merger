@@ -11,8 +11,12 @@ import {
     commands,
     workspace,
     window,
-    ExtensionContext
+    ExtensionContext,
+    scm
 } from 'vscode';
+import {
+    stash
+} from "../stash/gitStash";
 import strings from '../../constants/string-constnats';
 import {
     exec,
@@ -27,6 +31,9 @@ import {
     IBranchObj,
     IOptionsObj
 } from "../../constants/interfaces";
+import {
+    unstash
+} from "../stash/gitUnstash";
 
 export function activate(context: ExtensionContext) {
     /**
@@ -43,8 +50,9 @@ export function activate(context: ExtensionContext) {
          * Holds the targeted merge branch info
          * @type {IgitBranchResponse}
          */
-        targetBranch;
-
+        targetBranch,
+        patchCreated,
+        userCommitMessage;
 
     /**
      * Exexute the git merge command
@@ -52,10 +60,7 @@ export function activate(context: ExtensionContext) {
      * @returns {void}
      */
     function merge(customCommitMsg ? ) {
-        if (customCommitMsg && strings.userSettings.get("extendAutoCommitMessage")) {
-            customCommitMsg = "Merge branch '" + targetBranch.label + "' into '" + branchObj.currentBranch + "'\n" + customCommitMsg;
-        }
-        exec(strings.git.merge(optionsObj.validOptions, targetBranch.label, customCommitMsg), {
+        exec(strings.git.merge(optionsObj.validOptions, targetBranch.label, userCommitMessage), {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (optionsObj.invalidOptions.length > 0) {
@@ -76,22 +81,49 @@ export function activate(context: ExtensionContext) {
                             logger.logWarning(conflictedFiles[i].substr(38, conflictedFiles[i].length));
                         }
                     }
-                    window.showWarningMessage(strings.windowConflictsMessage, strings.actionButtons.openLog).then((action) => {
-                        if (action == strings.actionButtons.openLog) {
-                            logger.openLog();
-                        }
-                    });
+                    let message = strings.windowConflictsMessage;
+
+                    if (patchCreated) {
+                        message += ", stash was not applied";
+                    }
+                    window.showWarningMessage(message);
+                    setGitMessage();
                     return;
                 } else if (stdout.indexOf(strings.git.upToDate) != -1) {
                     logger.logInfo(strings.git.upToDate);
                     return;
                 }
             } else if (error) {
-                logger.logError(strings.error("merging"), stderr || error);
-                return;
+                if (stderr.indexOf("Your local changes") != -1) {
+                    window.showWarningMessage("Merge will fail due to uncommited changes, either commit\
+                        the changes or use stash & patch option", "Stash & Patch").then((action) => {
+                        if (action) {
+                            stash("Temp stash - merge branch '" + targetBranch.label + "' into '" + branchObj.currentBranch + "'", true).then(() => {
+                                patchCreated = true;
+                                merge();
+                            });
+                        }
+                    });
+                    return;
+                } else {
+                    logger.logError(strings.error("merging"), stderr || error);
+                    return;
+                }
+            }
+            if (optionsObj.addMessage) {
+                setGitMessage();
+            }
+            if (patchCreated) {
+                unstash();
             }
             logger.logInfo(strings.success.merge(targetBranch.label, branchObj.currentBranch));
         });
+    }
+
+    function setGitMessage() {
+        if(scm.inputBox.value.length == 0){
+            scm.inputBox.value = "Merge branch '" + targetBranch.label + "' into branch '" + branchObj.currentBranch + "'";
+        }
     }
 
     /**
@@ -108,12 +140,17 @@ export function activate(context: ExtensionContext) {
             window.showInputBox({
                 placeHolder: "Enter a custom commit message"
             }).then((customCommitMsg) => {
-                merge(customCommitMsg);
+                if (strings.userSettings.get("extendAutoCommitMessage")) {
+                    customCommitMsg = "Merge branch '" + targetBranch.label + "' into '" + branchObj.currentBranch + "'\n" + customCommitMsg;
+                }
+                userCommitMessage = customCommitMsg;
+                merge();
             });
         } else {
             merge();
         }
     }
+
     /**
      * Get the list of all the branches
      * @returns {void}
@@ -124,12 +161,7 @@ export function activate(context: ExtensionContext) {
         }).toString());
     }
 
-    let disposable = commands.registerCommand('gitMerger.mergeFrom', () => {
-        try {
-            branchObj = fetchBranchs();
-        } catch (error) {
-            logger.logError(strings.error("fetching branch list"), error.message);
-        }
+    function showBranchQuickPick() {
         window.showQuickPick(branchObj.branchList, {
             placeHolder: strings.quickPick.chooseBranch
         }).then(chosenitem => {
@@ -138,6 +170,15 @@ export function activate(context: ExtensionContext) {
                 processMergeOptions();
             }
         });
+    }
+
+    let disposable = commands.registerCommand('gitMerger.mergeFrom', () => {
+        try {
+            branchObj = fetchBranchs();
+            showBranchQuickPick();
+        } catch (error) {
+            logger.logError(strings.error("Fetching git branches"), error.message);
+        }
     });
     context.subscriptions.push(disposable);
 }

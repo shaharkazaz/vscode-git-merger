@@ -26,16 +26,7 @@ import {
     getStashList
 } from "../../services/util";
 
-export function activate(context: ExtensionContext) {
-
-    /**
-     * An array of all the stash objects
-     * @type {Array < IGitStashResponse > }
-     */
-    let stashList: Array < IGitStashResponse > ;
-
-
-    function deleteStash(stashItem) {
+export  function deleteStash(stashItem) {
         exec(strings.git.stash("drop " + stashItem.index), {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
@@ -48,6 +39,17 @@ export function activate(context: ExtensionContext) {
             }
         });
     }
+
+export function activate(context: ExtensionContext) {
+
+    /**
+     * An array of all the stash objects
+     * @type {Array < IGitStashResponse > }
+     */
+    let stashList: Array < IGitStashResponse > ;
+
+
+
 
     /**
      * Get the list of all the stashs

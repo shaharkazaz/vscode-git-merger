@@ -26,6 +26,31 @@ import {
 import {
     IGitStashResponse
 } from "../../constants/interfaces";
+import {
+    deleteStash
+} from "./gitDeleteStash";
+
+export function unstash(stashItem ? ) {
+    let command = stashItem ? strings.git.stash("apply " + stashItem.index) : strings.git.stash("pop ");
+    exec(command, {
+        cwd: workspace.rootPath
+    }, (error, stdout, stderr) => {
+        if (error) {
+            logger.logError(strings.error("unstashing:"), stderr || error);
+            return;
+        }
+        let button;
+        if (stashItem) {
+            button = {
+                name: "delete stash",
+                callback: () => {
+                    deleteStash(stashItem);
+                }
+            };
+        }
+        logger.logInfo(strings.success.general("Stash", "applied on current branch"), button);
+    });
+}
 
 export function activate(context: ExtensionContext) {
 
@@ -39,42 +64,6 @@ export function activate(context: ExtensionContext) {
          * @type {IGitStashResponse}
          */
         stashItem: IGitStashResponse;
-
-    /**
-     * Drops the currently unstashed stash item
-     * @returns {void}
-     */
-    function dropStash() {
-        exec(strings.git.stash("drop " + stashItem.index), {
-            cwd: workspace.rootPath
-        }, (error, stdout, stderr) => {
-            if (error) {
-                logger.logError(strings.error("droping stash:"), stderr || error);
-                return;
-            }
-            if (stdout.indexOf("Dropped") != -1) {
-                logger.logInfo(strings.success.general("Stash", "removed"));
-            }
-        });
-    }
-    /**
-     * Execute git apply stash and call the "drop stash" if wanted by user
-     * @returns {void}
-     */
-    function unstash() {
-        exec(strings.git.stash("apply " + stashItem.index), {
-            cwd: workspace.rootPath
-        }, (error, stdout, stderr) => {
-            if (error) {
-                logger.logError(strings.error("unstashing:"), stderr || error);
-                return;
-            }
-            logger.logInfo(strings.success.general("Stash", "applied on current branch"), {
-                name: "delete stash",
-                callback: dropStash
-            });
-        });
-    }
 
     /**
      * Get the list of all the stashs
@@ -99,7 +88,7 @@ export function activate(context: ExtensionContext) {
             }).then(choosenStashItem => {
                 if (choosenStashItem) {
                     stashItem = choosenStashItem;
-                    unstash();
+                    unstash(stashItem);
                 }
             });
         } catch (error) {
