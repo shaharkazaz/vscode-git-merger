@@ -40,7 +40,7 @@
             "properties": {
                 "gitMerger.mergeCommandOptions": {
                     "type": "Array<string>",
-                    "default": ["no-commit", "no-ff"],
+                    "default": ["commit", "no-ff"],
                     "description": "Add options to the git merge command"
                 },
                 "gitMerger.customCommitMessage": {

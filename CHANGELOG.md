@@ -9,6 +9,13 @@
 
 * Fixed "abort merge" command.
 
+<<<<<<< HEAD
+=======
+**Updated**
+
+* The default options for the git merge command are now: `["commit", "no-ff"]`
+
+>>>>>>> v0.3.6-Milstone-#13
 ### v0.3.5
 **Fixed** 
 

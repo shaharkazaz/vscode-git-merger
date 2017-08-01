@@ -5,7 +5,12 @@ Merging branches has never been easier.
 # Key Features
 
 * Stash & Patch - Uncommited changes handler while merging.
+<<<<<<< HEAD
 * Merge into / from - Merge your local branch into another and vice versa.
+=======
+* Merge from - Merge any branch into your local branch.
+* Configure options on the git merge command (more info in the repo's [wiki](https://github.com/shaharkazaz/vscode-git-merger/wiki/User-config)).
+>>>>>>> v0.3.6-Milstone-#13
 
 # Road Map
 
@@ -15,10 +20,17 @@ Coming soon to your VScode.
 # Installation
 
 First, you will need to [install Visual Studio Code](https://code.visualstudio.com/download).  
+<<<<<<< HEAD
 Once you have vscode installed access the marketplace and install "Git Merger" or launch the VScode quick open (Cmd+p | Ctrl+p) and run `ext install git-merger` 
 
 # Commands
 The extension commands that can be accessed from the command pallet (Cmd+Shift+P | Ctrl+Shift+P):
+=======
+Once you have vscode installed access the marketplace and install "Git Merger" or launch the VScode quick open (<kbd>⌘</kbd>+<kbd>p</kbd>  | <kbd>Ctrl</kbd>+<kbd>p</kbd>) and run `ext install git-merger` 
+
+# Commands
+The extension commands that can be accessed from the command pallet (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> ):
+>>>>>>> v0.3.6-Milstone-#13
 
 * ```GitMerger: Merge From``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
 * ```GitMerger: Abort Merge``` - Abort merge. 
