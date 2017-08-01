@@ -9,6 +9,10 @@
 
 * Fixed "abort merge" command.
 
+**Updated**
+
+* The default options for the git merge command are now: `["commit", "no-ff"]`
+
 ### v0.3.5
 **Fixed** 
 
