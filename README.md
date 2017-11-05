@@ -33,7 +33,6 @@ The extension commands that can be accessed from the command pallet (<kbd>⌘</k
 If you want to contribute or have any feedback positive or negative, let me know!  
 Contact via [Email](shahar.kazaz@gmail.com) or open an issue at this project's [Git Repo](https://github.com/shaharkazaz/vscode-git-merger/issues).  
 
-Thanks to Ori Segal for helping making this extension great.
 
 # License
 
