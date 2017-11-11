@@ -18,8 +18,9 @@ export abstract class Command {
  * your extension is activated the very first time the command is executed
  */ 
 export async function activate(context: ExtensionContext): Promise<any> {
-    localCommands.forEach((command: any) => {
-        const comm: Command = new command();
+    debugger;
+    localCommands.forEach((gitCommand: any) => {
+        const comm: Command = new gitCommand();
         const disposable = commands.registerCommand('gitMerger.' + comm.getCommandName(), comm.execute);
         context.subscriptions.push(disposable);  
     });

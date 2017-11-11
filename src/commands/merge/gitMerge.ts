@@ -7,8 +7,8 @@ import {openLog, logMessage, logError} from "../../logger";
 import {IBranchObj, IGitBranchResponse, IOptionsObj} from "../../constants/interfaces";
 import {getBranchList, processUserOptions} from "../../services/util";
 import {Command} from "../../extension";
-import {GitStash} from "../stash/gitStash";
-import {GitUnstash} from "../stash/gitUnstash";
+import {stash} from "../stash/gitStash";
+import {unstash} from "../stash/gitUnstash";
 
 
 export class GitMerge extends Command {
@@ -78,7 +78,7 @@ function merge(customCommitMsg ?) {
                 window.showWarningMessage("Merge will fail due to uncommited changes, either commit\
                         the changes or use stash & patch option", "Stash & Patch").then((action) => {
                     if (action) {
-                        GitStash.stash("Temp stash - merge branch '" + this.targetBranch.label + "' into '" +
+                        stash("Temp stash - merge branch '" + this.targetBranch.label + "' into '" +
                             this.branchObj.currentBranch + "'", true).then(() => {
                             this.stashCreated = true;
                             merge();
@@ -95,7 +95,7 @@ function merge(customCommitMsg ?) {
             setGitMessage();
         }
         if (this.stashCreated) {
-            GitUnstash.unstash();
+            unstash();
         }
         logMessage(strings.msgTypes.INFO, strings.success.merge(this.targetBranch.label, this.branchObj.currentBranch));
     });

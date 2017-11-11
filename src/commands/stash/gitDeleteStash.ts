@@ -31,28 +31,14 @@ export class GitDeleteStash extends Command {
             placeHolder: "Choose the stash you wish to drop"
         }).then(stashItem => {
             if (stashItem) {
-                GitDeleteStash.deleteStash(stashItem);
-            }
-        });
-    }
-
-    static deleteStash(stashItem): void {
-        exec(strings.git.stash("drop " + stashItem.index), {
-            cwd: workspace.rootPath
-        }, (error, stdout, stderr) => {
-            if (error) {
-                logError(strings.error("droping stash:"), stderr);
-                return;
-            }
-            if (stdout.indexOf("Dropped") != -1) {
-                logMessage(strings.msgTypes.INFO, strings.success.general("Stash", "removed"));
+                deleteStash(stashItem);
             }
         });
     }
 
     /**
      * Return a list of all the stashed items
-     * @return {Array<IGitStashResponse>}
+     * @return {IGitStashResponse[]}
      * @private
      */
     private _fetchStashList() {
@@ -61,4 +47,18 @@ export class GitDeleteStash extends Command {
         }).toString());
     }
 
+}
+
+export function deleteStash(stashItem): void {
+    exec(strings.git.stash("drop " + stashItem.index), {
+        cwd: workspace.rootPath
+    }, (error, stdout, stderr) => {
+        if (error) {
+            logError(strings.error("droping stash:"), stderr);
+            return;
+        }
+        if (stdout.indexOf("Dropped") != -1) {
+            logMessage(strings.msgTypes.INFO, strings.success.general("Stash", "removed"));
+        }
+    });
 }

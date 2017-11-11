@@ -16,30 +16,6 @@ export class GitStash extends Command {
         this._openStashSelection();
     }
 
-    static stash(stashName: string, hideMsg) {
-        return new Promise((resolve, reject) => {
-            exec(strings.git.stash("save ", false, stashName), {
-                cwd: workspace.rootPath
-            }, (error, stdout, stderr) => {
-                if (error) {
-                    logError(strings.error("creating stash:"), stderr);
-                    reject();
-                    return;
-                }
-                if (stdout.indexOf("No local changes to save") != -1) {
-                    logMessage(strings.msgTypes.INFO, "No local changes detected in tracked files");
-                    resolve();
-                    return;
-                }
-                if (!hideMsg) {
-                    logMessage(strings.msgTypes.INFO,strings.success.general("Stash", "created"));
-                }
-                resolve();
-            });
-        });
-
-    }
-
     private _openStashSelection() {
         window.showInputBox({
             placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
@@ -54,9 +30,31 @@ export class GitStash extends Command {
             if (userInput === undefined) {
                 return;
             }
-            GitStash.stash(userInput, false);
+            stash(userInput, false);
         });
     }
 }
 
+export function stash(stashName: string, hideMsg) {
+    return new Promise((resolve, reject) => {
+        exec(strings.git.stash("save ", false, stashName), {
+            cwd: workspace.rootPath
+        }, (error, stdout, stderr) => {
+            if (error) {
+                logError(strings.error("creating stash:"), stderr);
+                reject();
+                return;
+            }
+            if (stdout.indexOf("No local changes to save") != -1) {
+                logMessage(strings.msgTypes.INFO, "No local changes detected in tracked files");
+                resolve();
+                return;
+            }
+            if (!hideMsg) {
+                logMessage(strings.msgTypes.INFO,strings.success.general("Stash", "created"));
+            }
+            resolve();
+        });
+    });
 
+}
