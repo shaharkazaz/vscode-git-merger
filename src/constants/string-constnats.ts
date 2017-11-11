@@ -43,9 +43,7 @@ export default {
         DEBUG: "Debug"
     },
     error:
-        (errorWhile: string) => {
-            return "Error while " + errorWhile;
-        },
+        (errorWhile: string) => "Error while " + errorWhile,
     timeForamt: {
         fullDate: "MM.DD.YYYY HH:mm:ss",
         hours: "HH:mm:ss"

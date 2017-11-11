@@ -3,7 +3,7 @@
   "displayName": "Git Merger",
   "icon": "merger-icon.png",
   "description": "Simplifies the git merge process",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "publisher": "shaharkazaz",
   "repository": {
     "type": "git",
@@ -99,7 +99,6 @@
     "@types/mocha": "^2.2.32"
   },
   "dependencies": {
-    "moment": "^2.18.1",
-    "nodegit": "^0.18.3"
+    "moment": "^2.18.1"
   }
 }

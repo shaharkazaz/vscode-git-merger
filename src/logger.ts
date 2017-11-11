@@ -1,57 +1,45 @@
-/** 
- *  @fileOverview This file is in charge of logging and displaying messages
- *  @author       Shahar Kazaz
- *  @requires     vscode
- *  @requires     npm:moment
- *  @requires     ./constants/string-constnats: string-constants
- */
 
-import * as vscode from 'vscode';
+import {window} from 'vscode';
 import * as moment from 'moment';
 import strings from './constants/string-constnats';
+import {OutputChannel} from "vscode";
 
-export default class Logger {
+export class Logger {
+
+    /** The output channel instance */
+    static outLogChannel: OutputChannel = window.createOutputChannel('Git merger');
 
     /**
-     * The output channel instance
-     * @type {vscode.OutputChannel}
+     * Post an Error log message to vscode output channel.
+     * @param {string} message - The error message
+     * @param {string} errorHeader - the error's stderr
      */
-    static outLogChannel = vscode.window.createOutputChannel('Git merger');
-
-//TODO: remove from here
-    static logError(message: string, errorHeader ? : string) {
+    static logError(message: string, errorHeader?: string) {
         message = errorHeader ? strings.error(errorHeader) + "\n" + message : message;
-        this.logMessage("Error", message);
-        // vscode.window.showErrorMessage(strings.windowErrorMessage, strings.actionButtons.openLog).then((action) => {
-        //     if (action) {
-        //         this.openLog();
-        //     }
-        // });
+        this.logMessage(strings.msgTypes.ERROR, message);
+        window.showErrorMessage(strings.windowErrorMessage, strings.actionButtons.openLog).then((action) => {
+            if (action) {
+                this.openLog();
+            }
+        });
     }
 
+    /**
+     * Post any log message to vscode output channel.
+     * @param {string} msgType - Error, Warning, Info etc.
+     * @param {string} message - The message to post.
+     */
     static logMessage(msgType: string, message: string) {
         this.outLogChannel.appendLine(`[${msgType}-${moment().format(strings.timeForamt.hours)}] ${message}`);
     }
 
     /**
-     * Opens a wanted output log
+     * Opens the vscode output channel
      * @returns {void} 
      */
     static openLog(): void {
         this.outLogChannel.show();
     }
-
-    //TODO: remove from here
-    // static logInfo(message: string, actionButton ? ) {
-    //     this.logMessage("Info", message);
-        
-        // vscode.window.showInformationMessage(message, actionButton ? actionButton.name : []).then((action) => {
-        //     if (action) {
-        //         actionButton.callback();
-        //     }
-        // });
-    // }
-
 
 }
 
