@@ -9,7 +9,7 @@ import {Command} from "../../extension";
 import {logError, logMessage} from "../../logger";
 import { deleteStash } from './gitDeleteStash';
 
-export class GitUnstash extends Command {
+export class GitUnstash {
 
     /** An array of all the stash objects */
     private _stashList: IGitStashResponse[];

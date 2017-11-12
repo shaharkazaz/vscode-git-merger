@@ -8,7 +8,7 @@ import {getStashList} from "../../services/util";
 import {Command} from "../../extension";
 import {logError, logMessage} from "../../logger";
 
-export class GitDeleteStash extends Command {
+export class GitDeleteStash {
 
     /** An array of all the stash objects */
     stashList: IGitStashResponse[];

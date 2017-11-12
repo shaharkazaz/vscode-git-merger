@@ -6,7 +6,7 @@ import {exec} from 'child_process';
 import {Command} from "../../extension";
 import {logError, logMessage} from "../../logger";
 
-export class GitStash extends Command {
+export class GitStash {
 
     getCommandName(): string {
         return "stash";

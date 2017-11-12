@@ -6,7 +6,7 @@ import {exec} from 'child_process';
 import {logError, logMessage} from "../../logger";
 import {Command} from "../../extension";
 
-export class GitAbort extends Command {
+export class GitAbort {
 
     getCommandName(): string {
         return "abortMerge";
