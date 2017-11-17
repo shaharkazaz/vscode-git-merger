@@ -1,100 +1,104 @@
 {
-    "name": "git-merger",
-    "displayName": "Git Merger",
-    "icon": "merger-icon.png",
-    "description": "Simplifies the git merge process",
-    "version": "0.3.6",
-    "publisher": "shaharkazaz",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/shaharkazaz/vscode-git-merger"
-    },
-    "license": "MIT",
-    "engines": {
-        "vscode": "^1.13.0"
-    },
-    "galleryBanner": {
-        "color": "#BDE4A7"
-    },
-    "keywords": [
-        "git",
-        "merge",
-        "stash"
-    ],
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onCommand:gitMerger.mergeFrom",
-        "onCommand:gitMerger.abortMerge",
-        "onCommand:gitMerger.stash",
-        "onCommand:gitMerger.unstash",
-        "onCommand:gitMerger.clearStash",
-        "onCommand:gitMerger.deleteStash"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "configuration": {
-            "type": "object",
-            "title": "GitMerger configuration",
-            "properties": {
-                "gitMerger.mergeCommandOptions": {
-                    "type": "Array<string>",
-                    "default": ["commit", "no-ff"],
-                    "description": "Add options to the git merge command"
-                },
-                "gitMerger.customCommitMessage": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Add a custom commit message to the merge"
-                },
-                "gitMerger.extendAutoCommitMessage": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Add your custom message after the auto commit message"
-                }
-            }
+  "name": "git-merger",
+  "displayName": "Git Merger",
+  "icon": "merger-icon.png",
+  "description": "Simplifies the git merge process",
+  "version": "0.3.7",
+  "publisher": "shaharkazaz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaharkazaz/vscode-git-merger"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.13.0"
+  },
+  "galleryBanner": {
+    "color": "#BDE4A7"
+  },
+  "keywords": [
+    "git",
+    "merge",
+    "stash"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:gitMerger.mergeFrom",
+    "onCommand:gitMerger.abortMerge",
+    "onCommand:gitMerger.stash",
+    "onCommand:gitMerger.unstash",
+    "onCommand:gitMerger.clearStash",
+    "onCommand:gitMerger.deleteStash"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "GitMerger configuration",
+      "properties": {
+        "gitMerger.mergeCommandOptions": {
+          "type": "Array<string>",
+          "default": [
+            "commit",
+            "no-ff"
+          ],
+          "description": "Add options to the git merge command"
         },
-        "commands": [{
-                "command": "gitMerger.mergeFrom",
-                "title": "GitMerger: Merge from"
-            },
-            {
-                "command": "gitMerger.abortMerge",
-                "title": "GitMerger: Abort merge"
-            },
-            {
-                "command": "gitMerger.stash",
-                "title": "GitMerger: Stash"
-            },
-            {
-                "command": "gitMerger.unstash",
-                "title": "GitMerger: Unstash"
-            },
-            {
-                "command": "gitMerger.clearStash",
-                "title": "GitMerger: Clear stash"
-            },
-            {
-                "command": "gitMerger.deleteStash",
-                "title": "GitMerger: Delete stash"
-            }
-        ]
+        "gitMerger.customCommitMessage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Add a custom commit message to the merge"
+        },
+        "gitMerger.extendAutoCommitMessage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add your custom message after the auto commit message"
+        }
+      }
     },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
-    },
-    "dependencies": {
-        "moment": "^2.18.1"
-    }
+    "commands": [
+      {
+        "command": "gitMerger.mergeFrom",
+        "title": "GitMerger: Merge from"
+      },
+      {
+        "command": "gitMerger.abortMerge",
+        "title": "GitMerger: Abort merge"
+      },
+      {
+        "command": "gitMerger.stash",
+        "title": "GitMerger: Stash"
+      },
+      {
+        "command": "gitMerger.unstash",
+        "title": "GitMerger: Unstash"
+      },
+      {
+        "command": "gitMerger.clearStash",
+        "title": "GitMerger: Clear stash"
+      },
+      {
+        "command": "gitMerger.deleteStash",
+        "title": "GitMerger: Delete stash"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  },
+  "dependencies": {
+    "moment": "^2.18.1"
+  }
 }

@@ -1,76 +1,32 @@
 'use strict';
-/** 
- *  @fileOverview The git delete stash command executer file
- *  @author       Shahar Kazaz
- *  @requires     vscode
- *  @requires     strings: The extension string constants
- *  @requires     exec
- *  @requires     logger
- */
-import {
-    commands,
-    workspace,
-    window,
-    ExtensionContext
-} from 'vscode';
+
+import {commands, workspace, window, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
-import {
-    exec,
-    execSync
-} from 'child_process';
-import * as logger from "../../logger";
-import {
-    IGitStashResponse
-} from "../../constants/interfaces";
-import {
-    getStashList
-} from "../../services/util";
+import {exec, execSync} from 'child_process';
+import {IGitStashResponse} from "../../constants/interfaces";
+import {getStashList} from "../../services/util";
+import {Command} from "../../extension";
+import {logError, logMessage} from "../../logger";
 
-export  function deleteStash(stashItem) {
-        exec(strings.git.stash("drop " + stashItem.index), {
-            cwd: workspace.rootPath
-        }, (error, stdout, stderr) => {
-            if (error) {
-                logger.logError(strings.error("droping stash:"), stderr || error);
-                return;
-            }
-            if (stdout.indexOf("Dropped") != -1) {
-                logger.logInfo(strings.success.general("Stash", "removed"));
-            }
-        });
+export class GitDeleteStash {
+
+    /** An array of all the stash objects */
+    stashList: IGitStashResponse[];
+
+    getCommandName(): string {
+        return "deleteStash";
     }
 
-export function activate(context: ExtensionContext) {
-
-    /**
-     * An array of all the stash objects
-     * @type {Array < IGitStashResponse > }
-     */
-    let stashList: Array < IGitStashResponse > ;
-
-
-
-
-    /**
-     * Get the list of all the stashs
-     * @returns {void}
-     */
-    function fetchStashList() {
-        return getStashList(execSync(strings.git.stash("list ", true), {
-            cwd: workspace.rootPath
-        }).toString());
-    }
-
-    let disposable = commands.registerCommand('gitMerger.deleteStash', () => {
+    async execute(): Promise<any> {
         try {
-            stashList = fetchStashList();
-            if (stashList.length === 0) {
-                logger.logInfo("No stash exists");
+            this.stashList = this._fetchStashList();
+            if (this.stashList.length === 0) {
+                logMessage(strings.msgTypes.INFO, "No stash exists");
             }
         } catch (error) {
-            logger.logError(strings.error("fetching branch list"), error.message);
+            logError(strings.error("fetching branch list"), error.message);
         }
-        window.showQuickPick(stashList, {
+        window.showQuickPick(this.stashList, {
             matchOnDescription: true,
             placeHolder: "Choose the stash you wish to drop"
         }).then(stashItem => {
@@ -78,6 +34,31 @@ export function activate(context: ExtensionContext) {
                 deleteStash(stashItem);
             }
         });
+    }
+
+    /**
+     * Return a list of all the stashed items
+     * @return {IGitStashResponse[]}
+     * @private
+     */
+    private _fetchStashList() {
+        return getStashList(execSync(strings.git.stash("list ", true), {
+            cwd: workspace.rootPath
+        }).toString());
+    }
+
+}
+
+export function deleteStash(stashItem): void {
+    exec(strings.git.stash("drop " + stashItem.index), {
+        cwd: workspace.rootPath
+    }, (error, stdout, stderr) => {
+        if (error) {
+            logError(strings.error("droping stash:"), stderr);
+            return;
+        }
+        if (stdout.indexOf("Dropped") != -1) {
+            logMessage(strings.msgTypes.INFO, strings.success.general("Stash", "removed"));
+        }
     });
-    context.subscriptions.push(disposable);
 }
