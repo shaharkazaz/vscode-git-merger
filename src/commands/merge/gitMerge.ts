@@ -3,15 +3,14 @@
 import {commands, workspace, window, ExtensionContext, scm} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
-import {openLog, logMessage, logError} from "../../logger";
 import {IBranchObj, IGitBranchResponse, IOptionsObj} from "../../constants/interfaces";
 import {getBranchList, processUserOptions} from "../../services/util";
-import {Command} from "../../extension";
-import {stash} from "../stash/gitStash";
-import {unstash} from "../stash/gitUnstash";
+import { Command } from '../command-base';
+import { GitUnstash } from '../stash/gitUnstash';
+import { GitStash } from '../stash/gitStash';
 
 
-export class GitMerge {
+export class GitMerge extends Command {
 
     /** Holds a list of all the branchs and the current branch */
     branchObj: IBranchObj;
@@ -46,7 +45,7 @@ export class GitMerge {
             if (this.optionsObj.invalidOptions.length > 0) {
                 window.showWarningMessage("Some of your options were invalid and were exluded, check the log for more info", strings.actionButtons.openLog).then((chosenitem) => {
                     if (chosenitem) {
-                        openLog();
+                        Command.logger.openLog();
                     }
                 });
             }
@@ -54,11 +53,11 @@ export class GitMerge {
                 if (stdout.toLowerCase().indexOf("conflict") != -1) {
                     let conflictedFiles = stdout.split("\n"),
                         conflictedFilesLength = conflictedFiles.length - 1;
-                    logMessage(strings.msgTypes.WARNING, strings.warnings.conflicts);
+                    Command.logger.logMessage(strings.msgTypes.WARNING, strings.warnings.conflicts);
                     for (let i = 0; i < conflictedFilesLength; i++) {
                         let conflictIndex = conflictedFiles[i].indexOf(strings.git.conflicts);
                         if (conflictIndex != -1) {
-                            logMessage(strings.msgTypes.WARNING, conflictedFiles[i].substr(38, conflictedFiles[i].length));
+                            Command.logger.logMessage(strings.msgTypes.WARNING, conflictedFiles[i].substr(38, conflictedFiles[i].length));
                         }
                     }
                     let message = strings.windowConflictsMessage;
@@ -70,7 +69,7 @@ export class GitMerge {
                     this._setGitMessage();
                     return;
                 } else if (stdout.indexOf(strings.git.upToDate) != -1) {
-                    logMessage(strings.msgTypes.INFO, strings.git.upToDate);
+                    Command.logger.logMessage(strings.msgTypes.INFO, strings.git.upToDate);
                     return;
                 }
             } else if (error) {
@@ -78,7 +77,7 @@ export class GitMerge {
                     window.showWarningMessage("Merge will fail due to uncommited changes, either commit\
                         the changes or use stash & patch option", "Stash & Patch").then((action) => {
                         if (action) {
-                            stash("Temp stash - merge branch '" + this.targetBranch.label + "' into '" +
+                            GitStash.stash("Temp stash - merge branch '" + this.targetBranch.label + "' into '" +
                                 this.branchObj.currentBranch + "'", true).then(() => {
                                 this.stashCreated = true;
                                 this.merge();
@@ -87,7 +86,7 @@ export class GitMerge {
                     });
                     return;
                 } else {
-                    logError(strings.error("merging"), stderr);
+                    Command.logger.logError(strings.error("merging"), stderr);
                     return;
                 }
             }
@@ -95,9 +94,9 @@ export class GitMerge {
                 this._setGitMessage();
             }
             if (this.stashCreated) {
-                unstash();
+                GitUnstash.unstash();
             }
-            logMessage(strings.msgTypes.INFO, strings.success.merge(this.targetBranch.label, this.branchObj.currentBranch));
+            Command.logger.logMessage(strings.msgTypes.INFO, strings.success.merge(this.targetBranch.label, this.branchObj.currentBranch));
         });
     }
 
@@ -114,8 +113,8 @@ export class GitMerge {
     private _processMergeOptions() {
         this.optionsObj = processUserOptions(strings.userSettings.get("mergeCommandOptions"), "merge");
         if (this.optionsObj.invalidOptions.length > 0) {
-            logMessage(strings.msgTypes.WARNING, "The following commands are not valid merge commands: " + this.optionsObj.invalidOptions.toString());
-            logMessage(strings.msgTypes.WARNING, "Yoc can check out which commands are valid at: https://git-scm.com/docs/git-merge");
+            Command.logger.logMessage(strings.msgTypes.WARNING, "The following commands are not valid merge commands: " + this.optionsObj.invalidOptions.toString());
+            Command.logger.logMessage(strings.msgTypes.WARNING, "Yoc can check out which commands are valid at: https://git-scm.com/docs/git-merge");
         }
         if (this.optionsObj.requireCommitMessage) {
             window.showInputBox({

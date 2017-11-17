@@ -7,11 +7,7 @@
 
 import {ExtensionContext, commands} from 'vscode';
 import {commands as localCommands} from './commands';
-
-export abstract class Command {
-    abstract getCommandName(): string;
-    abstract async execute(): Promise<any>;
-}
+import { Command } from './commands/command-base';
 
 /**
  * this method is called when your extension is activated

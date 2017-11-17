@@ -2,3 +2,4 @@ out
 node_modules
 vscode-git-merger.iml
 .idea/typescript-compiler.xml
+.idea/modules.xml
