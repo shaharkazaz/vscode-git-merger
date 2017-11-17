@@ -5,11 +5,10 @@ import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
 import {getStashList} from "../../services/util";
 import {IGitStashResponse} from "../../constants/interfaces";
-import {Command} from "../../extension";
-import {logError, logMessage} from "../../logger";
-import { deleteStash } from './gitDeleteStash';
+import { Command } from '../command-base';
+import { GitDeleteStash } from './gitDeleteStash';
 
-export class GitUnstash {
+export class GitUnstash extends Command {
 
     /** An array of all the stash objects */
     private _stashList: IGitStashResponse[];
@@ -24,7 +23,7 @@ export class GitUnstash {
         try {
             this._stashList = this._fetchStashList();
             if (this._stashList.length === 0) {
-                logMessage(strings.msgTypes.INFO, "No stash exists");
+                Command.logger.logMessage(strings.msgTypes.INFO, "No stash exists");
                 return
             }
             window.showQuickPick(this._stashList, {
@@ -33,12 +32,33 @@ export class GitUnstash {
             }).then(choosenStashItem => {
                 if (choosenStashItem) {
                     this._stashItem = choosenStashItem;
-                    unstash(this._stashItem);
+                    GitUnstash.unstash(this._stashItem);
                 }
             });
         } catch (error) {
-            logError(strings.error("fetching branch list"), error.message);
+            Command.logger.logError(strings.error("fetching branch list"), error.message);
         }
+    }
+
+    static unstash(stashItem?) {
+        let command = stashItem ? strings.git.stash("apply " + stashItem.index) : strings.git.stash("pop ");
+        exec(command, {
+            cwd: workspace.rootPath
+        }, (error, stdout, stderr) => {
+            if (error) {
+                Command.logger.logError(strings.error("unstashing:"), stderr);
+                return;
+            }
+            let msg = strings.success.general("Stash", "applied on current branch");
+            Command.logger.logMessage(strings.msgTypes.INFO, msg);
+            if (stashItem) {
+                window.showInformationMessage(msg, "delete stash").then((action) => {
+                    if (action) {
+                        GitDeleteStash.deleteStash(stashItem);
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -52,25 +72,4 @@ export class GitUnstash {
         }).toString());
     }
 
-}
-
-export function unstash(stashItem?) {
-    let command = stashItem ? strings.git.stash("apply " + stashItem.index) : strings.git.stash("pop ");
-    exec(command, {
-        cwd: workspace.rootPath
-    }, (error, stdout, stderr) => {
-        if (error) {
-            logError(strings.error("unstashing:"), stderr);
-            return;
-        }
-        let msg = strings.success.general("Stash", "applied on current branch");
-        logMessage(strings.msgTypes.INFO, msg);
-        if (stashItem) {
-            window.showInformationMessage(msg, "delete stash").then((action) => {
-                if (action) {
-                    deleteStash(stashItem);
-                }
-            });
-        }
-    });
 }

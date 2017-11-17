@@ -5,10 +5,9 @@ import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
 import {IGitStashResponse} from "../../constants/interfaces";
 import {getStashList} from "../../services/util";
-import {Command} from "../../extension";
-import {logError, logMessage} from "../../logger";
+import { Command } from '../command-base';
 
-export class GitDeleteStash {
+export class GitDeleteStash extends Command {
 
     /** An array of all the stash objects */
     stashList: IGitStashResponse[];
@@ -21,17 +20,33 @@ export class GitDeleteStash {
         try {
             this.stashList = this._fetchStashList();
             if (this.stashList.length === 0) {
-                logMessage(strings.msgTypes.INFO, "No stash exists");
+                Command.logger.logMessage(strings.msgTypes.INFO, "No stash exists");
             }
         } catch (error) {
-            logError(strings.error("fetching branch list"), error.message);
+            Command.logger.logError(strings.error("fetching branch list"), error.message);
         }
         window.showQuickPick(this.stashList, {
             matchOnDescription: true,
             placeHolder: "Choose the stash you wish to drop"
         }).then(stashItem => {
             if (stashItem) {
-                deleteStash(stashItem);
+                GitDeleteStash.deleteStash(stashItem);
+            }
+        });
+    }
+
+    static deleteStash(stashItem): void {
+        exec(strings.git.stash("drop " + stashItem.index), {
+            cwd: workspace.rootPath
+        }, (error, stdout, stderr) => {
+            if (error) {
+                Command.logger.logError(strings.error("droping stash:"), stderr);
+                return;
+            }
+            if (stdout.indexOf("Dropped") != -1) {
+                let msg = strings.success.general("Stash", "removed");
+                Command.logger.logMessage(strings.msgTypes.INFO, msg);
+                window.showInformationMessage(msg);
             }
         });
     }
@@ -47,18 +62,4 @@ export class GitDeleteStash {
         }).toString());
     }
 
-}
-
-export function deleteStash(stashItem): void {
-    exec(strings.git.stash("drop " + stashItem.index), {
-        cwd: workspace.rootPath
-    }, (error, stdout, stderr) => {
-        if (error) {
-            logError(strings.error("droping stash:"), stderr);
-            return;
-        }
-        if (stdout.indexOf("Dropped") != -1) {
-            logMessage(strings.msgTypes.INFO, strings.success.general("Stash", "removed"));
-        }
-    });
 }

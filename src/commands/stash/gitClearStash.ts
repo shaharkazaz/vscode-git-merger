@@ -2,10 +2,10 @@
 import {commands, workspace, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec} from 'child_process';
-import {logMessage, logError} from "../../logger";
-import {Command} from "../../extension";
+import { Command } from '../command-base';
 
-export class GitClearStash {
+export class GitClearStash extends Command {
+
     getCommandName(): string {
         return "clearStash";
     }
@@ -15,10 +15,10 @@ export class GitClearStash {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if(error) {
-                logError(strings.error("fetching stash list"), stderr);
+                Command.logger.logError(strings.error("fetching stash list"), stderr);
                 return;
             }
-            logMessage(strings.msgTypes.INFO, strings.success.general("Stash list", "cleared"));
+            Command.logger.logMessage(strings.msgTypes.INFO, strings.success.general("Stash list", "cleared"));
         });
     }
 }
