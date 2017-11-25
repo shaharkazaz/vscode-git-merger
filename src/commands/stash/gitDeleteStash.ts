@@ -21,6 +21,7 @@ export class GitDeleteStash extends Command {
             this.stashList = this._fetchStashList();
             if (this.stashList.length === 0) {
                 Command.logger.logMessage(strings.msgTypes.INFO, "No stash exists");
+                window.showInformationMessage(strings.msgTypes.INFO, "No stash exists");
             }
         } catch (error) {
             Command.logger.logError(strings.error("fetching branch list"), error.message);

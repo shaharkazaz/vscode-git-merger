@@ -70,6 +70,7 @@ export class GitMerge extends Command {
                     return;
                 } else if (stdout.indexOf(strings.git.upToDate) != -1) {
                     Command.logger.logMessage(strings.msgTypes.INFO, strings.git.upToDate);
+                    window.showInformationMessage(strings.git.upToDate);
                     return;
                 }
             } else if (error) {
@@ -97,6 +98,7 @@ export class GitMerge extends Command {
                 GitUnstash.unstash();
             }
             Command.logger.logMessage(strings.msgTypes.INFO, strings.success.merge(this.targetBranch.label, this.branchObj.currentBranch));
+            window.showInformationMessage(strings.success.merge(this.targetBranch.label, this.branchObj.currentBranch));
         });
     }
 

@@ -24,6 +24,7 @@ export class GitUnstash extends Command {
             this._stashList = this._fetchStashList();
             if (this._stashList.length === 0) {
                 Command.logger.logMessage(strings.msgTypes.INFO, "No stash exists");
+                window.showInformationMessage("No stash exists");
                 return
             }
             window.showQuickPick(this._stashList, {

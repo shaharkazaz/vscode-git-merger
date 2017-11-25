@@ -26,7 +26,9 @@ export class GitStash extends Command {
                     return;
                 }
                 if (stdout.indexOf("No local changes to save") != -1) {
-                    Command.logger.logMessage(strings.msgTypes.INFO, "No local changes detected in tracked files");
+                    let msg = "No local changes detected in tracked files";
+                    Command.logger.logMessage(strings.msgTypes.INFO, msg);
+                    window.showInformationMessage(msg);
                     resolve();
                     return;
                 }

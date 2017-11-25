@@ -1,6 +1,6 @@
 'use strict';
 
-import {commands, workspace, ExtensionContext} from 'vscode';
+import {commands, workspace, ExtensionContext, window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec} from 'child_process';
 import { Command } from '../command-base';
@@ -24,7 +24,9 @@ export class GitAbort extends Command{
                 Command.logger.logError(message, strings.error("aborting merge"));
                 return;
             }
-            Command.logger.logMessage(strings.msgTypes.INFO, strings.success.general("Merge", "aborted"));
+            let msg = strings.success.general("Merge", "aborted");
+            Command.logger.logMessage(strings.msgTypes.INFO, msg);
+            window.showInformationMessage(msg);
         });
     }
 }
