@@ -17,7 +17,8 @@ export class GitAbort extends Command{
         }, (error, stdout, stderr) => {
             if (error) {
                 if (stderr.indexOf(strings.git.noMerge)) {
-                    Command.logger.logError(strings.git.noMerge);
+                    Command.logger.logMessage(strings.msgTypes.INFO, strings.git.noMerge);
+                    window.showInformationMessage(strings.git.noMerge);
                     return;
                 }
                 let message = stderr ? stderr.toString() : error.toString();
