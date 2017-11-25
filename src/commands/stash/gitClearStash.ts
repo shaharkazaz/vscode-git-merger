@@ -1,5 +1,5 @@
 'use strict';
-import {commands, workspace, ExtensionContext} from 'vscode';
+import {commands, workspace, ExtensionContext, window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec} from 'child_process';
 import { Command } from '../command-base';
@@ -19,6 +19,7 @@ export class GitClearStash extends Command {
                 return;
             }
             Command.logger.logMessage(strings.msgTypes.INFO, strings.success.general("Stash list", "cleared"));
+            window.showInformationMessage(strings.success.general("Stash list", "cleared"));
         });
     }
 }
