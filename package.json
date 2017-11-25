@@ -39,7 +39,7 @@
       "title": "GitMerger configuration",
       "properties": {
         "gitMerger.mergeCommandOptions": {
-          "type": "Array<string>",
+          "type": "string[]",
           "default": [
             "commit",
             "no-ff"
