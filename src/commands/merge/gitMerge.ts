@@ -1,6 +1,6 @@
 'use strict';
 
-import {commands, workspace, window, ExtensionContext, scm} from 'vscode';
+import {commands, workspace, window, scm} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
 import {IBranchObj, IGitBranchResponse, IOptionsObj} from "../../constants/interfaces";
