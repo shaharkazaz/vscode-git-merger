@@ -2,8 +2,11 @@
 ### v0.3.7
 **Updated**
 
-* Updated project's class and structure.
+* Updated project's structure.
 
+**Fixed**
+
+* Error throwen from accessing SCM input box
 ### v0.3.6
 **Added** 
 
