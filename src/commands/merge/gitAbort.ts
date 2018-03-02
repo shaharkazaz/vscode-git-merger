@@ -1,33 +1,33 @@
 'use strict';
-/** 
- *  @fileOverview The git abort merge command executer file
- *  @author       Shahar Kazaz
- *  @requires     vscode
- *  @requires     strings: The extension string constants
- *  @requires     exec
- *  @requires     logger
- */
-import {commands, workspace, ExtensionContext} from 'vscode';
-import strings from '../../constants/string-constnats';
-import { exec } from 'child_process';
-import * as logger from "../../logger";
 
-export function activate(context: ExtensionContext) {
-    let disposable = commands.registerCommand('gitMerger.abortMerge', () => {
+import {commands, workspace, ExtensionContext, window} from 'vscode';
+import strings from '../../constants/string-constnats';
+import {exec} from 'child_process';
+import { Command } from '../command-base';
+
+export class GitAbort extends Command{
+
+    getCommandName(): string {
+        return "abortMerge";
+    }
+
+    async execute(): Promise<any> {
         exec(strings.git.merge(["abort"]), {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (error) {
-                if(stderr.indexOf(strings.git.noMerge)){
-                    logger.logInfo(strings.git.noMerge);
+                if (stderr.indexOf(strings.git.noMerge)) {
+                    Command.logger.logMessage(strings.msgTypes.INFO, strings.git.noMerge);
+                    window.showInformationMessage(strings.git.noMerge);
                     return;
                 }
-                logger.logError(strings.error("aborting merge"), stderr || error);
+                let message = stderr ? stderr.toString() : error.toString();
+                Command.logger.logError(message, strings.error("aborting merge"));
                 return;
             }
-            logger.logInfo(strings.success.general("Merge", "aborted"));
+            let msg = strings.success.general("Merge", "aborted");
+            Command.logger.logMessage(strings.msgTypes.INFO, msg);
+            window.showInformationMessage(msg);
         });
-    });
-
-    context.subscriptions.push(disposable);
+    }
 }

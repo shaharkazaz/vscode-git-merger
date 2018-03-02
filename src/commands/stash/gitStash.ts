@@ -1,58 +1,64 @@
 'use strict';
-/** 
- *  @fileOverview The git stash command executer file
- *  @author       Shahar Kazaz
- *  @requires     vscode
- *  @requires     strings: The extension string constants
- *  @requires     exec
- *  @requires     logger
- */
 
 import {commands, workspace, window, ExtensionContext} from 'vscode';
 import strings from '../../constants/string-constnats';
-import { exec } from 'child_process';
-import * as logger from "../../logger";
+import {exec} from 'child_process';
+import { Command } from '../command-base';
 
-export function stash(stashName:string, hideMsg){
-    let promise = new Promise((resolve, reject) => {
-                exec(strings.git.stash("save ", false, stashName), {
+export class GitStash extends Command {
+
+    getCommandName(): string {
+        return "stash";
+    }
+
+    async execute(): Promise<any> {
+        this._openStashSelection();
+    }
+
+    static stash(stashName: string, hideMsg) {
+        return new Promise((resolve, reject) => {
+            exec(strings.git.stash("save ", false, stashName), {
                 cwd: workspace.rootPath
             }, (error, stdout, stderr) => {
                 if (error) {
-                    logger.logError(strings.error("creating stash:"), stderr || error);
+                    Command.logger.logError(strings.error("creating stash:"), stderr);
                     reject();
                     return;
-                } 
-                if(stdout.indexOf("No local changes to save") != -1){
-                    logger.logInfo("No local changes detected in tracked files");
-                    resolve()
+                }
+                if (stdout.indexOf("No local changes to save") != -1) {
+                    let msg = "No local changes detected in tracked files";
+                    Command.logger.logMessage(strings.msgTypes.INFO, msg);
+                    window.showInformationMessage(msg);
+                    resolve();
                     return;
                 }
-                if(!hideMsg){
-                    logger.logInfo(strings.success.general("Stash", "created"));
+                if (!hideMsg) {
+                    let msg = strings.success.general("Stash", "created")
+                    Command.logger.logMessage(strings.msgTypes.INFO, msg);
+                    window.showInformationMessage(msg);
                 }
                 resolve();
             });
-    });
-        return promise;
-
-}
-
-export function activate(context: ExtensionContext) {
-    let disposable = commands.registerCommand('gitMerger.stash', () => {
-        window.showInputBox({placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
-            if(input[0] == "-"){
-                return "The name can't start with '-'";
-            } else if(new RegExp("[()&`|!]", 'g').test(input)){
-                return "The name can't contain the following characters: '|', '&', '!', '(', ')' or '`'";
-            } return "";
-        }}).then((userInput) => {
-            if(userInput === undefined){return;}
-            stash(userInput, false);
         });
-    });
+    
+    }
+    
 
-    context.subscriptions.push(disposable);
+    private _openStashSelection() {
+        window.showInputBox({
+            placeHolder: "Enter stash message (default will show no message)", validateInput: (input) => {
+                if (input[0] == "-") {
+                    return "The name can't start with '-'";
+                } else if (new RegExp("[()&`|!]", 'g').test(input)) {
+                    return "The name can't contain the following characters: '|', '&', '!', '(', ')' or '`'";
+                }
+                return "";
+            }
+        }).then((userInput) => {
+            if (userInput === undefined) {
+                return;
+            }
+            GitStash.stash(userInput, false);
+        });
+    }
 }
-
-

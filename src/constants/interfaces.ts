@@ -1,11 +1,8 @@
-/**
- *  @fileOverview Holds the project's interfaces
- *  @author  Shahar Kazaz
- */
 import {QuickPickItem} from "vscode";
+
 export interface IBranchObj {
     currentBranch: string;
-    branchList: Array<IGitBranchResponse>
+    branchList: IGitBranchResponse[];
 }
 
 export interface IGitBranchResponse extends QuickPickItem {
@@ -17,8 +14,8 @@ export interface IGitStashResponse extends QuickPickItem {
 }
 
 export interface IOptionsObj {
-        validOptions: Array<string>;
+        validOptions: string[];
         requireCommitMessage: boolean;
-        invalidOptions: Array<string>;
+        invalidOptions: string[];
         addMessage: boolean;
 }

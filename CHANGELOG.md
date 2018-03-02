@@ -1,4 +1,9 @@
 # Change Log
+### v0.3.7
+**Updated**
+
+* Updated project's class and structure.
+
 ### v0.3.6
 **Added** 
 

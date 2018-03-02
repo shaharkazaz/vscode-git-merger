@@ -36,10 +36,14 @@ export default {
             return command;
         }
     },
+    msgTypes: {
+        ERROR: "Error",
+        WARNING: "Warning",
+        INFO: "Info",
+        DEBUG: "Debug"
+    },
     error:
-        (errorWhile: string) => {
-            return "Error while " + errorWhile;
-        },
+        (errorWhile: string) => "Error while " + errorWhile,
     timeForamt: {
         fullDate: "MM.DD.YYYY HH:mm:ss",
         hours: "HH:mm:ss"
