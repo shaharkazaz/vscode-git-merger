@@ -103,7 +103,7 @@ export class GitMerge extends Command {
     }
 
     private _setGitMessage() {
-        if (scm.inputBox.value.length == 0) {
+        if (scm.inputBox && scm.inputBox.value.length === 0) {
             scm.inputBox.value = "Merge branch '" + this.targetBranch.label + "' into branch '" + this.branchObj.currentBranch + "'";
         }
     }
