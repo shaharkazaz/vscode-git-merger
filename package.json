@@ -26,6 +26,7 @@
   ],
   "activationEvents": [
     "onCommand:gitMerger.mergeFrom",
+    "onCommand:gitMerger.continue",
     "onCommand:gitMerger.abortMerge",
     "onCommand:gitMerger.stash",
     "onCommand:gitMerger.unstash",
@@ -61,7 +62,11 @@
     "commands": [
       {
         "command": "gitMerger.mergeFrom",
-        "title": "GitMerger: Merge from"
+        "title": "GitMerger: Merge from..."
+      },
+      {
+        "command": "gitMerger.continue",
+        "title": "GitMerger: Continue merge"
       },
       {
         "command": "gitMerger.abortMerge",
@@ -69,11 +74,11 @@
       },
       {
         "command": "gitMerger.stash",
-        "title": "GitMerger: Stash"
+        "title": "GitMerger: Stash..."
       },
       {
         "command": "gitMerger.unstash",
-        "title": "GitMerger: Unstash"
+        "title": "GitMerger: Unstash..."
       },
       {
         "command": "gitMerger.clearStash",
@@ -81,7 +86,7 @@
       },
       {
         "command": "gitMerger.deleteStash",
-        "title": "GitMerger: Delete stash"
+        "title": "GitMerger: Delete stash..."
       }
     ]
   },

@@ -5,5 +5,7 @@ import {GitStash} from "./stash/gitStash";
 import {GitUnstash} from "./stash/gitUnstash";
 import {GitClearStash} from './stash/gitClearStash';
 import {GitDeleteStash} from "./stash/gitDeleteStash";
+import { GitContinue } from './merge/gitContinue';
 
-export const commands = [GitMerge, GitAbort, GitStash, GitUnstash, GitClearStash, GitDeleteStash];
+export const commands = [GitMerge, GitAbort, GitStash, 
+    GitUnstash, GitClearStash, GitDeleteStash, GitContinue];

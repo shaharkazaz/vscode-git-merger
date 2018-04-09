@@ -1,4 +1,8 @@
 # Change Log
+### v0.4.0
+**Added**
+
+* Added `GitMerger: Continue merge` command which allows you to continue the merge once the conflicts were resolved
 ### v0.3.7
 **Updated**
 
@@ -6,7 +10,7 @@
 
 **Fixed**
 
-* Error throwen from accessing SCM input box
+* Error is thrown from accessing SCM input box
 ### v0.3.6
 **Added** 
 
