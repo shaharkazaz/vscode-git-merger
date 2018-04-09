@@ -33,7 +33,9 @@ export class GitContinue extends Command {
                     window.showWarningMessage(msg);
                 }
             })
-            .catch((err) => {debugger;})
+            .catch((err) => {
+                Command.logger.logError(strings.error("continuing merge"), err);
+            })
         })
     }
 }
