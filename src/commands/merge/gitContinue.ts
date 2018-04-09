@@ -25,8 +25,7 @@ export class GitContinue extends Command {
                 if (!searchResults) {
                     return gitExecutor(cmds.commitMerge)
                     .then((commitMsg) => {
-                        window.showInformationMessage('Merge was successfull completed');
-                        Command.logger.logMessage(strings.msgTypes.INFO, `commit message: ${commitMsg}`);
+                        window.showInformationMessage('Merge was successfully completed');
                     });
                 } else {
                     const msg = 'You still have some unresolved conflicts, please resolve before continuing';
