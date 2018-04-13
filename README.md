@@ -18,7 +18,7 @@ Coming to your VScode.
 In vscode marketplace search and install "Git Merger".  
 Or launch the vscode quick open (<kbd>⌘</kbd>+<kbd>p</kbd>  | <kbd>Ctrl</kbd>+<kbd>p</kbd>) and run `ext install git-merger` 
 
-# Commands 
+# Commands 🗣
 The extension commands that can be accessed from the command pallet (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd> ):
 
 * ```GitMerger: Merge from...``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
@@ -29,7 +29,7 @@ The extension commands that can be accessed from the command pallet (<kbd>⌘</k
 * ```GitMerger: Clear stash``` - Remove any saved stashes.
 * ```GitMerger: Delete stash...``` - Delete a specific stash.
 
-# Help this extension be great 💪🏻
+# Help this extension be great 💪
 
 If you want to contribute or have any feedback positive or negative, let me know!  
 Contact via [Email](shahar.kazaz@gmail.com) or open an issue at this project's [Git Repo](https://github.com/shaharkazaz/vscode-git-merger/issues).  
