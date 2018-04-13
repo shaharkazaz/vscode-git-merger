@@ -17,7 +17,7 @@ export class GitContinue extends Command {
         };
         gitExecutor(cmds.checkMergeInProcess)
         .then(() => {
-            window.showInformationMessage('No merge in process');
+            window.showInformationMessage('No merge in progress');
         })
         .catch(() => {
             gitExecutor(cmds.searchConflicts)
