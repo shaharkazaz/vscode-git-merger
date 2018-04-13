@@ -1,9 +1,9 @@
 import {QuickPickItem} from "vscode";
 import {SpawnOptions} from "child_process";
-export interface IBranchObj {
+export type IBranchObj = {
     currentBranch: string;
     branchList: IGitBranchResponse[];
-}
+};
 
 export interface IGitBranchResponse extends QuickPickItem {
     current: string;
@@ -13,15 +13,15 @@ export interface IGitStashResponse extends QuickPickItem {
     index: string;
 }
 
-export interface IOptionsObj {
+export type IOptionsObj = {
         validOptions: string[];
         requireCommitMessage: boolean;
         invalidOptions: string[];
         addMessage: boolean;
-}
+};
 
-export interface commandConfig {
+export type commandConfig  = {
     execOptions?: SpawnOptions;
     logProcess?: boolean;
     customMsg?: string;
-}
+};
