@@ -1,8 +1,8 @@
 'use strict';
-import {commands, workspace, ExtensionContext, window} from 'vscode';
+import { commands, workspace, ExtensionContext, window } from 'vscode';
 import strings from '../../constants/string-constnats';
-import {exec} from 'child_process';
 import { Command } from '../command-base';
+import { gitExecutor, stashCmd } from '../../services/executer';
 
 export class GitClearStash extends Command {
 
@@ -11,15 +11,15 @@ export class GitClearStash extends Command {
     }
 
     async execute(): Promise<any> {
-        exec(strings.git.stash("clear"), {
-            cwd: workspace.rootPath
-        }, (error, stdout, stderr) => {
-            if(error) {
-                Command.logger.logError(strings.error("fetching stash list"), stderr);
-                return;
-            }
-            Command.logger.logMessage(strings.msgTypes.INFO, strings.success.general("Stash list", "cleared"));
-            window.showInformationMessage(strings.success.general("Stash list", "cleared"));
+        const clearCmd = stashCmd('clear');
+        gitExecutor(clearCmd)
+        .then(() => {
+            const msg = strings.success.general('Stash list', 'cleared');
+            Command.logger.logMessage(strings.msgTypes.INFO, msg);
+            window.showInformationMessage(msg);
+        })
+        .catch((err) => {
+            Command.logger.logError(strings.error('fetching stash list'), err);
         });
     }
 }

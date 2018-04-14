@@ -65,6 +65,12 @@ export function mergeCmd(options: string[] = [], branchName = '', commitMessage?
     return commitMessage ? `${command} -m '${commitMessage}'` : command;
 }
 
-export function stashCmdGen() {
+export function stashCmd(cmd: string, includeOption: boolean = false, stashName = ''): string {
+    if (!cmd) {
+        Command.logger.logError('No stash command given!');
+        return '';
+    }
 
+    const option = includeOption ? '--pretty=format:"{\'detail\':\'%gd \u2022 %h \u2022 %cr\',\'label\':\'%s\',\'index\':\'%gd\'},"' : '';
+    return `stash ${cmd} ${option} ${stashName}`.trim();
 }
