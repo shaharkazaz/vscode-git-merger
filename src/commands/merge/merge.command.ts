@@ -1,23 +1,23 @@
 'use strict';
 
-import {commands, workspace, window, scm} from 'vscode';
+import {workspace, window, scm} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
-import {IBranchObj, IGitBranchResponse, IOptionsObj} from "../../constants/interfaces";
-import {getBranchList, processUserOptions} from "../../services/util";
-import { Command } from '../command-base';
-import { GitUnstash } from '../stash/gitUnstash';
-import { GitStash } from '../stash/gitStash';
+import {branchObj, GitBranchResponse, optionsObj} from "../../constants/interfaces";
+import {Command} from '../command-base';
+import {getBranchList} from "../../utils/git.util";
+import {GitStash, GitUnstash} from "../stash";
+import {processUserOptions} from "../../utils/config.util";
 
 
 export class GitMerge extends Command {
 
-    /** Holds a list of all the branchs and the current branch */
-    branchObj: IBranchObj;
+    /** Holds a list of all the branches and the current branch */
+    branchObj: branchObj;
     /** Holds all the git commands options info */
-    optionsObj: IOptionsObj;
+    optionsObj: optionsObj;
     /** Holds the targeted merge branch info*/
-    targetBranch: IGitBranchResponse;
+    targetBranch: GitBranchResponse;
     /** Flag that indicates rather a stash has been created or not */
     stashCreated: boolean;
     /** a custom message for the merge commit */

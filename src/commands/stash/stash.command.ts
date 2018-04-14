@@ -1,6 +1,6 @@
 'use strict';
 
-import {commands, workspace, window, ExtensionContext} from 'vscode';
+import {workspace, window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec} from 'child_process';
 import { Command } from '../command-base';

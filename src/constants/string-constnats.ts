@@ -1,11 +1,11 @@
-/** 
+/**
  *  @fileOverview This file contains all the string constants
  *  @author       Shahar Kazaz
  *  @requires     workspace from vscode
- *  @requires     allowedOptions 
+ *  @requires     allowedOptions
  */
 import {workspace} from 'vscode';
-import { allowedOptions } from './allowedOptions';
+import {allowedOptions} from './extensionConfig/allowedOptions';
 
 export default {
     userSettings: workspace.getConfiguration('gitMerger'),
@@ -16,16 +16,16 @@ export default {
         noMerge: 'There is no merge to abort',
         getBranches: 'git for-each-ref --format="{\'description\':\'%(objectname:short)\',\'label\':\'%(refname:short)\',\'current\':\'%(HEAD)\'}," refs/heads refs/remotes',
         getCurrentBranch: 'git rev-parse --abbrev-ref HEAD',
-        merge: (options: string[] , branchName ? : string, commitMessage?: string) => {
+        merge: (options: string[], branchName ?: string, commitMessage?: string) => {
             let command = `git merge ${branchName || ''}`;
             if (options) {
                 options.forEach((option) => {
-                    if(option !== 'm'){
+                    if (option !== 'm') {
                         command += ` ${allowedOptions['merge'][option]}${option}`;
                     }
                 });
             }
-            if(commitMessage){
+            if (commitMessage) {
                 command += ` -m '${commitMessage}'`;
             }
             return command;
@@ -60,8 +60,8 @@ export default {
     },
     success: {
         general: (operation: string, functionality: string) => `${operation} was successfully ${functionality}`,
-        merge: (choosenBranch: string, currentBranch: string) => 
+        merge: (choosenBranch: string, currentBranch: string) =>
             `Branch '${choosenBranch}' was successfully merged into branch '${currentBranch}'`
-        
+
     }
 }

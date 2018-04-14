@@ -1,20 +1,20 @@
 import { QuickPickItem } from "vscode";
 import { SpawnOptions } from "child_process";
 
-export type IBranchObj = {
+export type branchObj = {
     currentBranch: string;
-    branchList: IGitBranchResponse[];
+    branchList: GitBranchResponse[];
 };
 
-export interface IGitBranchResponse extends QuickPickItem {
+export interface GitBranchResponse extends QuickPickItem {
     current: string;
 }
 
-export interface IGitStashResponse extends QuickPickItem {
+export interface GitStashResponse extends QuickPickItem {
     index: string;
 }
 
-export type IOptionsObj = {
+export type optionsObj = {
     validOptions: string[];
     requireCommitMessage: boolean;
     invalidOptions: string[];

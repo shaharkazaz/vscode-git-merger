@@ -1,3 +1,3 @@
-export {GitAbort} from './gitAbort';
-export {GitContinue} from './gitContinue';
-export {GitMerge} from './gitMerge';
+export {GitAbortMerge} from './abort.command';
+export {GitContinueMerge} from './continue.command';
+export {GitMerge} from './merge.command';

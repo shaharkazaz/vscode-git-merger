@@ -1,8 +1,8 @@
 import {spawn} from "child_process";
-import { commandConfig } from "../constants/interfaces";
-import { workspace } from "vscode";
-import { allowedOptions } from '../constants/allowedOptions';
-import { Command } from "../commands/command-base";
+import {commandConfig} from "../constants/interfaces";
+import {workspace} from "vscode";
+import {allowedOptions} from '../constants/extensionConfig/allowedOptions';
+import {Command} from "../commands/command-base";
 
 const defaultConfig = {
     execOptions: {
@@ -32,14 +32,14 @@ export function gitExecutor(args: string | string[], cmdConfig?: commandConfig) 
         const commandExecuter = spawn('git', args, cmdConfig.execOptions);
         let stdOutData = '';
         let stderrData = '';
-        
+
         const removeEmptyLine = (str) => str.replace(/\n$/, '');
         commandExecuter.stdout.on('data', (data) => stdOutData += data);
         commandExecuter.stderr.on('data', (data) => stderrData += data);
-        commandExecuter.on('close', (code) => code != 0 
-                    ? reject(removeEmptyLine(stderrData.toString())) 
-                    : resolve(removeEmptyLine(stdOutData.toString()))
-                );
+        commandExecuter.on('close', (code) => code != 0
+            ? reject(removeEmptyLine(stderrData.toString()))
+            : resolve(removeEmptyLine(stdOutData.toString()))
+        );
     });
 }
 
@@ -57,7 +57,7 @@ export function mergeCmd(options: string[] = [], branchName = '', commitMessage?
     let command = branchName ? `merge ${branchName}` : 'merge';
     options.forEach((option) => {
         const allowedOption = allowedOptions.merge[option];
-        if(allowedOption && option !== 'm'){
+        if (allowedOption && option !== 'm') {
             command += ` ${allowedOption}${option}`;
         }
     });

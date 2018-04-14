@@ -1,19 +1,19 @@
 'use strict';
 
-import {commands, workspace, window, ExtensionContext} from 'vscode';
+import {workspace, window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
-import {getStashList} from "../../services/util";
-import {IGitStashResponse} from "../../constants/interfaces";
+import {getStashList} from "../../utils/git.util";
+import {GitStashResponse} from "../../constants/interfaces";
 import { Command } from '../command-base';
-import { GitDeleteStash } from './gitDeleteStash';
+import { GitDeleteStash } from './delete.command';
 
 export class GitUnstash extends Command {
 
     /** An array of all the stash objects */
-    private _stashList: IGitStashResponse[];
+    private _stashList: GitStashResponse[];
     /** The selected stash item to unstash */
-    private _stashItem: IGitStashResponse;
+    private _stashItem: GitStashResponse;
 
     getCommandName(): string {
         return "unstash";
@@ -64,7 +64,7 @@ export class GitUnstash extends Command {
 
     /**
      * Return a list of all the stashed items
-     * @return {IGitStashResponse[]}
+     * @return {GitStashResponse[]}
      * @private
      */
     private _fetchStashList() {
