@@ -3,7 +3,8 @@
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {Command} from '../command-base';
-import {gitExecutor, buildMergeCmd} from '../../services/executer';
+import {buildMergeCmd} from "../../utils/git.util";
+import {gitExecutor} from "../../services/executer.service";
 
 export class GitAbortMerge extends Command {
 

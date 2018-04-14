@@ -1,11 +1,11 @@
-import {Logger} from "../services/logger";
+import {LoggerService} from "../services/logger.service";
 
 export abstract class Command {
 
-    static logger: Logger;
+    static logger: LoggerService;
 
     constructor() {
-        Command.logger = new Logger();
+        Command.logger = new LoggerService();
     }
 
     abstract async execute(): Promise<any>;

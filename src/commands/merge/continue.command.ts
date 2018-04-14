@@ -1,7 +1,7 @@
 import {Command} from '../command-base';
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
-import {gitExecutor} from '../../services/executer';
+import {gitExecutor} from "../../services/executer.service";
 
 export class GitContinueMerge extends Command {
     getCommandName(): string {

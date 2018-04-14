@@ -2,7 +2,8 @@
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {Command} from '../command-base';
-import {gitExecutor, buildStashCmd} from '../../services/executer';
+import {buildStashCmd} from "../../utils/git.util";
+import {gitExecutor} from "../../services/executer.service";
 
 export class GitClearStash extends Command {
 

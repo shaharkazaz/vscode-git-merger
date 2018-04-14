@@ -3,14 +3,14 @@
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {GitStashResponse} from "../../constants/interfaces";
-import {parseGitJson} from "../../utils/git.util";
 import {Command} from '../command-base';
-import {gitExecutor, buildStashCmd} from "../../services/executer";
+import {buildStashCmd, parseGitJson} from "../../utils/git.util";
+import {gitExecutor} from "../../services/executer.service";
 
 export class GitDeleteStash extends Command {
 
     getCommandName(): string {
-        return "deleteStash";
+        return 'deleteStash';
     }
 
     async execute(): Promise<any> {
@@ -19,12 +19,12 @@ export class GitDeleteStash extends Command {
             .then((stashListRaw: string) => {
                 const stashList = parseGitJson<GitStashResponse>(stashListRaw);
                 if (stashList.length === 0) {
-                    Command.logger.logMessage(strings.msgTypes.INFO, "No stash exists");
-                    window.showInformationMessage(strings.msgTypes.INFO, "No stash exists");
+                    Command.logger.logMessage(strings.msgTypes.INFO, 'No stash exists');
+                    window.showInformationMessage(strings.msgTypes.INFO, 'No stash exists');
                 } else {
                     window.showQuickPick(stashList, {
                         matchOnDescription: true,
-                        placeHolder: "Choose the stash you wish to delete"
+                        placeHolder: 'Choose the stash you wish to delete'
                     }).then((stashItem) => {
                         if (stashItem) {
                             GitDeleteStash.deleteStash(stashItem);
@@ -32,7 +32,7 @@ export class GitDeleteStash extends Command {
                     });
                 }
             })
-            .catch((err) =>  Command.logger.logError(strings.error("fetching branch list"), err));
+            .catch((err) =>  Command.logger.logError(strings.error('fetching branch list'), err));
     }
 
     static deleteStash({index}: GitStashResponse): void {
@@ -45,7 +45,7 @@ export class GitDeleteStash extends Command {
                     window.showInformationMessage(msg);
                 }
             })
-            .catch((err) => Command.logger.logError(strings.error("dropping stash:"), err));
+            .catch((err) => Command.logger.logError(strings.error('dropping stash:'), err));
     }
 
 }

@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import strings from '../constants/string-constnats';
 import {OutputChannel} from "vscode";
 
-export class Logger {
+export class LoggerService {
 
     /** The output channel instance */
     private outLogChannel: OutputChannel;
