@@ -1,10 +1,12 @@
 import {branchList, GitBranchResponse, GitStashResponse} from "../constants/interfaces";
+import * as capitalize from "lodash.capitalize";
 
 export function getBranchList(output: string): branchList {
     const branchList: branchList = {
         branchList: [],
         currentBranch: ''
     };
+
     branchList.branchList = parseGitJson<GitBranchResponse>(output).filter((branch) => {
         if (branch.current === '*') {
             branchList.currentBranch = branch.label;
@@ -19,15 +21,16 @@ export function getBranchList(output: string): branchList {
     return branchList;
 }
 
-export function getStashList(output: string): GitStashResponse[] {
-    if (output.length === 0) {
+export function getStashList(rawString: string): GitStashResponse[] {
+    if (rawString.length === 0) {
         return [];
     }
-    let stashList = parseGitJson<GitStashResponse>(output);
-    stashList.forEach(stashItem => {
-        stashItem.label = stashItem.label.replace("WIP ", "");
-        stashItem.label = stashItem.label.charAt(0).toUpperCase() + stashItem.label.slice(1);
+
+    const stashList = parseGitJson<GitStashResponse>(rawString);
+    stashList.forEach((stash)  => {
+        stash.label = capitalize(stash.label.replace('WIP ', ''));
     });
+
     return stashList;
 }
 

@@ -7,7 +7,8 @@ import {branchList, GitBranchResponse, optionsObj} from "../../constants/interfa
 import {Command} from '../command-base';
 import {getBranchList} from "../../utils/git.util";
 import {GitStash, GitUnstash} from "../stash";
-import {processUserOptions} from "../../utils/config.util";
+import {getConfig, processUserOptions} from "../../utils/config.util";
+import {ConfigProperty, OptionsSections} from "../../constants/extensionConfig/user-config";
 
 
 export class GitMerge extends Command {
@@ -113,7 +114,7 @@ export class GitMerge extends Command {
      * @returns {void}
      */
     private _processMergeOptions() {
-        this.optionsObj = processUserOptions(strings.userSettings.get("mergeCommandOptions"), "merge");
+        this.optionsObj = processUserOptions(getConfig<string[]>(ConfigProperty.MERGE_OPTIONS), OptionsSections.MERGE);
         if (this.optionsObj.invalidOptions.length > 0) {
             Command.logger.logMessage(strings.msgTypes.WARNING, "The following commands are not valid merge commands: " + this.optionsObj.invalidOptions.toString());
             Command.logger.logMessage(strings.msgTypes.WARNING, "Yoc can check out which commands are valid at: https://git-scm.com/docs/git-merge");
@@ -122,7 +123,7 @@ export class GitMerge extends Command {
             window.showInputBox({
                 placeHolder: "Enter a custom commit message"
             }).then((customCommitMsg) => {
-                if (strings.userSettings.get("extendAutoCommitMessage")) {
+                if (getConfig<boolean>(ConfigProperty.EXTEND_AUTO_MSG)) {
                     customCommitMsg = "Merge branch '" + this.targetBranch.label + "' into '" +
                         this.branchObj.currentBranch + "'\n" + customCommitMsg;
                 }

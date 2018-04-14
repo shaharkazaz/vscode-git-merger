@@ -1,6 +1,12 @@
 const doubleDash = '--';
 const dash = '-';
 
+export enum ConfigProperty {
+    MERGE_OPTIONS = 'mergeCommandOptions',
+    CUSTOM_MSG = 'customCommitMessage',
+    EXTEND_AUTO_MSG = 'extendAutoCommitMessage'
+}
+
 export const allowedOptions = {
     merge: {
         abort: doubleDash,
@@ -24,4 +30,8 @@ export const allowedOptions = {
         "no-verify-signatures": doubleDash
     }
 
+};
+
+export enum OptionsSections {
+    MERGE = 'merge'
 }

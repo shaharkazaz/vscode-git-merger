@@ -5,10 +5,9 @@
  *  @requires     allowedOptions
  */
 import {workspace} from 'vscode';
-import {allowedOptions} from './extensionConfig/allowedOptions';
+import {allowedOptions} from "./extensionConfig/user-config";
 
 export default {
-    userSettings: workspace.getConfiguration('gitMerger'),
     git: {
         status: 'git status',
         conflicts: 'CONFLICT (content): Merge conflict in',
@@ -21,7 +20,7 @@ export default {
             if (options) {
                 options.forEach((option) => {
                     if (option !== 'm') {
-                        command += ` ${allowedOptions['merge'][option]}${option}`;
+                        command += ` ${allowedOptions.merge[option]}${option}`;
                     }
                 });
             }

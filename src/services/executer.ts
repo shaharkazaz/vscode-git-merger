@@ -1,8 +1,8 @@
 import {spawn} from "child_process";
 import {commandConfig} from "../constants/interfaces";
 import {workspace} from "vscode";
-import {allowedOptions} from '../constants/extensionConfig/allowedOptions';
 import {Command} from "../commands/command-base";
+import {allowedOptions} from "../constants/extensionConfig/user-config";
 
 const defaultConfig = {
     execOptions: {
