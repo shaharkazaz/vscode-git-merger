@@ -50,7 +50,7 @@ export class GitUnstash extends Command {
                 Command.logger.logError(strings.error("unstashing:"), stderr);
                 return;
             }
-            let msg = strings.success.general("Stash", "applied on current branch");
+            const msg = strings.success.general("Stash", "applied on current branch");
             Command.logger.logMessage(strings.msgTypes.INFO, msg);
             if (stashItem) {
                 window.showInformationMessage(msg, "delete stash").then((action) => {

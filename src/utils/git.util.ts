@@ -37,6 +37,10 @@ export function getStashList(rawString: string): GitStashResponse[] {
 }
 
 export function parseGitJson<T>(rawString: string): T[] {
+    if (!rawString) {
+        return [];
+    }
+
     const jsonString = `[${rawString.substring(0, rawString.lastIndexOf("},"))}}]`;
     return JSON.parse(jsonString);
 }

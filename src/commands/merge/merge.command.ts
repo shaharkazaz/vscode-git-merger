@@ -76,8 +76,8 @@ export class GitMerge extends Command {
                 }
             } else if (error) {
                 if (stderr.indexOf("Your local changes") != -1) {
-                    window.showWarningMessage("Merge will fail due to uncommited changes, either commit\
-                        the changes or use stash & patch option", "Stash & Patch").then((action) => {
+                    window.showWarningMessage("Merge will fail due to uncommited changes, either commit" +
+                        "the changes or use stash & patch option", "Stash & Patch").then((action) => {
                         if (action) {
                             GitStash.stash("Temp stash - merge branch '" + this.targetBranch.label + "' into '" +
                                 this.branchObj.currentBranch + "'", true).then(() => {

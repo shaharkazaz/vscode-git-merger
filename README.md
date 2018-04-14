@@ -6,7 +6,7 @@ Merging branches has never been easier.
 
 * Stash & Patch - Uncommitted changes handler while merging.
 * Merge from - Merge any branch into your local branch.
-* Configure options on the git merge command (more info in the repo's [wiki](https://github.com/shaharkazaz/vscode-git-merger/wiki/User-config)).
+* Flexibility - Configure options on the git merge command (more info in the repo's [wiki](https://github.com/shaharkazaz/vscode-git-merger/wiki/User-config)).
 
 # Road Map 🗺
 

@@ -19,8 +19,8 @@ export class GitDeleteStash extends Command {
             .then((stashListRaw: string) => {
                 const stashList = parseGitJson<GitStashResponse>(stashListRaw);
                 if (stashList.length === 0) {
-                    Command.logger.logMessage(strings.msgTypes.INFO, 'No stash exists');
-                    window.showInformationMessage(strings.msgTypes.INFO, 'No stash exists');
+                    Command.logger.logMessage(strings.msgTypes.INFO, 'No stashes exists');
+                    window.showInformationMessage('No stashes exists');
                 } else {
                     window.showQuickPick(stashList, {
                         matchOnDescription: true,
