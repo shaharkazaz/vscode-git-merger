@@ -1,4 +1,4 @@
-import { Logger } from "../services/logger";
+import {Logger} from "../services/logger";
 
 export abstract class Command {
 
@@ -9,5 +9,6 @@ export abstract class Command {
     }
 
     abstract async execute(): Promise<any>;
+
     abstract getCommandName(): string;
 }

@@ -1,28 +1,29 @@
-import {branchObj, GitStashResponse} from "../constants/interfaces";
+import {branchList, GitBranchResponse, GitStashResponse} from "../constants/interfaces";
 
-export function getBranchList(output: string): branchObj {
-    let responseObj = {
-        branchList: this.parseGitJson(output),
-        currentBranch: ""
+export function getBranchList(output: string): branchList {
+    const branchList: branchList = {
+        branchList: [],
+        currentBranch: ''
     };
-    responseObj.branchList = responseObj.branchList.filter((branch) => {
-        if (branch.current === "*") {
-            responseObj.currentBranch = branch.label;
+    branchList.branchList = parseGitJson<GitBranchResponse>(output).filter((branch) => {
+        if (branch.current === '*') {
+            branchList.currentBranch = branch.label;
         } else {
-            if (branch.label.indexOf("origin") != -1) {
-                branch.description = "Remote branch at " + branch.description;
+            if (branch.label.indexOf('origin') !== -1) {
+                branch.description = `Remote branch at ${branch.description}`;
             }
             return true;
         }
     });
-    return responseObj;
+
+    return branchList;
 }
 
 export function getStashList(output: string): GitStashResponse[] {
-    if (output.length == 0) {
+    if (output.length === 0) {
         return [];
     }
-    let stashList = this.parseGitJson(output);
+    let stashList = parseGitJson<GitStashResponse>(output);
     stashList.forEach(stashItem => {
         stashItem.label = stashItem.label.replace("WIP ", "");
         stashItem.label = stashItem.label.charAt(0).toUpperCase() + stashItem.label.slice(1);
@@ -30,9 +31,7 @@ export function getStashList(output: string): GitStashResponse[] {
     return stashList;
 }
 
-export function parseGitJson(jsonString: string): any {
-    jsonString = jsonString.replace(/[:{,\s]'/g, (matcher): string => matcher.replace("'", '"'))
-        .replace(/'[,}:\s]/g, (matcher): string => matcher.replace("'", '"'));
-    jsonString = "[" + jsonString.substring(0, jsonString.lastIndexOf("},")) + "}]";
+export function parseGitJson<T>(rawString: string): T[] {
+    const jsonString = `[${rawString.substring(0, rawString.lastIndexOf("},"))}}]`;
     return JSON.parse(jsonString);
 }

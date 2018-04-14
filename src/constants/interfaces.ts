@@ -1,7 +1,7 @@
-import { QuickPickItem } from "vscode";
-import { SpawnOptions } from "child_process";
+import {QuickPickItem} from "vscode";
+import {SpawnOptions} from "child_process";
 
-export type branchObj = {
+export type branchList = {
     currentBranch: string;
     branchList: GitBranchResponse[];
 };

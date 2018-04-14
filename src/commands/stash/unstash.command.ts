@@ -5,8 +5,8 @@ import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
 import {getStashList} from "../../utils/git.util";
 import {GitStashResponse} from "../../constants/interfaces";
-import { Command } from '../command-base';
-import { GitDeleteStash } from './delete.command';
+import {Command} from '../command-base';
+import {GitDeleteStash} from './delete.command';
 
 export class GitUnstash extends Command {
 

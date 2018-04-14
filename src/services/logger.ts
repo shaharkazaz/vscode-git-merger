@@ -1,4 +1,3 @@
-
 import {window} from 'vscode';
 import * as moment from 'moment';
 import strings from '../constants/string-constnats';
@@ -39,7 +38,7 @@ export class Logger {
 
     /**
      * Opens the vscode output channel
-     * @returns {void} 
+     * @returns {void}
      */
     openLog(): void {
         this.outLogChannel.show();

@@ -3,7 +3,7 @@
 import {workspace, window, scm} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
-import {branchObj, GitBranchResponse, optionsObj} from "../../constants/interfaces";
+import {branchList, GitBranchResponse, optionsObj} from "../../constants/interfaces";
 import {Command} from '../command-base';
 import {getBranchList} from "../../utils/git.util";
 import {GitStash, GitUnstash} from "../stash";
@@ -13,7 +13,7 @@ import {processUserOptions} from "../../utils/config.util";
 export class GitMerge extends Command {
 
     /** Holds a list of all the branches and the current branch */
-    branchObj: branchObj;
+    branchObj: branchList;
     /** Holds all the git commands options info */
     optionsObj: optionsObj;
     /** Holds the targeted merge branch info*/
