@@ -1,9 +1,10 @@
 'use strict';
 
-import {commands, workspace, ExtensionContext, window} from 'vscode';
+import { commands, workspace, ExtensionContext, window } from 'vscode';
 import strings from '../../constants/string-constnats';
-import {exec} from 'child_process';
+import { exec } from 'child_process';
 import { Command } from '../command-base';
+import { gitExecutor, mergeCmd } from '../../services/executer';
 
 export class GitAbort extends Command{
 
@@ -12,22 +13,20 @@ export class GitAbort extends Command{
     }
 
     async execute(): Promise<any> {
-        exec(strings.git.merge(["abort"]), {
-            cwd: workspace.rootPath
-        }, (error, stdout, stderr) => {
-            if (error) {
-                if (stderr.indexOf(strings.git.noMerge)) {
-                    Command.logger.logMessage(strings.msgTypes.INFO, strings.git.noMerge);
-                    window.showInformationMessage(strings.git.noMerge);
-                    return;
-                }
-                let message = stderr ? stderr.toString() : error.toString();
-                Command.logger.logError(message, strings.error("aborting merge"));
-                return;
-            }
-            let msg = strings.success.general("Merge", "aborted");
+        const abortCmd = mergeCmd(['abort']);
+        gitExecutor(abortCmd)
+        .then(() => {
+            const msg = strings.success.general('Merge', 'aborted');
             Command.logger.logMessage(strings.msgTypes.INFO, msg);
             window.showInformationMessage(msg);
+        })
+        .catch((err) => {
+            if (err.indexOf(strings.git.noMerge)) {
+                Command.logger.logMessage(strings.msgTypes.INFO, strings.git.noMerge);
+                window.showInformationMessage(strings.git.noMerge);
+            } else {
+                Command.logger.logError(err, strings.error('aborting merge'));
+            }
         });
     }
 }

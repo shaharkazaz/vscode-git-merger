@@ -1,6 +1,8 @@
 import {spawn} from "child_process";
 import { commandConfig } from "../constants/interfaces";
 import { workspace } from "vscode";
+import { allowedOptions } from '../constants/allowedOptions';
+import { Command } from "../commands/command-base";
 
 const defaultConfig = {
     execOptions: {
@@ -39,4 +41,30 @@ export function gitExecutor(args: string | string[], cmdConfig?: commandConfig) 
                     : resolve(removeEmptyLine(stdOutData.toString()))
                 );
     });
+}
+
+export function mergeCmd(options: string[] = [], branchName = '', commitMessage?: string): string {
+    if (!options.length && !branchName) {
+        Command.logger.logError('No options were passed to mergeCmd gen!');
+        return '';
+    }
+
+    if (options.some((opt) => typeof opt !== 'string')) {
+        Command.logger.logError('Options are accepted only as a string array!');
+        return '';
+    }
+
+    let command = branchName ? `merge ${branchName}` : 'merge';
+    options.forEach((option) => {
+        const allowedOption = allowedOptions.merge[option];
+        if(allowedOption && option !== 'm'){
+            command += ` ${allowedOption}${option}`;
+        }
+    });
+
+    return commitMessage ? `${command} -m '${commitMessage}'` : command;
+}
+
+export function stashCmdGen() {
+
 }

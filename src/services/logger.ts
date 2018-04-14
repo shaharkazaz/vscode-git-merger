@@ -1,7 +1,7 @@
 
 import {window} from 'vscode';
 import * as moment from 'moment';
-import strings from './constants/string-constnats';
+import strings from '../constants/string-constnats';
 import {OutputChannel} from "vscode";
 
 export class Logger {

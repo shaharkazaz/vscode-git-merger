@@ -16,12 +16,12 @@ export default {
         noMerge: 'There is no merge to abort',
         getBranches: 'git for-each-ref --format="{\'description\':\'%(objectname:short)\',\'label\':\'%(refname:short)\',\'current\':\'%(HEAD)\'}," refs/heads refs/remotes',
         getCurrentBranch: 'git rev-parse --abbrev-ref HEAD',
-        merge: (options: Array < string > , branchName ? : string, commitMessage?: string) => {
+        merge: (options: string[] , branchName ? : string, commitMessage?: string) => {
             let command = `git merge ${branchName || ''}`;
             if (options) {
-                options.forEach(option => {
+                options.forEach((option) => {
                     if(option !== 'm'){
-                        command += ' ' + allowedOptions['merge'][option] + option;
+                        command += ` ${allowedOptions['merge'][option]}${option}`;
                     }
                 });
             }
@@ -30,10 +30,9 @@ export default {
             }
             return command;
         },
-        stash: (stashCommand: string, includeOption:boolean = false, stashName ? : string) => {
-            let option = includeOption ? '--pretty=format:"{\'detail\':\'%gd \u2022 %h \u2022 %cr\',\'label\':\'%s\',\'index\':\'%gd\'},"' : '',
-                command = `git stash ${stashCommand} ${option} ${stashName || ''}`;
-            return command;
+        stash: (stashCommand: string, includeOption: boolean = false, stashName = '') => {
+            const option = includeOption ? '--pretty=format:"{\'detail\':\'%gd \u2022 %h \u2022 %cr\',\'label\':\'%s\',\'index\':\'%gd\'},"' : '';
+            return `git stash ${stashCommand} ${option} ${stashName}`;
         }
     },
     msgTypes: {
@@ -60,11 +59,9 @@ export default {
         chooseBranch: 'Choose destination branch'
     },
     success: {
-        general: (operation, functionality) => {
-            return `${operation} was successfully ${functionality}`;
-        },
-        merge: (choosenBranch, currentBranch) => {
-            return `Branch '${choosenBranch}' was successfully merged into branch '${currentBranch}'`;
-        }
+        general: (operation: string, functionality: string) => `${operation} was successfully ${functionality}`,
+        merge: (choosenBranch: string, currentBranch: string) => 
+            `Branch '${choosenBranch}' was successfully merged into branch '${currentBranch}'`
+        
     }
 }

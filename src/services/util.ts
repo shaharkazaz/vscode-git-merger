@@ -1,11 +1,5 @@
-import {
-    IBranchObj,
-    IOptionsObj,
-    IGitStashResponse
-} from "../constants/interfaces";
-import {
-    allowedOptions
-} from "../constants/allowedOptions";
+import {IBranchObj,IOptionsObj,IGitStashResponse} from "../constants/interfaces";
+import {allowedOptions} from "../constants/allowedOptions";
 import strings from '../constants/string-constnats';
 
 export function getBranchList(output: string): IBranchObj {

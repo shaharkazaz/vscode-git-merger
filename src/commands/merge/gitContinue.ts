@@ -1,12 +1,12 @@
-import { Command } from "../command-base";
-import {exec} from "child_process";
-import { workspace, window } from "vscode";
-import strings from "../../constants/string-constnats";
-import { gitExecutor } from "../../services/executer";
+import { Command } from '../command-base';
+import { exec } from 'child_process';
+import { workspace, window } from 'vscode';
+import strings from '../../constants/string-constnats';
+import { gitExecutor } from '../../services/executer';
 
 export class GitContinue extends Command {
     getCommandName(): string {
-        return "continue";
+        return 'continue';
     }
 
     async execute(): Promise<any> {
@@ -34,7 +34,7 @@ export class GitContinue extends Command {
                 }
             })
             .catch((err) => {
-                Command.logger.logError(strings.error("continuing merge"), err);
+                Command.logger.logError(strings.error('continuing merge'), err);
             })
         })
     }
