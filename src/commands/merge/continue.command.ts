@@ -23,7 +23,7 @@ export class GitContinueMerge extends Command {
                     .then((searchResults) => {
                         if (!searchResults) {
                             return gitExecutor(cmds.commitMerge)
-                                .then((commitMsg) => {
+                                .then(() => {
                                     window.showInformationMessage('Merge was successfully completed');
                                 });
                         } else {

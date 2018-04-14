@@ -3,7 +3,7 @@
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {Command} from '../command-base';
-import {gitExecutor, mergeCmd} from '../../services/executer';
+import {gitExecutor, buildMergeCmd} from '../../services/executer';
 
 export class GitAbortMerge extends Command {
 
@@ -12,7 +12,7 @@ export class GitAbortMerge extends Command {
     }
 
     async execute(): Promise<any> {
-        const abortCmd = mergeCmd(['abort']);
+        const abortCmd = buildMergeCmd(['abort']);
         gitExecutor(abortCmd)
             .then(() => {
                 const msg = strings.success.general('Merge', 'aborted');

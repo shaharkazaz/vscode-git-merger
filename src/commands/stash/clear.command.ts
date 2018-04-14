@@ -2,7 +2,7 @@
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {Command} from '../command-base';
-import {gitExecutor, stashCmd} from '../../services/executer';
+import {gitExecutor, buildStashCmd} from '../../services/executer';
 
 export class GitClearStash extends Command {
 
@@ -11,7 +11,7 @@ export class GitClearStash extends Command {
     }
 
     async execute(): Promise<any> {
-        const clearCmd = stashCmd('clear');
+        const clearCmd = buildStashCmd('clear');
         gitExecutor(clearCmd)
             .then(() => {
                 const msg = strings.success.general('Stash list', 'cleared');

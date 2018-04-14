@@ -44,7 +44,7 @@ export class GitMerge extends Command {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (this.optionsObj.invalidOptions.length > 0) {
-                window.showWarningMessage("Some of your options were invalid and were exluded, check the log for more info", strings.actionButtons.openLog).then((chosenitem) => {
+                window.showWarningMessage("Some of your options were invalid and were excluded, check the log for more info", strings.actionButtons.openLog).then((chosenitem) => {
                     if (chosenitem) {
                         Command.logger.openLog();
                     }
