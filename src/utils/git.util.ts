@@ -56,7 +56,7 @@ export function buildMergeCmd(options: string[] = [], branchName = '', commitMes
         return [];
     }
 
-    const command = branchName ? ['merge', branchName] : ['merge'];
+    let command = branchName ? ['merge', branchName] : ['merge'];
     options.forEach((option) => {
         const allowedOption = allowedOptions.merge[option];
         if (allowedOption && option !== 'm') {
@@ -64,7 +64,7 @@ export function buildMergeCmd(options: string[] = [], branchName = '', commitMes
         }
     });
     if (commitMessage) {
-        command.concat(['-m', commitMessage]);
+        command = command.concat(['-m', commitMessage]);
     }
 
     return command;
