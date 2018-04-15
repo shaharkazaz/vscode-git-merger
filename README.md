@@ -24,7 +24,7 @@ The extension commands that can be accessed from the command pallet (<kbd>⌘</k
 * ```GitMerger: Merge from...``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
 * ```GitMerger: Continue merge``` - Continue the merge once the conflicts are done.
 * ```GitMerger: Abort merge``` - Abort the current merge. 
-* ```GitMerger: Stash...``` - Stash your WIP for later usage.
+* ```GitMerger: Stash``` - Stash your WIP for later usage.
 * ```GitMerger: Unstash...``` - Apply stashed changes on working branch.
 * ```GitMerger: Clear stash``` - Remove any saved stashes.
 * ```GitMerger: Delete stash...``` - Delete a specific stash.

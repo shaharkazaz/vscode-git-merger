@@ -45,26 +45,29 @@ export function parseGitJson<T>(rawString: string): T[] {
     return JSON.parse(jsonString);
 }
 
-export function buildMergeCmd(options: string[] = [], branchName = '', commitMessage?: string): string {
+export function buildMergeCmd(options: string[] = [], branchName = '', commitMessage?: string): string[] {
     if (!options.length && !branchName) {
         Command.logger.logError('No options were passed to mergeCmd gen!');
-        return '';
+        return [];
     }
 
     if (options.some((opt) => typeof opt !== 'string')) {
         Command.logger.logError('Options are accepted only as a string array!');
-        return '';
+        return [];
     }
 
-    let command = branchName ? `merge ${branchName}` : 'merge';
+    const command = branchName ? ['merge', branchName] : ['merge'];
     options.forEach((option) => {
         const allowedOption = allowedOptions.merge[option];
         if (allowedOption && option !== 'm') {
-            command += ` ${allowedOption}${option}`;
+            command.push(`${allowedOption}${option}`);
         }
     });
+    if (commitMessage) {
+        command.concat(['-m', commitMessage]);
+    }
 
-    return commitMessage ? `${command} -m '${commitMessage}'` : command;
+    return command;
 }
 
 export function buildStashCmd(cmd: string, stashName = ''): string[] {

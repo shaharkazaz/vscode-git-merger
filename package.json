@@ -74,7 +74,7 @@
       },
       {
         "command": "gitMerger.stash",
-        "title": "GitMerger: Stash..."
+        "title": "GitMerger: Stash"
       },
       {
         "command": "gitMerger.unstash",
