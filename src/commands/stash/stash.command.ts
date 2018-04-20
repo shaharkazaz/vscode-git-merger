@@ -1,9 +1,9 @@
 'use strict';
 
-import {commands, workspace, window, ExtensionContext} from 'vscode';
+import {workspace, window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec} from 'child_process';
-import { Command } from '../command-base';
+import {Command} from '../command-base';
 
 export class GitStash extends Command {
 
@@ -40,9 +40,9 @@ export class GitStash extends Command {
                 resolve();
             });
         });
-    
+
     }
-    
+
 
     private _openStashSelection() {
         window.showInputBox({

@@ -1,39 +1,37 @@
-/** 
+/**
  *  @fileOverview This file contains all the string constants
  *  @author       Shahar Kazaz
  *  @requires     workspace from vscode
- *  @requires     allowedOptions 
+ *  @requires     allowedOptions
  */
 import {workspace} from 'vscode';
-import { allowedOptions } from './allowedOptions';
+import {allowedOptions} from "./extensionConfig/user-config";
 
 export default {
-    userSettings: workspace.getConfiguration('gitMerger'),
     git: {
         status: 'git status',
         conflicts: 'CONFLICT (content): Merge conflict in',
         upToDate: 'Already up-to-date',
         noMerge: 'There is no merge to abort',
-        getBranches: 'git for-each-ref --format="{\'description\':\'%(objectname:short)\',\'label\':\'%(refname:short)\',\'current\':\'%(HEAD)\'}," refs/heads refs/remotes',
+        getBranches: `git for-each-ref --format='{"description":"%(objectname:short)","label":"%(refname:short)","current":"%(HEAD)"},' refs/heads refs/remotes`,
         getCurrentBranch: 'git rev-parse --abbrev-ref HEAD',
-        merge: (options: Array < string > , branchName ? : string, commitMessage?: string) => {
+        merge: (options: string[], branchName ?: string, commitMessage?: string) => {
             let command = `git merge ${branchName || ''}`;
             if (options) {
-                options.forEach(option => {
-                    if(option !== 'm'){
-                        command += ' ' + allowedOptions['merge'][option] + option;
+                options.forEach((option) => {
+                    if (option !== 'm') {
+                        command += ` ${allowedOptions.merge[option]}${option}`;
                     }
                 });
             }
-            if(commitMessage){
+            if (commitMessage) {
                 command += ` -m '${commitMessage}'`;
             }
             return command;
         },
-        stash: (stashCommand: string, includeOption:boolean = false, stashName ? : string) => {
-            let option = includeOption ? '--pretty=format:"{\'detail\':\'%gd \u2022 %h \u2022 %cr\',\'label\':\'%s\',\'index\':\'%gd\'},"' : '',
-                command = `git stash ${stashCommand} ${option} ${stashName || ''}`;
-            return command;
+        stash: (stashCommand: string, includeOption: boolean = false, stashName = '') => {
+            const option = includeOption ? `--pretty=format:'{"detail":"%gd \u2022 %h \u2022 %cr","label":"%s","index":"%gd"},'` : '';
+            return `git stash ${stashCommand} ${option} ${stashName}`;
         }
     },
     msgTypes: {
@@ -55,16 +53,14 @@ export default {
     warnings: {
         conflicts: 'Conflicts while mergning in the following files:'
     },
-    windowErrorMessage: 'Oops! something didn\'t work check the \'Git Merger Log\' for more inforamtion',
+    windowErrorMessage: `Oops! something didn't work check the 'Git Merger Log' for more inforamtion`,
     quickPick: {
         chooseBranch: 'Choose destination branch'
     },
     success: {
-        general: (operation, functionality) => {
-            return `${operation} was successfully ${functionality}`;
-        },
-        merge: (choosenBranch, currentBranch) => {
-            return `Branch '${choosenBranch}' was successfully merged into branch '${currentBranch}'`;
-        }
+        general: (operation: string, functionality: string) => `${operation} was successfully ${functionality}`,
+        merge: (choosenBranch: string, currentBranch: string) =>
+            `Branch '${choosenBranch}' was successfully merged into branch '${currentBranch}'`
+
     }
 }

@@ -1,23 +1,24 @@
 'use strict';
 
-import {commands, workspace, window, scm} from 'vscode';
+import {workspace, window, scm} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {exec, execSync} from 'child_process';
-import {IBranchObj, IGitBranchResponse, IOptionsObj} from "../../constants/interfaces";
-import {getBranchList, processUserOptions} from "../../services/util";
-import { Command } from '../command-base';
-import { GitUnstash } from '../stash/gitUnstash';
-import { GitStash } from '../stash/gitStash';
+import {branchList, GitBranchResponse, optionsObj} from "../../constants/interfaces";
+import {Command} from '../command-base';
+import {getBranchList} from "../../utils/git.util";
+import {GitStash, GitUnstash} from "../stash";
+import {getConfig, processUserOptions} from "../../utils/config.util";
+import {ConfigProperty, OptionsSections} from "../../constants/extensionConfig/user-config";
 
 
 export class GitMerge extends Command {
 
-    /** Holds a list of all the branchs and the current branch */
-    branchObj: IBranchObj;
+    /** Holds a list of all the branches and the current branch */
+    branchObj: branchList;
     /** Holds all the git commands options info */
-    optionsObj: IOptionsObj;
+    optionsObj: optionsObj;
     /** Holds the targeted merge branch info*/
-    targetBranch: IGitBranchResponse;
+    targetBranch: GitBranchResponse;
     /** Flag that indicates rather a stash has been created or not */
     stashCreated: boolean;
     /** a custom message for the merge commit */
@@ -43,7 +44,7 @@ export class GitMerge extends Command {
             cwd: workspace.rootPath
         }, (error, stdout, stderr) => {
             if (this.optionsObj.invalidOptions.length > 0) {
-                window.showWarningMessage("Some of your options were invalid and were exluded, check the log for more info", strings.actionButtons.openLog).then((chosenitem) => {
+                window.showWarningMessage("Some of your options were invalid and were excluded, check the log for more info", strings.actionButtons.openLog).then((chosenitem) => {
                     if (chosenitem) {
                         Command.logger.openLog();
                     }
@@ -75,8 +76,8 @@ export class GitMerge extends Command {
                 }
             } else if (error) {
                 if (stderr.indexOf("Your local changes") != -1) {
-                    window.showWarningMessage("Merge will fail due to uncommited changes, either commit\
-                        the changes or use stash & patch option", "Stash & Patch").then((action) => {
+                    window.showWarningMessage("Merge will fail due to uncommited changes, either commit" +
+                        "the changes or use stash & patch option", "Stash & Patch").then((action) => {
                         if (action) {
                             GitStash.stash("Temp stash - merge branch '" + this.targetBranch.label + "' into '" +
                                 this.branchObj.currentBranch + "'", true).then(() => {
@@ -113,7 +114,7 @@ export class GitMerge extends Command {
      * @returns {void}
      */
     private _processMergeOptions() {
-        this.optionsObj = processUserOptions(strings.userSettings.get("mergeCommandOptions"), "merge");
+        this.optionsObj = processUserOptions(getConfig<string[]>(ConfigProperty.MERGE_OPTIONS), OptionsSections.MERGE);
         if (this.optionsObj.invalidOptions.length > 0) {
             Command.logger.logMessage(strings.msgTypes.WARNING, "The following commands are not valid merge commands: " + this.optionsObj.invalidOptions.toString());
             Command.logger.logMessage(strings.msgTypes.WARNING, "Yoc can check out which commands are valid at: https://git-scm.com/docs/git-merge");
@@ -122,7 +123,7 @@ export class GitMerge extends Command {
             window.showInputBox({
                 placeHolder: "Enter a custom commit message"
             }).then((customCommitMsg) => {
-                if (strings.userSettings.get("extendAutoCommitMessage")) {
+                if (getConfig<boolean>(ConfigProperty.EXTEND_AUTO_MSG)) {
                     customCommitMsg = "Merge branch '" + this.targetBranch.label + "' into '" +
                         this.branchObj.currentBranch + "'\n" + customCommitMsg;
                 }

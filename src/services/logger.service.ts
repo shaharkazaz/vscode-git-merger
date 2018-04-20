@@ -1,10 +1,9 @@
-
 import {window} from 'vscode';
 import * as moment from 'moment';
-import strings from './constants/string-constnats';
+import strings from '../constants/string-constnats';
 import {OutputChannel} from "vscode";
 
-export class Logger {
+export class LoggerService {
 
     /** The output channel instance */
     private outLogChannel: OutputChannel;
@@ -39,7 +38,7 @@ export class Logger {
 
     /**
      * Opens the vscode output channel
-     * @returns {void} 
+     * @returns {void}
      */
     openLog(): void {
         this.outLogChannel.show();

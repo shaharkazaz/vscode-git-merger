@@ -3,7 +3,7 @@
   "displayName": "Git Merger",
   "icon": "merger-icon.png",
   "description": "Simplifies the git merge process",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "publisher": "shaharkazaz",
   "repository": {
     "type": "git",
@@ -74,7 +74,7 @@
       },
       {
         "command": "gitMerger.stash",
-        "title": "GitMerger: Stash..."
+        "title": "GitMerger: Stash"
       },
       {
         "command": "gitMerger.unstash",
@@ -97,13 +97,14 @@
     "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "typescript": "^2.0.3",
+    "typescript": "2.4.2",
     "vscode": "^1.0.0",
     "mocha": "^2.3.3",
     "@types/node": "^6.0.40",
     "@types/mocha": "^2.2.32"
   },
   "dependencies": {
+    "lodash.capitalize": "^4.2.1",
     "moment": "^2.18.1"
   }
 }

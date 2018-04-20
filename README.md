@@ -6,7 +6,7 @@ Merging branches has never been easier.
 
 * Stash & Patch - Uncommitted changes handler while merging.
 * Merge from - Merge any branch into your local branch.
-* Configure options on the git merge command (more info in the repo's [wiki](https://github.com/shaharkazaz/vscode-git-merger/wiki/User-config)).
+* Flexibility - Configure options on the git merge command (more info in the repo's [wiki](https://github.com/shaharkazaz/vscode-git-merger/wiki/User-config)).
 
 # Road Map 🗺
 
@@ -24,7 +24,7 @@ The extension commands that can be accessed from the command pallet (<kbd>⌘</k
 * ```GitMerger: Merge from...``` - Merge branch into working branch (write ```mf``` or ```gmf``` for short).
 * ```GitMerger: Continue merge``` - Continue the merge once the conflicts are done.
 * ```GitMerger: Abort merge``` - Abort the current merge. 
-* ```GitMerger: Stash...``` - Stash your WIP for later usage.
+* ```GitMerger: Stash``` - Stash your WIP for later usage.
 * ```GitMerger: Unstash...``` - Apply stashed changes on working branch.
 * ```GitMerger: Clear stash``` - Remove any saved stashes.
 * ```GitMerger: Delete stash...``` - Delete a specific stash.
