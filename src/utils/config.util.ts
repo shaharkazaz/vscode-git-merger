@@ -1,13 +1,13 @@
-import {optionsObj} from "../constants/interfaces";
+import {userOptions} from "../constants/types";
 import {workspace} from "vscode";
 import {allowedOptions, ConfigProperty, OptionsSections} from "../constants/extensionConfig/user-config";
 
-export function processUserOptions(userSettings: string[], optionsType: OptionsSections): optionsObj {
-    const processedOptions: optionsObj = {
+export function processUserOptions(userSettings: string[], optionsType: OptionsSections): userOptions {
+    const processedOptions: userOptions = {
         validOptions: [],
         requireCommitMessage: false,
         addMessage: userSettings.some((option) => option === 'no-commit'),
-        invalidOptions: [],
+        invalidOptions: []
     };
     const customCommitMsg = getConfig<boolean>(ConfigProperty.CUSTOM_MSG);
     processedOptions.validOptions = userSettings.filter((option) => {

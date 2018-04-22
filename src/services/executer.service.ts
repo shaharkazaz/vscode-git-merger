@@ -1,5 +1,5 @@
 import {spawn} from "child_process";
-import {commandConfig} from "../constants/interfaces";
+import {commandConfig} from "../constants/types";
 import {workspace} from "vscode";
 
 const defaultConfig = {

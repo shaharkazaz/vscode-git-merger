@@ -2,7 +2,7 @@
 
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
-import {GitStashResponse} from "../../constants/interfaces";
+import {GitStashResponse} from "../../constants/types";
 import {Command} from '../command-base';
 import {buildStashCmd, parseGitJson} from "../../utils/git.util";
 import {gitExecutor} from "../../services/executer.service";
@@ -19,7 +19,7 @@ export class GitDeleteStash extends Command {
             .then((stashListRaw: string) => {
                 const stashList = parseGitJson<GitStashResponse>(stashListRaw);
                 if (stashList.length === 0) {
-                    Command.logger.logMessage(strings.msgTypes.INFO, 'No stashes exists');
+                    Command.logger.logMessage('No stashes exists');
                     window.showInformationMessage('No stashes exists');
                 } else {
                     window.showQuickPick(stashList, {
@@ -32,7 +32,7 @@ export class GitDeleteStash extends Command {
                     });
                 }
             })
-            .catch((err) =>  Command.logger.logError(strings.error('fetching branch list'), err));
+            .catch((err) =>  Command.logger.logError(strings.error('fetching stash list'), err));
     }
 
     static deleteStash({index}: GitStashResponse): void {
@@ -41,7 +41,7 @@ export class GitDeleteStash extends Command {
             .then((std: string) => {
                 if (std.indexOf('Dropped') !== -1) {
                     const msg = strings.success.general('Stash', 'removed');
-                    Command.logger.logMessage(strings.msgTypes.INFO, msg);
+                    Command.logger.logMessage(msg);
                     window.showInformationMessage(msg);
                 }
             })

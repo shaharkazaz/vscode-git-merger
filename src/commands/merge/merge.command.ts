@@ -1,158 +1,108 @@
 'use strict';
 
-import {workspace, window, scm} from 'vscode';
+import {window, scm} from 'vscode';
 import strings from '../../constants/string-constnats';
-import {exec, execSync} from 'child_process';
-import {branchList, GitBranchResponse, optionsObj} from "../../constants/interfaces";
+import {branchDetail, GitBranchResponse} from "../../constants/types";
 import {Command} from '../command-base';
-import {getBranchList} from "../../utils/git.util";
+import {buildMergeCmd, getBranchList, getMergeOptions} from "../../utils/git.util";
 import {GitStash, GitUnstash} from "../stash";
-import {getConfig, processUserOptions} from "../../utils/config.util";
-import {ConfigProperty, OptionsSections} from "../../constants/extensionConfig/user-config";
+import {gitExecutor} from "../../services/executer.service";
+import {LOG_TYPE} from "../../services/logger/logger.types";
 
 
 export class GitMerge extends Command {
 
     /** Holds a list of all the branches and the current branch */
-    branchObj: branchList;
-    /** Holds all the git commands options info */
-    optionsObj: optionsObj;
+    branches: branchDetail;
     /** Holds the targeted merge branch info*/
     targetBranch: GitBranchResponse;
-    /** Flag that indicates rather a stash has been created or not */
-    stashCreated: boolean;
-    /** a custom message for the merge commit */
-    userCommitMessage: string;
 
     getCommandName(): string {
         return "mergeFrom";
     }
 
     async execute(): Promise<any> {
-        this.branchObj = this._fetchBranchs();
-        this._showBranchQuickPick();
+        gitExecutor(strings.git.getBranches)
+            .then((rawBranchList: string) => {
+                this.branches = getBranchList(rawBranchList);
+                return window.showQuickPick(this.branches.branchList, {
+                    placeHolder: strings.quickPick.chooseBranch
+                })
+            })
+            .then((mergeFrom) => {
+                if (mergeFrom) {
+                    this.targetBranch = mergeFrom;
+                    getMergeOptions(this.targetBranch, this.branches)
+                        .then((userOptions) =>
+                            GitMerge.merge(this.branches, this.targetBranch, {userOptions}));
+                }
+            })
+            .catch((err) => Command.logger.logError(strings.error("fetching branch list"), err));
     }
 
 
     /**
      * Exexute the git merge command
-     * @param   {string} [customCommitMsg] The user's custom commit message
      * @returns {void}
+     * @param branches
+     * @param targetBranch
+     * @param stashCreated
+     * @param userOptions
      */
-    merge(customCommitMsg ?) {
-        exec(strings.git.merge(this.optionsObj.validOptions, this.targetBranch.label, this.userCommitMessage), {
-            cwd: workspace.rootPath
-        }, (error, stdout, stderr) => {
-            if (this.optionsObj.invalidOptions.length > 0) {
-                window.showWarningMessage("Some of your options were invalid and were excluded, check the log for more info", strings.actionButtons.openLog).then((chosenitem) => {
-                    if (chosenitem) {
-                        Command.logger.openLog();
-                    }
-                });
-            }
-            if (stdout) {
-                if (stdout.toLowerCase().indexOf("conflict") != -1) {
-                    let conflictedFiles = stdout.split("\n"),
-                        conflictedFilesLength = conflictedFiles.length - 1;
-                    Command.logger.logMessage(strings.msgTypes.WARNING, strings.warnings.conflicts);
-                    for (let i = 0; i < conflictedFilesLength; i++) {
-                        let conflictIndex = conflictedFiles[i].indexOf(strings.git.conflicts);
+    static merge(branches: branchDetail, targetBranch: GitBranchResponse, {stashCreated, userOptions}: any) {
+        const mergeCmd = buildMergeCmd(userOptions ? userOptions.validOptions : [], targetBranch.label, userOptions.customMsg);
+        gitExecutor(mergeCmd)
+            .then((mergeResult: string) => {
+                if (mergeResult.toLowerCase().indexOf('conflict') !== -1) {
+                    const conflictedFiles = mergeResult.split("\n");
+                    Command.logger.logMessage(strings.warnings.conflicts, LOG_TYPE.WARNING);
+                    for (let i = 0; i < conflictedFiles.length - 1; i++) {
+                        const conflictIndex = conflictedFiles[i].indexOf(strings.git.conflicts);
                         if (conflictIndex != -1) {
-                            Command.logger.logMessage(strings.msgTypes.WARNING, conflictedFiles[i].substr(38, conflictedFiles[i].length));
+                            Command.logger.logMessage(conflictedFiles[i].substr(38, conflictedFiles[i].length), LOG_TYPE.WARNING);
                         }
                     }
-                    let message = strings.windowConflictsMessage;
+                    let msg = strings.windowConflictsMessage;
 
-                    if (this.stashCreated) {
-                        message += ", stash was not applied";
+                    if (stashCreated) {
+                        msg += ', stash was not applied';
                     }
-                    window.showWarningMessage(message);
-                    this._setGitMessage();
-                    return;
-                } else if (stdout.indexOf(strings.git.upToDate) != -1) {
-                    Command.logger.logMessage(strings.msgTypes.INFO, strings.git.upToDate);
+                    window.showWarningMessage(msg);
+                    // this.setScmMsg();
+                } else if (mergeResult.indexOf(strings.git.upToDate) !== -1) {
+                    Command.logger.logMessage(strings.git.upToDate);
                     window.showInformationMessage(strings.git.upToDate);
-                    return;
+                } else {
+                    // if (userOptions.addMessage) {
+                    //     this.setScmMsg();
+                    // }
+                    if (stashCreated) {
+                        GitUnstash.unstash();
+                    }
+
+                    Command.logger.logMessage(strings.success.merge(targetBranch.label, branches.currentBranch));
+                    window.showInformationMessage(strings.success.merge(targetBranch.label, branches.currentBranch));
                 }
-            } else if (error) {
-                if (stderr.indexOf("Your local changes") != -1) {
-                    window.showWarningMessage("Merge will fail due to uncommited changes, either commit" +
-                        "the changes or use stash & patch option", "Stash & Patch").then((action) => {
+            })
+            .catch((err) => {
+                if (err.indexOf('Your local changes') !== -1) {
+                    window.showWarningMessage('Merge will fail due to uncommitted changes, either commit' +
+                        ' the changes or use stash & patch option', 'Stash & Patch').then((action) => {
                         if (action) {
-                            GitStash.stash("Temp stash - merge branch '" + this.targetBranch.label + "' into '" +
-                                this.branchObj.currentBranch + "'", true).then(() => {
-                                this.stashCreated = true;
-                                this.merge();
-                            });
+                            GitStash.stash(`Temp stash - merge branch '${targetBranch.label}' into '${branches.currentBranch}'`)
+                                .then(() => GitMerge.merge(branches, targetBranch, {stashCreated: true, userOptions}));
                         }
                     });
-                    return;
                 } else {
-                    Command.logger.logError(strings.error("merging"), stderr);
-                    return;
+                    Command.logger.logError(strings.error('merging'), err);
                 }
-            }
-            if (this.optionsObj.addMessage) {
-                this._setGitMessage();
-            }
-            if (this.stashCreated) {
-                GitUnstash.unstash();
-            }
-            Command.logger.logMessage(strings.msgTypes.INFO, strings.success.merge(this.targetBranch.label, this.branchObj.currentBranch));
-            window.showInformationMessage(strings.success.merge(this.targetBranch.label, this.branchObj.currentBranch));
-        });
-    }
-
-    private _setGitMessage() {
-        if (scm.inputBox && scm.inputBox.value.length === 0) {
-            scm.inputBox.value = "Merge branch '" + this.targetBranch.label + "' into branch '" + this.branchObj.currentBranch + "'";
-        }
-    }
-
-    /**
-     * Process the options, handle invalid ones and require a commit message if necessary
-     * @returns {void}
-     */
-    private _processMergeOptions() {
-        this.optionsObj = processUserOptions(getConfig<string[]>(ConfigProperty.MERGE_OPTIONS), OptionsSections.MERGE);
-        if (this.optionsObj.invalidOptions.length > 0) {
-            Command.logger.logMessage(strings.msgTypes.WARNING, "The following commands are not valid merge commands: " + this.optionsObj.invalidOptions.toString());
-            Command.logger.logMessage(strings.msgTypes.WARNING, "Yoc can check out which commands are valid at: https://git-scm.com/docs/git-merge");
-        }
-        if (this.optionsObj.requireCommitMessage) {
-            window.showInputBox({
-                placeHolder: "Enter a custom commit message"
-            }).then((customCommitMsg) => {
-                if (getConfig<boolean>(ConfigProperty.EXTEND_AUTO_MSG)) {
-                    customCommitMsg = "Merge branch '" + this.targetBranch.label + "' into '" +
-                        this.branchObj.currentBranch + "'\n" + customCommitMsg;
-                }
-                this.userCommitMessage = customCommitMsg;
-                this.merge();
             });
-        } else {
-            this.merge();
+    }
+
+    static setScmMsg(targetBranch, branches) {
+        if (scm.inputBox && scm.inputBox.value.length === 0) {
+            scm.inputBox.value = `Merge branch '${targetBranch.label}' into branch '${branches.currentBranch}'`;
         }
     }
 
-    /**
-     * Get the list of all the branches
-     * @returns {void}
-     */
-    private _fetchBranchs() {
-        return getBranchList(execSync(strings.git.getBranches, {
-            cwd: workspace.rootPath
-        }).toString());
-    }
-
-    private _showBranchQuickPick() {
-        window.showQuickPick(this.branchObj.branchList, {
-            placeHolder: strings.quickPick.chooseBranch
-        }).then(chosenitem => {
-            if (chosenitem) {
-                this.targetBranch = chosenitem;
-                this._processMergeOptions();
-            }
-        });
-    }
 }

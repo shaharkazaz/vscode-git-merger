@@ -2,6 +2,7 @@ import {Command} from '../command-base';
 import {window} from 'vscode';
 import strings from '../../constants/string-constnats';
 import {gitExecutor} from "../../services/executer.service";
+import {LOG_TYPE} from "../../services/logger/logger.types";
 
 export class GitContinueMerge extends Command {
     getCommandName(): string {
@@ -28,7 +29,7 @@ export class GitContinueMerge extends Command {
                                 });
                         } else {
                             const msg = 'You still have some unresolved conflicts, please resolve before continuing';
-                            Command.logger.logMessage(strings.msgTypes.WARNING, msg);
+                            Command.logger.logMessage(msg, LOG_TYPE.WARNING);
                             window.showWarningMessage(msg);
                         }
                     })

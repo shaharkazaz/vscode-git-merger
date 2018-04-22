@@ -1,10 +1,36 @@
-import {branchList, GitBranchResponse, GitStashResponse} from "../constants/interfaces";
+import {branchDetail, GitBranchResponse, GitStashResponse} from "../constants/types";
 import * as capitalize from "lodash.capitalize";
 import {Command} from "../commands/command-base";
-import {allowedOptions} from "../constants/extensionConfig/user-config";
+import {allowedOptions, ConfigProperty, OptionsSections} from "../constants/extensionConfig/user-config";
+import {getConfig, processUserOptions} from "./config.util";
+import {LOG_TYPE} from "../services/logger/logger.types";
+import strings from "../constants/string-constnats";
+import {window} from "vscode";
 
-export function getBranchList(output: string): branchList {
-    const branchList: branchList = {
+export function getMergeOptions(targetBranch: GitBranchResponse, branches: branchDetail) {
+    return new Promise((resolve, reject) => {
+        let userOptions = processUserOptions(getConfig<string[]>(ConfigProperty.MERGE_OPTIONS), OptionsSections.MERGE);
+        if (userOptions.invalidOptions.length > 0) {
+            Command.logger.logMessage(strings.config.invalidOptions(userOptions.invalidOptions), LOG_TYPE.WARNING);
+        }
+        if (userOptions.requireCommitMessage) {
+            window.showInputBox({placeHolder: 'Enter a custom commit message'})
+                .then((customCommitMsg) => {
+                    let commitMsg = customCommitMsg;
+                    if (getConfig<boolean>(ConfigProperty.EXTEND_AUTO_MSG)) {
+                        commitMsg = `Merge branch '${targetBranch.label}' into ${branches.currentBranch}' \n ${customCommitMsg}`;
+                    }
+                    resolve({...userOptions, commitMsg});
+                })
+        } else {
+            resolve(userOptions);
+        }
+    });
+
+}
+
+export function getBranchList(output: string): branchDetail {
+    const branchList: branchDetail = {
         branchList: [],
         currentBranch: ''
     };
@@ -45,8 +71,8 @@ export function parseGitJson<T>(rawString: string): T[] {
     return JSON.parse(jsonString);
 }
 
-export function buildMergeCmd(options: string[] = [], branchName = '', commitMessage?: string): string[] {
-    if (!options.length && !branchName) {
+export function buildMergeCmd(options: string[] = [], branchName = '', customMsg?: string): string[] {
+    if (!options && !branchName) {
         Command.logger.logError('No options were passed to mergeCmd gen!');
         return [];
     }
@@ -63,8 +89,8 @@ export function buildMergeCmd(options: string[] = [], branchName = '', commitMes
             command.push(`${allowedOption}${option}`);
         }
     });
-    if (commitMessage) {
-        command = command.concat(['-m', commitMessage]);
+    if (customMsg) {
+        command.push('-m', customMsg);
     }
 
     return command;

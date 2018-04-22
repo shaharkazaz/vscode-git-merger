@@ -1,7 +1,7 @@
 import {QuickPickItem} from "vscode";
 import {SpawnOptions} from "child_process";
 
-export type branchList = {
+export type branchDetail = {
     currentBranch: string;
     branchList: GitBranchResponse[];
 };
@@ -14,11 +14,12 @@ export interface GitStashResponse extends QuickPickItem {
     index: string;
 }
 
-export type optionsObj = {
+export type userOptions = {
     validOptions: string[];
     requireCommitMessage: boolean;
     invalidOptions: string[];
     addMessage: boolean;
+    customMsg?: string;
 };
 
 export type commandConfig = {

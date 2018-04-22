@@ -16,11 +16,11 @@ export class GitClearStash extends Command {
         gitExecutor(clearCmd)
             .then(() => {
                 const msg = strings.success.general('Stash list', 'cleared');
-                Command.logger.logMessage(strings.msgTypes.INFO, msg);
+                Command.logger.logMessage(msg);
                 window.showInformationMessage(msg);
             })
             .catch((err) => {
-                Command.logger.logError(strings.error('fetching stash list'), err);
+                Command.logger.logError(strings.error('clearing stash list'), err);
             });
     }
 }

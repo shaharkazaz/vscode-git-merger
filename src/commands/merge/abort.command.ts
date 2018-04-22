@@ -17,12 +17,12 @@ export class GitAbortMerge extends Command {
         gitExecutor(abortCmd)
             .then(() => {
                 const msg = strings.success.general('Merge', 'aborted');
-                Command.logger.logMessage(strings.msgTypes.INFO, msg);
+                Command.logger.logMessage(msg);
                 window.showInformationMessage(msg);
             })
             .catch((err) => {
                 if (err.indexOf(strings.git.noMerge)) {
-                    Command.logger.logMessage(strings.msgTypes.INFO, strings.git.noMerge);
+                    Command.logger.logMessage(strings.git.noMerge);
                     window.showInformationMessage(strings.git.noMerge);
                 } else {
                     Command.logger.logError(err, strings.error('aborting merge'));

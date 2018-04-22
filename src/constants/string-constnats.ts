@@ -13,7 +13,7 @@ export default {
         conflicts: 'CONFLICT (content): Merge conflict in',
         upToDate: 'Already up-to-date',
         noMerge: 'There is no merge to abort',
-        getBranches: `git for-each-ref --format='{"description":"%(objectname:short)","label":"%(refname:short)","current":"%(HEAD)"},' refs/heads refs/remotes`,
+        getBranches: ['for-each-ref', `--format={"description":"%(objectname:short)","label":"%(refname:short)","current":"%(HEAD)"},`, 'refs/heads', 'refs/remotes'],
         getCurrentBranch: 'git rev-parse --abbrev-ref HEAD',
         merge: (options: string[], branchName ?: string, commitMessage?: string) => {
             let command = `git merge ${branchName || ''}`;
@@ -40,20 +40,26 @@ export default {
         INFO: 'Info',
         DEBUG: 'Debug'
     },
+    config: {
+        invalidOptions: (options) => {
+            return `The following commands are not valid merge commands: ${options.toString()}` +
+                `\n You can check out which commands are valid at: https://git-scm.com/docs/git-merge`;
+        }
+    },
     error:
         (command: string) => `Error4 while ${command}`,
     timeForamt: {
         fullDate: 'MM.DD.YYYY HH:mm:ss',
         hours: 'HH:mm:ss'
     },
-    windowConflictsMessage: 'Seems like there are some conflicts, resolve before commiting',
+    windowConflictsMessage: 'Seems like there are some conflicts, resolve before committing',
     actionButtons: {
         openLog: 'open log'
     },
     warnings: {
-        conflicts: 'Conflicts while mergning in the following files:'
+        conflicts: 'Conflicts while merging in the following files:'
     },
-    windowErrorMessage: `Oops! something didn't work check the 'Git Merger Log' for more inforamtion`,
+    windowErrorMessage: `Oops! something didn't work check the 'Git Merger Log' for more information`,
     quickPick: {
         chooseBranch: 'Choose destination branch'
     },

@@ -1,4 +1,4 @@
-import {LoggerService} from "../services/logger.service";
+import {LoggerService} from "../services/logger/logger.service";
 
 export abstract class Command {
 
